@@ -1,0 +1,26 @@
+\apartado{Fase 2 (H1): interfaz e identidad}
+\subsection{T05: sistema visual y shell adaptable}
+La dirección visual parte de Block \& Bold y una paleta azul profundo, oro, marfil y arena definida en la especificación. Se adapta a lectura académica mediante bloques claros, jerarquía y contraste. En este informe se usa una interpretación sobria en tablas y diagramas; no se incluyen mockups gigantes ni escudos oficiales.
+
+El shell debe ofrecer navegación consistente y estados vacíos honestos. El inicio conserva el tutor cerrado. Las materias tienen nombres libres y eligen una ilustración genérica mediante un identificador independiente. Cambiar la ilustración no modifica el nombre ni el contenido. La procedencia y licencia de los activos deben registrarse.
+
+La validación visual incluye teclado, foco, contraste, tamaños móviles y reducción de movimiento. Un screenshot de escritorio no acredita accesibilidad ni funcionamiento móvil. Los textos de fórmulas y gráficas futuras necesitan alternativas legibles; la decoración no sustituye títulos reales.
+
+\subsection{T06: acceso del piloto y autorización}
+El recorrido previsto es acceso por Google o correo, validación de token, habilitación de cuenta y creación idempotente del perfil. Logout, expiración y recuperación de sesión son parte del mismo comportamiento. Un emulador ayuda a comprobarlo localmente; no debe introducir un bypass activable por una petición del usuario en cloud.
+
+\begin{center}
+\begin{tikzpicture}[>=Latex,node distance=0.38cm,
+ n/.style={draw=Azul,fill=Marfil,align=center,text width=11.6cm,minimum height=0.62cm,font=\small}]
+\node[n] (a) {Petición con token: no aceptar un propietario como autoridad};
+\node[n,below=of a] (b) {Verificar identidad y comprobar cuenta habilitada para el piloto};
+\node[n,below=of b] (c) {Resolver recurso dentro del alcance del actor y comprobar propiedad};
+\node[n,below=of c] (d) {Validar campos y revisión; ejecutar operación o rechazar};
+\draw[->,thick,Azul] (a)--(b);\draw[->,thick,Azul] (b)--(c);\draw[->,thick,Azul] (c)--(d);
+\end{tikzpicture}
+\end{center}
+\begin{center}\small\textbf{Figura 2.} Flujo de autorización previsto para operaciones académicas.\end{center}
+
+\textbf{Pruebas mínimas:} token ausente o inválido, cuenta fuera del piloto, actor A que conoce un ID de B, campos de privilegio falsos y acceso directo del cliente a datos. Se espera fallo cerrado. La ocultación de un botón no cuenta como autorización; la regla se aplica en API, servicio y repositorio.
+
+La puerta de identidad requiere pruebas negativas y resultados de integración. Tener una pantalla de login o una configuración Firebase no demuestra aislamiento entre cuentas ni permisos IAM correctos.

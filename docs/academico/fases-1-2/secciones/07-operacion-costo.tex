@@ -1,0 +1,28 @@
+\apartado{Contenedores, asincronía, observabilidad y costo}
+\subsection{Ejecución y escalamiento}
+Se propone empaquetar procesos en contenedores con versiones fijadas. Cloud Run administra instancias y puede escalar un servicio a cero; la primera solicitud posterior puede incorporar tiempo de arranque \cite{cloud-run}. El worker del diseño es un \textbf{servicio HTTP privado invocado por tareas}, no un producto de worker pool asumido equivalente.
+
+Como parámetros iniciales del piloto se plantean mínimo cero instancias, máximo dos para API y una para worker, y concurrencia acotada. Son decisiones ajustables, no mediciones ni límites universales. Deben contrastarse con memoria, tiempos de procesamiento y cola; aumentar instancias sin controlar llamadas a IA también puede aumentar consumo.
+
+\subsection{Procesamiento asíncrono}
+Cloud Tasks admite tareas HTTP con autenticación mediante cuenta de servicio \cite{cloud-tasks}. El diseño separa aceptación de solicitud y ejecución. Cada trabajo necesitará estado persistente, reintentos idempotentes, cancelación y recuperación ante interrupción; reintentar una entrega no debe duplicar resultados. Esta integración pertenece a hitos posteriores, aunque H0 define sus contratos.
+
+\subsection{Señales operativas y privacidad}
+Se prevén registros estructurados, compatibles con el tratamiento de campos de Cloud Logging \cite{logging}. Un \codigo{requestId} y un \codigo{jobId} permitirían relacionar fallos sin guardar apuntes ni chats. Las señales incluirán latencia, errores por dependencia, antigüedad de cola, fallos de extracción y consumo estimado. Nunca se requieren tokens, URLs firmadas o prompts completos para explicar que una petición falló.
+
+\subsection{Plan económico sin créditos trial}
+El Free Tier tiene condiciones y límites; requiere cuenta de facturación, y los excedentes de una cuenta de pago pueden generar cargos \cite{free-tier}. El piloto no usa el crédito de prueba como base de viabilidad. Se propone revisar región, cuotas y consumo de cada servicio antes de crear recursos. \codigo{us-central1} es una región candidata del plan, aún sujeta a residencia de datos y latencia.
+
+\small
+\begin{tabularx}{\linewidth}{P{3cm}Y}
+\toprule
+\textbf{Grupo de gasto} & \textbf{Control y evidencia previstos}\\
+\midrule
+Run, builds y registro & Tiempo/memoria, instancias, número de imágenes y limpieza.\\
+Firestore y Storage & Operaciones, índices, bytes, transferencia y retención física.\\
+Tasks y operación & Despachos, reintentos, logs, Scheduler y secretos.\\
+IA externa & Tokens/imagen, cuota por cuenta, reserva de consumo y apagado operativo.\\
+\bottomrule
+\end{tabularx}
+\normalsize
+\textbf{Presupuesto no equivale a control automático por defecto.} Las alertas por sí mismas no detienen gasto. La documentación vigente distingue presupuestos solo de alerta y presupuestos con límite de gasto; su disponibilidad y cobertura deben comprobarse antes de confiar en ellos \cite{budgets}. No hay costo observado ni monto mensual demostrado en este corte.

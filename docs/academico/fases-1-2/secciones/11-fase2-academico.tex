@@ -1,0 +1,28 @@
+\apartado{Fase 2 (H1): materias, agenda e inicio}
+\subsection{T07: organización académica}
+El modelo permite perfil, periodo opcional, materia y temas. ``Métodos numéricos II'' es un ejemplo de validación de nombre libre, no una asignatura preconfigurada obligatoria. Debe ser posible crear una materia sin periodo, cambiar ilustración y acento, ordenar temas y archivar/restaurar sin perder historial.
+
+Las referencias deben pertenecer al mismo usuario y los prerrequisitos de temas a la misma materia, sin ciclos. Cada edición incluye la revisión esperada para detectar cambios simultáneos. Un conflicto debe explicarse al usuario; no se sobreescribe silenciosamente la edición de otra pestaña.
+
+\begin{tabularx}{\linewidth}{P{3.2cm}Y}
+\toprule
+\textbf{Entidad} & \textbf{Datos esenciales y regla prevista}\\
+\midrule
+Periodo & Nombre y fechas opcionales; una materia puede omitirlo.\\
+Materia & Nombre libre, ilustración, acento y estado de archivo independientes.\\
+Tema & Título, orden y prerrequisitos válidos dentro de la materia.\\
+Pendiente & Título, tipo, estado, notas; materia y fecha opcionales.\\
+Bloque de horario & Día semanal, inicio/fin local, zona y excepciones sencillas.\\
+\bottomrule
+\end{tabularx}
+
+La eliminación destructiva completa depende de un trabajo posterior que retire descendientes y referencias. Mientras esa integración no exista, la interfaz debe expresar el límite. No se considera correcto borrar solo la tarjeta y dejar contenido privado accesible.
+
+\subsection{T08: agenda e inicio organizador}
+El inicio debe resultar útil antes de usar IA: materias recientes y pendientes próximos con acciones de completar y editar. Las recomendaciones pueden tener un estado vacío; no se rellenan porcentajes de aprendizaje ni actividad ficticia. El chat permanece cerrado al entrar y recargar.
+
+Las fechas requieren semántica precisa. Un pendiente de día completo conserva fecha, sin convertirse artificialmente en medianoche UTC. Un evento con hora utiliza instante y zona de presentación; el horario semanal conserva hora local y zona IANA. Los tests emplean reloj controlado, no el día de ejecución como supuesto oculto.
+
+\destacado{Demostración prevista de H1}{Iniciar sesión con cuenta de prueba; crear materia sin periodo; elegir y cambiar ilustración; agregar un tema; archivar/restaurar; crear pendiente sin fecha y uno de día completo; registrar horario; completar actividad y recargar. Repetir una lectura ajena con otra cuenta para comprobar denegación.}
+
+El cierre de H1 exige que estos recorridos persistan y sean verificables, además de los estados de error y la revisión móvil. Un prototipo visual sin backend o una API sin flujo de navegador no equivale a toda la fase concluida.

@@ -1,0 +1,45 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=2.25cm,headheight=15pt]{geometry}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{array,tabularx,booktabs,longtable}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,backgrounds,calc}
+\usepackage{hyperref}
+\definecolor{Azul}{HTML}{122245}
+\definecolor{Oro}{HTML}{B59957}
+\definecolor{Marfil}{HTML}{F5F2EA}
+\definecolor{Arena}{HTML}{E9DEC7}
+\definecolor{Gris}{HTML}{505764}
+\hypersetup{colorlinks=true,linkcolor=Azul,urlcolor=Azul,citecolor=Azul,pdftitle={Plataforma universitaria: fases 1 y 2},pdfauthor={Equipo académico por completar}}
+\urlstyle{same}
+\renewcommand{\contentsname}{Contenido}
+\renewcommand{\refname}{Fuentes consultadas}
+\renewcommand{\figurename}{Figura}
+\renewcommand{\tablename}{Tabla}
+\renewcommand{\arraystretch}{1.22}
+\setlength{\tabcolsep}{5pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\setlength{\emergencystretch}{2em}
+\setcounter{tocdepth}{1}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\codigo}[1]{\texttt{\small #1}}
+\newcommand{\apartado}[1]{\clearpage\section{#1}}
+\newcommand{\destacado}[2]{\par\medskip\begingroup\setlength{\fboxsep}{9pt}\noindent\colorbox{Marfil}{\parbox{\dimexpr\linewidth-18pt\relax}{\textcolor{Azul}{\textbf{#1}}\par #2}}\endgroup\par\medskip}
+\makeatletter
+\def\@oddhead{\small\textcolor{Azul}{CÓMPUTO EN LA NUBE}\hfil\textcolor{Gris}{Fases 1 y 2}}
+\def\@evenhead{\@oddhead}
+\def\@oddfoot{\small\textcolor{Gris}{Plataforma universitaria de estudio}\hfil\thepage}
+\def\@evenfoot{\@oddfoot}
+\makeatother
+\input{datos-portada}
+\begin{document}
+\input{secciones/00-portada}
+\input{secciones/compacto}
+\input{secciones/14-fuentes}
+\end{document}

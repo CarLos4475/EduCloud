@@ -1,0 +1,116 @@
+\apartado{Motivación y propuesta de valor}
+\textbf{Resumen.} Se propone una plataforma web para estudiantes universitarios de ciencias físico-matemáticas e ingeniería que reúna organización académica, tutoría con IA y práctica. Este informe documenta las dos primeras etapas: H0, base técnica y pruebas de viabilidad; y H1, espacio académico. Google Cloud es la plataforma propuesta para persistencia, identidad, procesamiento asíncrono y ejecución administrada. El proveedor de IA previsto es DeepSeek. La integración completa del tutor corresponde a etapas posteriores.
+
+\subsection*{Problema y motivación}
+Un estudiante puede tener apuntes en archivos, fechas en otra aplicación y dudas en un chat que no conoce el contexto de su materia. Además, recibir una explicación no siempre permite comprobar si comprendió un concepto. El proyecto busca conectar estas actividades para facilitar el estudio y ofrecer oportunidades de explorar, practicar y reconocer dificultades. Esta necesidad se plantea como hipótesis de diseño que deberá contrastarse con estudiantes.
+
+\destacado{Presentación del proyecto}{Queremos que un estudiante pueda entrar a su espacio académico, ubicar sus pendientes y estudiar a partir de sus propios apuntes. Desde ahí podrá pedir una explicación con fuentes, explorar un concepto mediante un recurso interactivo y practicar para reconocer qué necesita reforzar. La nube permitirá conservar su trabajo entre sesiones y procesar materiales sin interrumpir la navegación. La propuesta conecta \textbf{organización, comprensión y práctica} en un mismo recorrido, con preferencias ajustables y progreso explicable.}
+
+\subsection*{Diferenciación buscada}
+Se priorizarán el material, método y notación del alumno; el tutor podrá crear experiencias interactivas variadas y distinguir entre ayuda solicitada y evidencia independiente. Su personalidad se elegirá por separado del tipo de apoyo: el estudiante podrá pedir pistas o una solución completa. El pasaporte y la comparación entre amigos serán voluntarios. Estos atributos orientan el diseño; no constituyen una afirmación de superioridad frente a herramientas no evaluadas.
+
+\subsection*{Objetivo y alcance}
+Diseñar e iniciar una plataforma cloud con identidad, organización académica y contratos de integración reproducibles. H0/H1 cubren la base y el espacio de materias, temas, periodos, pendientes y horarios. Las materias son libres; cálculo, física, álgebra lineal y programación servirán como casos de validación. No se promete mejora de calificaciones ni se sustituye al profesor.
+
+\apartado{Fundamento cloud y decisiones de arquitectura}
+La aplicación se plantea como un servicio web para el estudiante. El equipo combinará servicios administrados para reducir la operación de servidores y concentrarse en las funciones educativas. La clasificación de servicio se apoya en la definición de cloud del NIST [1].
+
+\begin{tabularx}{\linewidth}{P{3cm}Y Y}
+\toprule
+\textbf{Servicio propuesto} & \textbf{Responsabilidad} & \textbf{Concepto cloud aplicado}\\
+\midrule
+Cloud Run & Web, API y worker en contenedores. & Ejecución administrada y ajuste de capacidad.\\
+Firebase Auth & Identidad del estudiante. & Autenticación administrada.\\
+Firestore & Perfiles, materias, agenda y estados. & Persistencia documental independiente de instancias.\\
+Cloud Storage & Originales, páginas e índices privados. & Almacenamiento de objetos.\\
+Cloud Tasks & Entrega de trabajos al worker. & Desacoplamiento y reintentos.\\
+Secret Manager & Credenciales del proveedor de IA. & Separación de secretos y código.\\
+Logging y Monitoring & Errores, latencias y trabajo pendiente. & Observabilidad y operación.\\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Identidad, datos y permisos}
+Firebase Auth identifica a la persona; la API valida su token y comprueba que puede acceder al recurso. IAM controla lo que los servicios pueden hacer en GCP. Son dos fronteras distintas: estar autenticado no concede acceso a todas las materias y una identidad de servicio no reemplaza la autorización del estudiante.
+
+Firestore contendrá registros consultables; Storage conservará archivos grandes. Los documentos se mantendrán privados y las cargas utilizarán autorizaciones temporales, verificando tipo y tamaño antes de procesar. Las claves del proveedor permanecerán en backend. El renderer tendrá un origen separado y capacidades limitadas.
+
+\subsection*{Operación y costo}
+Se parte del Free Tier, sin créditos trial. Las cuotas, servicios habilitados, región y facturación deberán comprobarse antes de desplegar [8]. Se limitarán instancias, concurrencia y trabajos, y se medirán almacenamiento, tráfico y consumo de IA. Las alertas presupuestarias por sí solas no detienen el gasto [9]. Se requieren resultados reales para afirmar escalamiento, disponibilidad o costo observado.
+
+\input{secciones/05-arquitectura}
+
+\apartado{Fase 1 (H0): base técnica y viabilidad}
+H0 busca reducir riesgos antes de construir funcionalidades sobre supuestos no comprobados. El stack propuesto combina React/TypeScript para la web y Python/FastAPI para la API y el procesamiento de materiales. Se utilizarán dependencias fijadas, configuración por ambiente y pruebas locales reproducibles.
+
+\begin{tabularx}{\linewidth}{P{1.2cm}Y Y}
+\toprule
+\textbf{Tarea} & \textbf{Entrega} & \textbf{Criterio de comprobación}\\
+\midrule
+T01 & Workspace, API mínima, web y renderer. & Instalar desde lockfiles y arrancar los tres servicios.\\
+T02 & Esquemas, errores, puertos y cliente generado. & Rechazar entradas indebidas y detectar contratos desactualizados.\\
+T03 & Prototipo de laboratorio limitado. & Mostrar tres experiencias y bloquear acceso a capacidades no autorizadas.\\
+T04 & Prototipo de extracción y recuperación. & Recuperar fuentes correctas y señalar transcripciones ambiguas.\\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Contratos y separación de infraestructura}
+La API define tipos compartidos de materia, fuente, trabajo y error. El cliente TypeScript se genera desde esos esquemas para evitar mantener dos versiones manuales. Los campos controlados por servidor, como propietario y resultados, no se aceptan en entradas de creación. Las fechas y la zona horaria deben ser explícitas.
+
+Los puertos permiten sustituir almacenamiento, cola y proveedor sin cambiar las reglas del dominio. Los dobles locales sirven para pruebas; no demuestran que Firestore, Cloud Tasks o DeepSeek estén integrados. El código pendiente debe responder como pendiente, sin simular éxito.
+
+\subsection*{Pruebas de viabilidad}
+El laboratorio interpretará JavaScript en un runtime limitado y expondrá únicamente operaciones visuales autorizadas. Se probarán un explorador matemático, una simulación física y una visualización de algoritmo. Los controles deberán impedir acceso a credenciales y datos privados, además de limitar ejecución y memoria.
+
+La extracción cubrirá PDF, PPTX, notas e imágenes. Cada bloque conservará localizador de página o diapositiva. La recuperación buscará dentro de la materia y fuentes elegidas; las fórmulas dudosas se enviarán a revisión. La visión y calidad del proveedor requieren pruebas reales con credencial y corpus conocido. El cierre de H0 depende también de estas validaciones, no solo del arranque local.
+
+\apartado{Fase 2 (H1): espacio académico}
+H1 construirá el recorrido que el estudiante utiliza antes de conversar con la IA. La entrada principal mostrará materias y pendientes; el chat permanecerá cerrado hasta que el usuario lo abra. Se busca una primera sesión breve, con datos opcionales y posibilidad de completar la organización después.
+
+\begin{tabularx}{\linewidth}{P{1.2cm}Y Y}
+\toprule
+\textbf{Tarea} & \textbf{Entrega} & \textbf{Criterio de comprobación}\\
+\midrule
+T05 & Sistema visual y navegación adaptable. & Uso móvil/teclado y legibilidad.\\
+T06 & Identidad y autorización del piloto. & Rechazar sesión inválida y acceso a datos ajenos.\\
+T07 & Periodos, materias y temas. & Crear una materia libre y editarla conservando relaciones.\\
+T08 & Inicio, pendientes y horarios. & Fechas coherentes y datos persistentes al recargar.\\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Organización libre y diseño}
+La estructura será perfil, periodo opcional, materia y temas. El alumno podrá crear asignaturas con nombres propios y elegir una ilustración genérica de un catálogo. El dibujo no determina el contenido de la materia. Se incorporarán estados vacíos, carga y error con acciones claras.
+
+La identidad visual se inspira en Block \& Bold, con azul, oro, fondos claros y bloques de borde firme. Se comprobarán contraste, foco visible, objetivos táctiles y reducción de movimiento. El color universitario es inspiración; no se utilizan escudos ni se afirma afiliación institucional.
+
+\subsection*{Acceso y persistencia}
+Se utilizarán cuentas internas para probar el piloto. El backend verificará el token y el propietario de cada recurso. Las pruebas con cuentas A, B y C intentarán acceder a materias, agenda y datos ajenos cambiando sus IDs. Las reglas cliente de base y archivos comenzarán restrictivas.
+
+El almacenamiento local de una instancia no será la fuente de verdad del despliegue cloud. La API conservará las reglas y Firestore la información persistente. Las pruebas con emuladores se identificarán como locales; IAM y los servicios reales se verificarán cuando exista un proyecto configurado.
+
+\subsection*{Agenda e inicio}
+Los pendientes podrán asociarse a una materia y tener fecha, hora o día completo. Los horarios guardarán hora local y zona, con excepciones sencillas. El inicio utilizará información real y mostrará recomendaciones vacías mientras el módulo de aprendizaje no produzca evidencia.
+
+\apartado{Validación, avance y siguientes pasos}
+La construcción se verificará por comportamiento observable, con pruebas de reglas, integración y navegador según el riesgo. Una captura de pantalla no demuestra persistencia; un test con proveedor falso no demuestra calidad de IA ni integración cloud.
+
+\begin{tabularx}{\linewidth}{P{3cm}Y}
+\toprule
+\textbf{Nivel} & \textbf{Qué debe demostrar}\\
+\midrule
+Contratos y reglas & Campos permitidos, fechas, aislamiento, idempotencia y errores.\\
+Recorrido local & Crear materia, editar ilustración, registrar pendiente y recargar.\\
+Servicios reales & Token validado, permisos IAM, persistencia y procesamiento en GCP.\\
+Calidad educativa & Fuentes correctas, cálculos comprobables y ambigüedad reconocida.\\
+Experiencia & Localizar pendientes, recuperar contexto y usar controles sin ayuda.\\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Estado de este corte}
+H0 y H1 cuentan con implementación y pruebas: contratos generados, extracción de PDF/PPTX e imágenes, recuperación de fuentes, laboratorio limitado, identidad, perfil, materias, temas, periodos, agenda y horario. El navegador verifica guardado y recarga, cambio de ilustración y los recorridos principales. El laboratorio ejecuta tres familias de ejemplos y un recurso nuevo generado por DeepSeek; los intentos de acceso a red y DOM quedan bloqueados.
+
+Se probaron visión y respuestas con DeepSeek usando material sintético. La recuperación acertó los 40 casos del corpus pequeño preparado; este resultado no representa precisión general. En Firebase/Firestore reales se comprobaron creación y lectura de un documento, rechazo de token inválido y rechazo de correo externo o sin verificar. Los fixtures remotos se eliminaron al terminar. Se exige el dominio exacto \texttt{pcpuma.acatlan.unam.mx} y habilitación de piloto. La base autorizada está en \texttt{educloud-1d5de}, región \texttt{us-central1}, con acceso cliente denegado. Cloud Run aún corresponde al despliegue posterior; la aplicación se ejecuta localmente.
+
+\subsection*{Riesgos y conclusión}
+Los riesgos principales son errores de transcripción matemática, respuestas sin respaldo, acceso entre cuentas, código generado con capacidades excesivas y consumo cloud no previsto. Se atenderán mediante revisión de fuentes, autorización de backend, runtime acotado y límites operativos.
+
+Estas fases establecen las condiciones para conectar \textbf{apuntes, explicación, experimentación y práctica}. Su valor educativo se evaluará observando tareas y resultados de uso; no se atribuyen mejoras de calificaciones sin evidencia. Los próximos hitos incorporarán tutoría, recursos completos, progreso y pasaporte. El catálogo definitivo de estampillas y el nombre del producto siguen abiertos.

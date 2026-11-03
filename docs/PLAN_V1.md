@@ -1,8 +1,8 @@
 # Plataforma de estudio con IA · Plan de la v1.0
 
-Fecha: 2 de noviembre de 2026. Estado: **planeación; implementación no iniciada**.
+Fecha: 2 de noviembre de 2026. Estado: **arranque autorizado de H0 y H1; seguimiento en el registro de avance**.
 
-Este paquete convierte la conversación y los conceptos visuales en un proyecto ejecutable. La v1 será una aplicación real para pruebas internas con varias cuentas, orientada a estudiantes universitarios de ciencias físico-matemáticas e ingeniería. No se ha autorizado en esta etapa escribir la aplicación, aprovisionar servicios ni desplegar.
+Este paquete convierte la conversación y los conceptos visuales en un proyecto ejecutable. La v1 será una aplicación real para pruebas internas con varias cuentas, orientada a estudiantes universitarios de ciencias físico-matemáticas e ingeniería. El usuario autorizó comenzar las dos primeras etapas y documentarlas en LaTeX. Aún no se han aprovisionado ni desplegado servicios cloud. Consultar el [registro de avance](evidence/avance-fases-1-2.md) para distinguir trabajo terminado de trabajo previsto.
 
 ## Lectura recomendada
 
@@ -31,6 +31,6 @@ Los [cuatro conceptos](design/conceptos-v1/PROMPTS.md) son referencia de lenguaj
 
 ## Regla de ejecución
 
-Cuando se autorice construir, seguir el plan por dependencias y cerrar cada hito con evidencia. No implementar todos los módulos en paralelo desde el comienzo. Primero demostrar una ruta completa: crear materia → subir material → preguntar con cita → generar y guardar un recurso → practicar → reflejar progreso.
+Seguir el plan por dependencias y cerrar cada hito con evidencia. No implementar todos los módulos en paralelo desde el comienzo. Primero demostrar una ruta completa: crear materia → subir material → preguntar con cita → generar y guardar un recurso → practicar → reflejar progreso. El arranque actual cubre H0/H1; la ruta completa sigue siendo objetivo de hitos posteriores.
 
 El cierre de esta planeación no significa que existan pruebas de software, infraestructura o seguridad aprobadas. Esas verificaciones están especificadas para la ejecución futura.

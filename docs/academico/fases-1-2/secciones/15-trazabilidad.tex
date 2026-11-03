@@ -1,0 +1,30 @@
+\apartado{Apéndice: trazabilidad de requisitos y evidencias}
+\small
+\begin{tabularx}{\linewidth}{P{1.7cm}P{2cm}Y Y}
+\toprule
+\textbf{Requisito} & \textbf{Fase/tarea} & \textbf{Artefacto esperado} & \textbf{Evidencia de cierre}\\
+\midrule
+RF01, RN02 & H0 / T01 & Manifiestos, lockfiles, scripts e instrucciones. & Instalación reproducible, healthcheck y runner que falla correctamente.\\
+RF02, RN04 & H0 / T02 & Esquemas, OpenAPI, cliente y puertos. & Generación sin divergencia; rechazo de campos sensibles.\\
+RF03 & H0 / T03 & Runtime, SDK y tres fixtures. & Correctitud, ataques, interrupción y memoria medidos.\\
+RF03 & H0 / T04 & Corpus y adaptadores de extracción/recuperación. & Resultados por formato y localizador; live separado de mock.\\
+RF05, RN03 & H1 / T05 & Tokens, shell y catálogo genérico. & Capturas, teclado, contraste y adaptación móvil.\\
+RF04, RN01 & H1 / T06 & Acceso, actor y autorización. & Token inválido, cuenta excluida, A contra B y reglas cliente.\\
+RF05, RN04 & H1 / T07 & Servicio y pantalla de materias/temas. & V01/V02, materia libre, archivo y conflicto de revisión.\\
+RF06, RN04 & H1 / T08 & Agenda e inicio. & V03, reloj controlado, recarga y tutor cerrado.\\
+RN05--06 & Base transversal & Límites y diseño de operación. & Configuración y medición; integración cloud posterior.\\
+\bottomrule
+\end{tabularx}
+\normalsize
+\subsection*{Documentos de origen}
+\begin{itemize}
+\item \nolinkurl{docs/PLAN_V1.md}: decisiones, propuestas y límites.
+\item \nolinkurl{docs/superpowers/specs/2026-11-02-plataforma-estudio-design.md}: público, recorridos y experiencia.
+\item \nolinkurl{docs/planning/arquitectura-y-contratos.md}: componentes, datos, API y operación.
+\item \nolinkurl{docs/superpowers/plans/2026-11-02-plataforma-estudio.md}: dependencias y aceptación de H0/H1 y T01--T08.
+\end{itemize}
+
+\subsection*{Formato mínimo de registro posterior}
+\textbf{ID de evidencia; tarea; fecha; ambiente; versión o revisión; comando/procedimiento; resultado; enlace o ruta; limitación.} Una captura puede acreditar disposición visual, pero no sustituye resultados de persistencia o autorización. Cuando una prueba se omita, se indica la razón y la puerta que permanece abierta.
+
+La columna de evidencia en esta matriz es una \textbf{exigencia de cierre}, no una lista de resultados ya obtenidos. El siguiente apartado concentra el estado factual del corte.

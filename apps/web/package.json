@@ -10,6 +10,11 @@
     "test:unit": "vitest run"
   },
   "dependencies": {
+    "@fontsource/alfa-slab-one": "^5.3.0",
+    "@fontsource/archivo-narrow": "^5.3.0",
+    "@fontsource/caveat-brush": "^5.3.0",
+    "@fontsource/dm-mono": "^5.3.0",
+    "firebase": "^13.1.0",
     "react": "19.3.1",
     "react-dom": "19.3.1"
   },

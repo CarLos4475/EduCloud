@@ -1,0 +1,23 @@
+\section*{Resumen}
+\addcontentsline{toc}{section}{Resumen}
+El proyecto propone una aplicación web para estudiantes universitarios de ciencias físico-matemáticas e ingeniería. Su propósito es reunir organización académica, material de estudio y, en etapas posteriores, tutoría con inteligencia artificial y recursos interactivos. Este informe desarrolla las dos primeras fases del plan: la base técnica y las pruebas de viabilidad (H0), seguidas por el espacio académico con identidad, materias y agenda (H1).
+
+El eje de análisis es el cómputo en la nube. Se estudia un monolito modular con API y procesamiento separados, contenedores en Cloud Run, autenticación con Firebase, metadatos en Firestore y archivos en Cloud Storage. La propuesta incorpora autorización por propietario, identidades de servicio distintas, trabajos asíncronos y registros sin contenido privado. La gratuidad debe verificarse por servicio y región; el diseño no depende de créditos de prueba.
+
+La metodología combina construcción incremental, contratos compartidos, datos sintéticos y puertas de salida basadas en evidencia. Las pruebas locales revisan lógica e interfaces, pero no acreditan por sí mismas permisos IAM, facturación o comportamiento de servicios desplegados. Se presentan criterios de aceptación, riesgos y trazabilidad entre requisitos, tareas y evidencias esperadas.
+
+\destacado{Lectura del estado}{El documento parte de una planeación autorizada para iniciar trabajo. Una descripción técnica expresa una solución propuesta; no prueba que esté implementada. El apartado final registra el estado comprobable del corte y solo se actualiza con resultados identificables. No se afirma que exista un despliegue cloud.}
+
+\textbf{Palabras clave:} cómputo en la nube, SaaS, servicios administrados, contenedores, identidad, aislamiento de datos, escalamiento, organización académica.
+
+\subsection*{Convención de evidencia}
+\begin{tabularx}{\linewidth}{P{3.4cm}Y}
+\toprule
+\textbf{Categoría} & \textbf{Significado en este informe}\\
+\midrule
+Propuesto & Decisión de diseño o comportamiento previsto; requiere construcción o evaluación.\\
+Implementado & Existe un artefacto concreto identificable; su presencia no demuestra funcionamiento.\\
+Verificado & Una comprobación ejecutada tiene comando, ambiente, resultado y alcance registrados.\\
+Pendiente o bloqueado & Falta trabajo o una condición necesaria; se indica su efecto sobre el cierre.\\
+\bottomrule
+\end{tabularx}

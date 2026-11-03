@@ -1,0 +1,28 @@
+\apartado{Validación y criterios de cierre}
+\subsection{Evidencia reproducible por nivel}
+Cada resultado debe registrar fecha, ambiente, versión del artefacto, comando o procedimiento, resultado y limitación. Las salidas se redactan para no incluir tokens ni datos privados. Un resultado ``omitido'' o un proceso que no arrancó no se cuenta como aprobado.
+
+\small
+\begin{tabularx}{\linewidth}{P{2.2cm}Y Y}
+\toprule
+\textbf{Nivel} & \textbf{Qué debe comprobar} & \textbf{Qué no demuestra por sí solo}\\
+\midrule
+Unitario & Reglas académicas, fechas, campos extra, revisión y errores. & Persistencia o IAM de un servicio real.\\
+Integración local & API y adaptadores, emuladores, contratos y datos aislados. & Costo, cuotas y configuración del proyecto cloud.\\
+Navegador & Acceso, materias, agenda, teclado, móvil y recuperación. & Seguridad universal o calidad pedagógica general.\\
+Viabilidad & Runtime, ataques acotados, extracción y recuperación sobre corpus. & Flujo completo de tutoría o todas las entradas posibles.\\
+Cloud real & Identidades, permisos, persistencia, cola, revisiones y consumo. & Ausencia de todos los fallos futuros.\\
+\bottomrule
+\end{tabularx}
+\normalsize
+\subsection{Puertas de salida por fase}
+\textbf{H0:} instalación reproducible; smoke de web/API; contratos coherentes; runtime recuperable y expresivo en tres familias; pipeline documental evaluado con localizadores y símbolos. Una carencia crítica de seguridad, extracción o visión se declara como bloqueo, aunque otras partes funcionen.
+
+\textbf{H1:} recorridos V01--V03 del plan para acceso inicial, materias y agenda, junto con aislamiento base de V21/V22. Se comprueban cuenta vacía, nombres libres, materia sin periodo, edición, archivo, cambio de ilustración, fechas y recarga. Las capturas se acompañan de pruebas de persistencia y controles de acceso.
+
+\subsection{Evaluación de la propuesta de valor}
+Se propone una prueba de tareas con estudiantes voluntarios y datos sintéticos. Las tareas incluyen localizar un pendiente, cambiar el contexto de una materia y explicar qué información está usando el tutor cuando ese módulo exista. Se observan pasos, errores, tiempo y comprensión del estado; se recoge percepción de utilidad mediante preguntas breves. No se inferirá mejora académica a partir de satisfacción o una demostración.
+
+Las funciones posteriores de experimento y práctica requerirán comprobar corrección del contenido y capacidad para reconocer una duda. Una mejora en calificaciones exigiría un estudio específico, con muestra y método adecuados; no forma parte de los resultados de H0/H1.
+
+\destacado{Evidencia documental frente a evidencia de software}{Compilar este informe verifica su integridad editorial y visual. No valida el software descrito. Del mismo modo, que una suite local pase no acredita un despliegue cloud que no se haya realizado.}

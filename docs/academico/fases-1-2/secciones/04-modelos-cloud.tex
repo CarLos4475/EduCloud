@@ -1,0 +1,24 @@
+\apartado{Fundamento cloud y modelo de servicio}
+\subsection{SaaS para el estudiante; plataforma administrada para el equipo}
+El NIST caracteriza la nube mediante acceso por red, recursos compartidos, elasticidad y medición del uso, entre otros rasgos. Distingue SaaS, PaaS e IaaS según la capacidad entregada y la responsabilidad del consumidor \cite{nist}. En el proyecto, el estudiante consumiría una \textbf{aplicación como servicio (SaaS)}: accedería por web a sus materias y datos sin administrar servidores. Esta clasificación describe la experiencia prevista, no una certificación ni un servicio ya publicado.
+
+Para construir esa aplicación se propone utilizar capacidades de plataforma y servicios administrados. Cloud Run ejecuta contenedores y administra instancias; Firestore, Storage y Firebase resuelven persistencia e identidad. El equipo conserva la responsabilidad de sus contratos, permisos, dependencias, reglas de negocio y configuración. Usar un servicio administrado no delega la decisión de quién puede leer una materia.
+
+\begin{tabularx}{\linewidth}{P{2.6cm}Y Y}
+\toprule
+\textbf{Capa} & \textbf{Necesidad del proyecto} & \textbf{Responsabilidad del equipo}\\
+\midrule
+Aplicación SaaS & Materias y agenda privadas disponibles por navegador. & Experiencia, accesibilidad, propiedad y consistencia.\\
+Plataforma de contenedores & Ejecutar web, API y worker sin mantener una VM propia. & Imagen, dependencias, límites, entradas y versiones.\\
+Datos administrados & Conservar registros y archivos más allá de una instancia. & Modelo, autorización, índices, retención y borrado.\\
+Identidad e IAM & Identificar personas y autenticar servicios. & Roles mínimos, cuentas del piloto y pruebas negativas.\\
+Operación administrada & Observar uso, fallos y consumo. & Señales útiles, redacción, alertas y respuesta.\\
+\bottomrule
+\end{tabularx}
+
+\subsection{Por qué esta arquitectura}
+El monolito modular reduce el número de contratos distribuidos durante el piloto. API y worker comparten dominio, pero pueden tener despliegue y capacidad distintos: navegar no debe competir con una extracción pesada. Se evita dividir cada función en un microservicio antes de comprobar que lo necesita.
+
+La propuesta usa una nube pública para alojar un piloto de acceso restringido. \textbf{Piloto privado no equivale a nube privada}: la privacidad de los datos depende de autenticación, autorización y configuración; no del nombre dado al entorno. El entorno local facilita desarrollo y pruebas, mientras que el entorno cloud futuro permite comprobar identidades de servicio, persistencia y elasticidad reales.
+
+\destacado{La nube como parte del sistema}{El aporte previsto incluye persistencia multiusuario, acceso web, separación de cargas, procesamiento asíncrono, medición y trazabilidad. Alojar una maqueta estática no demostraría por sí solo estas capacidades.}

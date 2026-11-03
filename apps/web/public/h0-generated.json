@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "title": "Explorador de la ley de Ohm: V = I · R",
+  "learningObjective": "Comprender la relación lineal entre voltaje, corriente y resistencia mediante la ley de Ohm, manteniendo una corriente fija de 2 A y observando cómo cambia el voltaje al variar la resistencia.",
+  "instructions": "Mueve el control deslizante de resistencia entre 1 y 10 ohmios. La corriente permanece fija en 2 amperios. El voltaje se actualiza inmediatamente usando V = I · R. Observa el valor mostrado y la gráfica de voltaje frente a corriente para la resistencia seleccionada.",
+  "html": "<div id=\"app\">\n  <p>Ley de Ohm: V = I · R</p>\n  <p>Corriente fija: I = 2 A</p>\n  <label for=\"resistencia\">Resistencia R (Ω):</label>\n  <input id=\"resistencia\" type=\"range\" min=\"1\" max=\"10\" step=\"1\" value=\"5\">\n  <p id=\"voltaje\">Voltaje: 10 V</p>\n  <p id=\"detalle\">V = 2 A · 5 Ω = 10 V</p>\n  <div id=\"grafica\" aria-label=\"Gráfica de voltaje frente a corriente\"></div>\n</div>",
+  "css": "",
+  "javascript": "function actualizar(valor) {\n  const R = Math.min(10, Math.max(1, Number(valor) || 5));\n  const I = 2;\n  const V = I * R;\n  ui.patch(\"voltaje\", { text: \"Voltaje: \" + V + \" V\" });\n  ui.patch(\"detalle\", { text: \"V = 2 A · \" + R + \" Ω = \" + V + \" V\" });\n  ui.plot(\"grafica\", {\n    points: [[0, 0], [1, R], [2, V], [3, 3 * R], [4, 4 * R], [5, 5 * R]],\n    label: \"V frente a I para R = \" + R + \" Ω; punto de operación en I = 2 A, V = \" + V + \" V\"\n  });\n  state.write({ resistencia: R });\n}\n\nui.on(\"resistencia\", \"input\", function (valor) {\n  actualizar(valor);\n});\n\nactualizar(5);",
+  "initialState": {},
+  "textAlternative": "Explorador interactivo de la ley de Ohm. Incluye un control deslizante para elegir una resistencia entre 1 y 10 ohmios, con una corriente fija de 2 amperios. El voltaje se calcula como V = I · R y se muestra inmediatamente al mover el control. La gráfica representa el voltaje frente a la corriente para la resistencia elegida: es una recta que pasa por el origen, y en I = 2 A se marca el voltaje de operación. Por ejemplo, si la resistencia es 5 ohmios, el voltaje mostrado es 10 voltios.",
+  "sourceRefs": [],
+  "requestedCapabilities": [
+    "controls",
+    "plot",
+    "state"
+  ]
+}

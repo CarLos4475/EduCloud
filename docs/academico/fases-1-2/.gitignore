@@ -1,0 +1,9 @@
+# Intermediarios de compilación y revisión, todos regenerables.
+*.aux
+*.log
+*.out
+*.toc
+*.fdb_latexmk
+*.fls
+/revision/
+/portada.png

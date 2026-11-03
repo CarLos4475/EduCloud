@@ -1,0 +1,45 @@
+\apartado{Fase 1 (H0): motivación y base técnica}
+\subsection{Motivación y propuesta de valor}
+En ciencias físico-matemáticas e ingeniería, estudiar exige relacionar notación, procedimientos y fenómenos abstractos. Se plantea que una experiencia conectada podría reducir la fricción entre organizar el trabajo, consultar apuntes y comprobar una explicación. Esta motivación debe validarse con estudiantes; no supone que todos tengan el mismo problema ni que usar IA mejore por sí solo las calificaciones.
+
+\destacado{Presentación del proyecto: intervención de 60--90 segundos}{Un estudiante puede tener sus apuntes en un archivo, sus fechas en otra aplicación y sus dudas en un chat que desconoce lo que está estudiando. Nuestro proyecto busca reunir ese recorrido: empezar por las materias y pendientes, consultar el propio material, explorar un concepto mediante un experimento y practicar para reconocer qué falta comprender. La propuesta está dirigida a estudiantes universitarios de ciencias físico-matemáticas e ingeniería, donde una fórmula necesita interpretación además de una respuesta. Queremos que el tutor indique sus fuentes, que la personalidad sea independiente del tipo de ayuda y que el progreso distinga práctica asistida de evidencia independiente. La nube permitiría conservar el trabajo de cada cuenta, procesar documentos sin bloquear la navegación y rastrear fallos. Las primeras fases construyen esa base; el flujo completo es una meta posterior. Su valor se comprobará con tareas y observación de uso, sin prometer mejores notas.}
+
+\small
+\begin{tabularx}{\linewidth}{P{3.2cm}Y Y}
+\toprule
+\textbf{Problema a explorar} & \textbf{Aporte planteado} & \textbf{Cómo validarlo}\\
+\midrule
+Material y fechas dispersos & Materia como contexto de agenda, fuentes y actividad. & Observar si se localiza un pendiente y su contexto sin ayuda.\\
+Saltar entre agenda y chat & Inicio organizador y tutor contextual. & Comparar pasos, errores y pérdida de contexto en tareas equivalentes.\\
+Conceptos abstractos difíciles & Experimento con controles y alternativa textual. & Pedir explicación de cambios y contrastar con resultados conocidos.\\
+Estudiar sin reconocer dudas & Práctica y evidencia con nivel de confianza. & Comprobar si el alumno identifica un error y elige una acción útil.\\
+\bottomrule
+\end{tabularx}
+\normalsize
+
+La diferenciación buscada combina prioridad al material y método del alumno, laboratorio abierto con límites, organización conectada con progreso, personalidad separada de ayuda y participación social voluntaria. Son atributos de diseño sujetos a validación, no afirmaciones de superioridad frente a otras marcas. El recorrido \textbf{apuntes $\rightarrow$ tutor con fuentes $\rightarrow$ experimento $\rightarrow$ práctica $\rightarrow$ evidencia} orienta la v1 completa; H0/H1 no lo entregan por sí solos.
+
+\clearpage
+\subsection{T01: entorno reproducible}
+La base debe permitir que otra persona instale dependencias fijadas y arranque los componentes desde instrucciones explícitas. Se proponen paquetes de web y renderer, backend Python, scripts de desarrollo y variables por ambiente. Los secretos reales quedan fuera del repositorio. La configuración de prueba debe utilizar proveedores falsos y no necesitar una cuenta cloud para cada ejecución unitaria.
+
+\begin{tabularx}{\linewidth}{P{3.4cm}Y}
+\toprule
+\textbf{Entrega esperada} & \textbf{Razón y comprobación}\\
+\midrule
+Manifiestos y lockfiles & Fijar dependencias compatibles. Probar instalación desde ellos.\\
+API y web mínimas & Comprobar arranque y healthcheck antes de agregar funciones.\\
+Configuración de ejemplo & Explicar variables sin copiar credenciales o datos del piloto.\\
+Scripts de comprobación & El proceso debe devolver fallo si falla una prueba; no basta imprimir ``OK''.\\
+Decisión de stack & Registrar versiones, licencia de herramientas y límites del entorno.\\
+\bottomrule
+\end{tabularx}
+
+La portabilidad del contenedor es una intención de diseño. Un arranque local satisfactorio todavía no prueba que la imagen cumpla requisitos de ejecución, identidad o red de Cloud Run. Ambos resultados deben permanecer separados.
+
+\subsection{T02: contratos y adaptadores}
+Los esquemas compartidos describen IDs opacos, fechas, páginas de resultados, errores, revisión e idempotencia. El backend origina el contrato; el cliente TypeScript debe generarse de él y comprobar que no exista divergencia. Los handlers aún ausentes deben responder de manera explícita, sin simular operaciones exitosas.
+
+Los puertos separan dominio e infraestructura: almacenamiento de objetos, cola, recuperación y proveedor de tutoría, además de repositorios y reloj. Un doble en memoria permite evaluar reglas sin afirmar que Firestore o Cloud Tasks estén validados. Las mutaciones sensibles rechazan campos extra como propietario, privilegio o resultado académico enviados por el cliente.
+
+\destacado{Puerta parcial de H0}{Cerrar T01/T02 requiere arranque reproducible, contratos coherentes y pruebas ejecutadas. H0 completo también necesita resultados de T03 y T04; una carpeta de prototipos vacía no satisface la viabilidad.}

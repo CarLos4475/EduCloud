@@ -21,6 +21,11 @@ playwright-report/
 *.toc
 *.synctex.gz
 graphify-out/
+.tools/
+.firebase/
+*-debug.log
+docs/academico/**/revision/
+docs/academico/**/portada.png
 
 .uv-cache/
 .mypy_cache/

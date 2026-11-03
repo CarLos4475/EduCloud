@@ -1,28 +1,55 @@
-# Base local de la plataforma de estudio
+# Mi Campus · H0 y H1
 
-Esta es una base técnica; aún no implementa funcionalidades de producto, autenticación, almacenamiento, renderer seguro ni integración cloud.
+En estas etapas funcionan identidad, perfil, materias libres, temas, periodos, agenda y horario. H0 incluye extracción/recuperación de materiales y un laboratorio aislado. El tutor completo y la biblioteca del alumno corresponden a H2; los apuntes todavía se procesan mediante scripts de viabilidad.
 
 ## Requisitos e instalación
 
-Node 24.15 o superior de la serie 24, pnpm 11.0.8, Python 3.12 o 3.13 y uv 0.11.8. En PowerShell, desde la raíz:
+Node 24 LTS, pnpm 11, Python 3.12–3.13, uv y Java 21 para los emuladores. Esta PC tiene un JRE 21 local en `.tools/java21`, detectado por el script sin modificar el Java del sistema. En PowerShell:
 
 ```powershell
 pnpm install --frozen-lockfile
 uv sync --project backend --locked
-pnpm dev
+pnpm emulators
 ```
 
-Web: http://127.0.0.1:5173; renderer: http://127.0.0.1:5174; API: http://127.0.0.1:8000/health. Ctrl+C termina los procesos. El puerto de cada servicio es estricto. `uv sync` crea `backend/.venv`, necesario antes de `pnpm dev`. No se necesitan credenciales para estas pruebas.
+En otra terminal: `pnpm dev`. Copiar `.env.example` a `.env` solo la primera vez; nunca sobrescribir una clave ya configurada.
 
-`.env.example` documenta valores previstos, pero T01 aún no carga configuración de este archivo. No copiar secretos al repositorio. No se requieren contenedores ni emuladores para T01; los emuladores de Firebase/Firestore/Storage se decidirán y documentarán en tareas posteriores. No se han creado imágenes ni Dockerfiles.
+- Aplicación: http://127.0.0.1:5173
+- Laboratorio H0: http://127.0.0.1:5173/h0.html
+- Contratos API: http://127.0.0.1:8000/docs
+- Auth/Firestore emulados: puertos 9099/8080; cuentas sintéticas con dominio institucional.
+
+El emulador exporta datos al salir con el script; `.firebase` está ignorado. Archivar conserva relaciones. Borrar completamente una materia corresponde a T24 y devuelve 501 explícito.
+
+## Servicios reales
+
+Firebase y datos: `educloud-1d5de`, con Firestore Native `(default)` en `us-central1`, reglas cliente deny-all y app web registrada. `educloud-513604` queda reservado para Cloud Run posterior; aún no hay despliegue de la aplicación.
+
+`pnpm dev:cloud` conecta la web local con Firebase/Firestore reales usando las sesiones Firebase CLI/gcloud del operador. Las credenciales temporales permanecen en memoria, no en variables VITE ni archivos. Al expirar la sesión, reiniciar el comando. En Cloud Run se usará identidad de servicio/ADC; el adaptador de operador local se niega a funcionar allí. El script local de gcloud está preparado para la ruta de Windows de esta PC.
+
+La API exige dominio exacto `pcpuma.acatlan.unam.mx`, correo verificado en real y pertenencia al piloto (`CAMPUS_PILOT_UIDS` o `CAMPUS_PILOT_EMAILS`, solo backend). Esta restricción protege acceso a datos; no bloquea la creación de identidades externas mediante la API pública de Firebase. Las cuentas externas no acceden a la aplicación. La verificación de correo se omite únicamente en el emulador.
 
 ## Verificación
 
 ```powershell
 pnpm check
 pnpm test:unit
+pnpm test:integration # requiere emuladores
+pnpm test:e2e         # requiere emuladores y pnpm dev
+pnpm test:security
+pnpm audit --prod
 pnpm --filter @campus/web build
 pnpm --filter @campus/renderer build
 ```
 
-Los comandos de integración, e2e, seguridad, contratos, evaluación de IA, cloud y demo existen como nombres reservados y fallan explícitamente hasta que se implementen. `pnpm check` cubre tipos y Ruff; la validación de contratos está pendiente de T02. Los tests actuales no prueban funciones de producto. Este entorno de desarrollo no es una configuración de producción.
+`pnpm check` comprueba tipos, Ruff, mypy y sincronización de contratos. El sandbox de herramientas de Windows puede bloquear asyncio: las pruebas se verificaron fuera de él. No se sustituyen resultados de emulador por resultados de servicios reales.
+
+Pruebas opt-in: `pnpm eval:ai` utiliza DeepSeek con cinco solicitudes sintéticas; `node scripts/ai-eval.mjs --generate-resource` genera y valida una experiencia; `node scripts/cloud-smoke.mjs --preflight` solo lee permisos y fixtures; `pnpm test:cloud` crea una cuenta sintética, prueba Auth/Firestore y elimina únicamente sus datos. El fixture se marca verificado por Admin SDK sin enviar correos. No se modifica la cuenta real del estudiante. La clave DeepSeek se lee de `.env` y no se imprime.
+
+## Contratos y documentación
+
+`pnpm contracts:generate` exporta OpenAPI y DTOs TypeScript desde el backend; `pnpm contracts:check` detecta divergencias. Las rutas académicas ya ejecutan operaciones reales; `/api/v1/contracts` queda como diagnóstico 501. Los contratos detallados de futuros módulos se amplían al implementar sus consumidores.
+
+El [informe escolar resumido](docs/academico/fases-1-2/informe-fases-1-2.pdf) ocupa ocho páginas y conserva el pitch, la arquitectura cloud y los objetivos de H0/H1. La implementación continúa directamente con un solo agente por decisión del usuario.
+
+El [registro de evidencia](docs/evidence/avance-fases-1-2.md) detalla pruebas y límites. El laboratorio es una prueba de viabilidad QuickJS/WASM con SDK acotado, no un IDE remoto. La configuración de orígenes/CSP debe adaptarse al desplegar. La calidad de IA se evaluó con un corpus sintético pequeño, no como certificación académica general.

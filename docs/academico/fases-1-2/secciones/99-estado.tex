@@ -1,0 +1,28 @@
+% Actualizar solo a partir de evidencia entregada por el integrador.
+% No convertir propuesta en resultado al cambiar tiempos verbales del resto.
+\apartado{Estado del corte y límites de la entrega}
+\textbf{Fecha de corte:} 2 de noviembre de 2026. \textbf{Alcance:} documentación académica de H0/H1 y comienzo de implementación.
+
+Al elaborar esta versión se dispone de especificación, arquitectura, contratos propuestos y plan de tareas. Se autorizó iniciar las dos primeras fases. La existencia de documentos y de una rama de trabajo no se presenta como funcionalidad concluida. Los resultados de software se incorporarán únicamente cuando tengan evidencia reproducible.
+
+\begin{tabularx}{\linewidth}{P{2.6cm}P{3.4cm}Y}
+\toprule
+\textbf{Elemento} & \textbf{Estado documentado} & \textbf{Límite de la afirmación}\\
+\midrule
+Diseño H0/H1 & Propuesto y documentado & No acredita ejecución de los servicios descritos.\\
+T01 & Base local implementada; revisión en curso & El integrador reporta pruebas, builds y tres respuestas HTTP 200; revisión independiente pendiente.\\
+T02 & Pendiente; no iniciado & Contratos propuestos; no se acredita generación ni comprobación.\\
+T03--T04 & Viabilidad pendiente de evidencia & No se atribuye aprobación de sandbox, visión o recuperación.\\
+T05--T08 & Desarrollo previsto; cierre pendiente & No se afirma recorrido completo de identidad, materias y agenda.\\
+Cloud real & No acreditado en este corte & Sin URL de despliegue, IAM real, consumo o pruebas de escalamiento.\\
+Informe académico & Fuente LaTeX modular & Compilación y revisión editorial se registran en README y REPORTE.\\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Condiciones para actualizar este apartado}
+El integrador deberá identificar archivos y comandos ejecutados, resultado, ambiente y limitaciones. Las pruebas locales se marcarán como locales; una ejecución con proveedor falso se marcará como simulada. El cierre de una tarea se separará del cierre del hito. Una prueba ausente o bloqueada mantendrá visible su efecto en la puerta de salida.
+
+\destacado{Conclusión del corte}{Existe una propuesta técnica y académica trazable para comenzar H0/H1. La entrega de este informe no permite afirmar que ambas fases estén terminadas, que el tutor funcione de extremo a extremo o que haya un sistema desplegado en Google Cloud.}
+
+\subsection*{Límites editoriales}
+Los campos de institución, integrantes, profesor y grupo deben completarse en la fuente editable. El nombre del producto continúa provisional. Las referencias oficiales sustentan capacidades de proveedores, mientras que las decisiones de arquitectura y parámetros del piloto pertenecen al proyecto y requieren validación propia.

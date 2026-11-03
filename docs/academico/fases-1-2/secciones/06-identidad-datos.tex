@@ -1,0 +1,27 @@
+\apartado{Identidad, IAM y almacenamiento}
+\subsection{Dos niveles de identidad}
+Firebase Authentication identifica al estudiante; el backend debe validar el ID token antes de confiar en su usuario \cite{firebase-token}. La autorización de producto añade la lista de cuentas habilitadas y comprueba propietario o concesión en cada operación. Que una persona haya iniciado sesión no le permite leer una materia ajena.
+
+IAM controla identidades de infraestructura. Se proponen cuentas separadas para API, worker, despacho de tareas y despliegue, con permisos mínimos sobre los recursos que necesitan. No se incluyen llaves de servicio en el repositorio. Los secretos del proveedor de IA se reservarían al servidor mediante Secret Manager.
+
+Las bibliotecas servidor de Firestore se autorizan mediante IAM; no sustituyen la autorización del dominio \cite{firestore-iam}. La propuesta deniega accesos directos del cliente a colecciones y objetos. Por ello, una regla cliente restrictiva no basta para proteger una ruta de servidor que omita comprobar el propietario.
+
+\subsection{Base documental frente a almacenamiento de objetos}
+\begin{tabularx}{\linewidth}{P{2.4cm}Y Y}
+\toprule
+\textbf{Dimensión} & \textbf{Firestore: documentos} & \textbf{Storage: objetos}\\
+\midrule
+Contenido & Perfil, materia, tema, agenda, revisión y estado de trabajo. & PDF, PPTX, imágenes y paquetes derivados.\\
+Uso esperado & Consultas acotadas e índices; cambios pequeños por entidad. & Guardar y recuperar bytes por clave y versión.\\
+Organización & Alcance por usuario y relaciones verificadas por servidor. & Claves privadas calculadas por servicio; no por el navegador.\\
+Consumo a medir & Lecturas, escrituras, almacenamiento e índices. & Bytes, operaciones, transferencias y retención.\\
+Consistencia & \codigo{revision} y \codigo{expectedRevision} para detectar conflictos. & Generación de objeto y versión de extracción para evitar confusión.\\
+\bottomrule
+\end{tabularx}
+
+El término ``documento'' en Firestore se refiere a un registro estructurado; no significa almacenar allí el PDF completo. Separar metadatos y archivos permite consultar la organización sin descargar material pesado, y aplicar políticas específicas de tamaño, versión y eliminación.
+
+\subsection{Carga privada prevista para etapas posteriores}
+La API resolvería una clave de objeto autorizada y emitiría un ticket de corta duración. Una URL firmada concede acceso temporal a quien la posea \cite{signed-url}; no se registraría en logs ni se trataría como enlace público de biblioteca. Completar la carga exigiría verificar objeto, tamaño y tipo real. La disponibilidad de este diseño no significa que el flujo de upload ya esté integrado en H1.
+
+Los originales, extracciones y recursos derivados tienen ciclos de vida diferentes. El borrado debe considerar todos sus descendientes y la retención física del proveedor; archivar una materia conserva historial y no equivale a eliminarlo.

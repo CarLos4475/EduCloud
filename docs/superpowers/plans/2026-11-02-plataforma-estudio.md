@@ -10,7 +10,9 @@
 
 **Spec:** [diseño de producto](../specs/2026-11-02-plataforma-estudio-design.md), [arquitectura y contratos](../../planning/arquitectura-y-contratos.md), [validación](../../planning/validacion-y-demo.md), [coordinación](../../planning/subagentes.md).
 
-**Estado:** todas las tareas pendientes de autorización de implementación. Este archivo es un plan, no evidencia de trabajo terminado. La autorización actual abarca solo documentos.
+**Estado:** el usuario autorizó iniciar las dos primeras etapas, H0 y H1 (T01–T08), y documentarlas en LaTeX. Las casillas solo se marcarán con evidencia de ejecución. H2–H7 y el despliegue cloud no están incluidos en este arranque.
+
+**Cierre H0/H1:** T01–T08 implementadas y verificadas; véase [evidencia y límites](../../evidence/cierre-h0-h1.md). La ejecución pasó a ser directa por preferencia del usuario. Las listas siguientes conservan el diseño original: contratos de módulos futuros se amplían con sus consumidores y los casos amplios de evaluación académica siguen en H7. Firebase Auth/Firestore reales comprobados; Cloud Run corresponde a H6.
 
 ## Global Constraints
 
@@ -23,7 +25,7 @@
 - Cada subagente edita solo archivos asignados. Contratos, lockfiles, rutas globales e infraestructura compartida tienen propietario único.
 - No implementar funciones futuras para “dejar preparado” un marketplace, comunidad pública, plataforma multiinstitución o editor de código remoto.
 - Datos de pruebas sintéticos/licenciados; no logs privados. No añadir datos demo al catálogo real sin acción explícita.
-- No ejecutar en esta etapa scaffolds, instalación, tests de aplicación, git init, llamadas pagadas al modelo ni despliegues. Los comandos siguientes son instrucciones futuras.
+- El arranque autorizado permite scaffold, dependencias locales y pruebas de T01–T08. Avisar al usuario al requerir proyecto GCP o credenciales; no crear infraestructura ni inventar pruebas live sin esos prerrequisitos.
 
 ## Review Focus
 

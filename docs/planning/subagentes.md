@@ -1,5 +1,7 @@
 # Coordinación de subagentes y control de ejecución
 
+**Actualización de ejecución:** el usuario prefirió continuar con un solo agente por el costo de la orquestación. Desde T02 se trabaja directamente, con pruebas focalizadas y registro breve de avance. La distribución siguiente queda como referencia opcional para el futuro, no como requisito de nuevas delegaciones.
+
 Este documento organiza trabajo futuro. La petición actual es preparar el plan; no ejecutar las tareas. La lectura de los documentos por un revisor no autoriza programar, instalar ni desplegar.
 
 ## 1. Responsabilidades

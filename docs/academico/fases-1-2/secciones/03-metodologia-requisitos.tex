@@ -1,0 +1,32 @@
+\apartado{Metodología y requisitos iniciales}
+\subsection{Construcción incremental con puertas de salida}
+El método sigue dependencias: entorno reproducible, contratos, pruebas de viabilidad y espacio académico. Cada tarea produce artefactos revisables y comprobaciones específicas. Un fallo en una puerta arquitectónica se documenta antes de que otros módulos dependan de ella. Se utiliza un corpus sintético o con licencia para evitar datos privados en pruebas y capturas.
+
+La verificación distingue pruebas unitarias, integración local, navegador y servicios cloud reales. Los proveedores falsos permiten resultados repetibles sin credenciales; se identifican como tales. Una evaluación live de IA se habilita explícitamente y registra modelo, entrada de prueba, latencia y consumo. Una respuesta simulada no valida el proveedor.
+
+\subsection{Requisitos funcionales de H0 y H1}
+\small
+\begin{tabularx}{\linewidth}{P{1cm}Y P{2cm}}
+\toprule
+\textbf{ID} & \textbf{Requisito} & \textbf{Tarea}\\
+\midrule
+RF01 & Arrancar el entorno desde instrucciones y dependencias fijadas. & T01\\
+RF02 & Compartir esquemas de API, errores, revisión e idempotencia sin tipos divergentes. & T02\\
+RF03 & Probar laboratorio limitado y extracción/recuperación representativa. & T03--T04\\
+RF04 & Entrar al piloto, recuperar sesión y restringir recursos al actor autorizado. & T06\\
+RF05 & Crear y editar materias libres, temas y periodos opcionales; cambiar ilustración. & T05, T07\\
+RF06 & Registrar pendientes y horario; mostrar inicio organizador con tutor cerrado. & T08\\
+\bottomrule
+\end{tabularx}
+\normalsize
+\subsection{Requisitos no funcionales}
+\begin{tabularx}{\linewidth}{P{1cm}Y}
+\toprule
+RN01 & \textbf{Privacidad:} identidad obtenida del token validado, no del propietario enviado por navegador.\\
+RN02 & \textbf{Reproducibilidad:} versiones y lockfiles; configuración por ambiente sin secretos.\\
+RN03 & \textbf{Accesibilidad:} teclado, foco visible, contraste y adaptación móvil.\\
+RN04 & \textbf{Consistencia:} revisiones optimistas y fechas con semántica explícita.\\
+RN05 & \textbf{Operación:} límites configurables, errores trazables y registros sin apuntes.\\
+RN06 & \textbf{Economía:} estimación por servicio, sin gratuidad ilimitada ni crédito trial.\\
+\bottomrule
+\end{tabularx}

@@ -1,1 +1,1 @@
-export const label = 'Plataforma de estudio';
+export const label = "Plataforma de estudio";

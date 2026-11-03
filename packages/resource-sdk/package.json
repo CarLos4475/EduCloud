@@ -1,0 +1,14 @@
+{
+  "name": "@campus/resource-sdk",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "check": "tsc --noEmit",
+    "test:unit": "vitest run"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.3",
+    "vitest": "5.1.0"
+  }
+}

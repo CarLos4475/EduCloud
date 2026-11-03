@@ -1,0 +1,7 @@
+node_modules/
+dist/
+packages/api-client/src/generated.ts
+backend/openapi.json
+pnpm-lock.yaml
+graphify-out/
+.tools/

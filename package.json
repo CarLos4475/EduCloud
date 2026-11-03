@@ -7,16 +7,24 @@
   },
   "scripts": {
     "dev": "node scripts/dev.mjs",
-    "check": "pnpm -r run check && uv run --project backend ruff check backend && uv run --project backend mypy backend/src",
+    "dev:cloud": "node scripts/dev-cloud.mjs",
+    "emulators": "node scripts/emulators.mjs",
+    "check": "pnpm -r run check && uv run --project backend ruff check backend && uv run --project backend mypy --config-file backend/pyproject.toml backend/src && pnpm contracts:check",
     "test:unit": "pnpm -r run test:unit && uv run --project backend pytest backend/tests/unit -q",
-    "test:integration": "node scripts/unavailable.mjs test:integration",
-    "test:e2e": "node scripts/unavailable.mjs test:e2e",
-    "test:security": "node scripts/unavailable.mjs test:security",
-    "contracts:generate": "node scripts/unavailable.mjs contracts:generate",
-    "contracts:check": "node scripts/unavailable.mjs contracts:check",
-    "eval:ai": "node scripts/unavailable.mjs eval:ai",
-    "test:cloud": "node scripts/unavailable.mjs test:cloud",
+    "test:integration": "uv run --project backend pytest backend/tests/integration -q",
+    "test:e2e": "playwright test",
+    "test:security": "playwright test tests/e2e/renderer.spec.ts && uv run --project backend pytest backend/tests/unit/test_access_policy.py backend/tests/integration -q",
+    "contracts:generate": "node scripts/contracts.mjs generate",
+    "contracts:check": "node scripts/contracts.mjs check",
+    "eval:ai": "node scripts/ai-eval.mjs",
+    "test:cloud": "node scripts/cloud-smoke.mjs",
     "demo:seed": "node scripts/unavailable.mjs demo:seed",
     "demo:reset": "node scripts/unavailable.mjs demo:reset"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.64.1",
+    "firebase-tools": "^15.34.2",
+    "prettier": "^3.9.10"
   }
 }

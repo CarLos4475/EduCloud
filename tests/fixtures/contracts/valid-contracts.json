@@ -1,0 +1,15 @@
+{
+  "sourceRef": {
+    "materialId": "material-1",
+    "extractionVersion": "v2",
+    "blockId": "page-3-block-1",
+    "locator": "page:3",
+    "quote": null
+  },
+  "apiError": {
+    "code": "validation_error",
+    "message": "La entrada no es válida.",
+    "requestId": "request-1",
+    "details": null
+  }
+}

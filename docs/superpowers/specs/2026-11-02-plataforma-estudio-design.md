@@ -8,6 +8,16 @@ Crear un espacio universitario donde el estudiante organice sus materias y convi
 
 La v1 debe funcionar de extremo a extremo con cuentas internas y permitir demostrar conceptos cloud reales: identidad, servicios administrados, almacenamiento persistente, procesamiento asíncrono, aislamiento de datos, escalamiento, observabilidad y despliegue reproducible. No basta una maqueta con respuestas pregrabadas.
 
+### 1.1 Motivación y propuesta de valor (H0)
+
+La hipótesis de partida es que estudiar se vuelve más difícil cuando los apuntes, las fechas, las explicaciones y la práctica quedan dispersos. En asignaturas físico-matemáticas, una respuesta aislada puede no mostrar cómo cambia un fenómeno al modificar sus parámetros ni si el estudiante es capaz de resolver un problema por sí mismo. Estas necesidades se validarán con recorridos y retroalimentación de estudiantes; no se presentan como resultados de una encuesta inexistente.
+
+La propuesta conecta la organización académica con un ciclo de estudio: **material propio → explicación con fuentes → exploración interactiva → práctica → evidencia y siguiente paso**. Buscamos que el estudiante invierta menos esfuerzo en reconstruir el contexto y tenga más oportunidades de explorar, preguntar y comprobar su comprensión.
+
+La diferenciación que se busca está en esa continuidad: respetar el método y la notación del material del alumno; crear recursos interactivos variados; separar personalidad del tutor y tipo de ayuda; mostrar progreso explicable, y compartir voluntariamente con amigos. Son objetivos de diseño, no afirmaciones de exclusividad frente a productos no evaluados. No se promete obtener mejores notas ni sustituir al profesor.
+
+Cloud hace viable mantener el espacio personal entre dispositivos, separar identidades y datos, procesar documentos fuera de una petición web, adaptar capacidad a la demanda y observar fallos/costos. La arquitectura debe demostrar estas propiedades, no limitarse a publicar una página en internet. El informe académico desarrolla este argumento como una propuesta breve de presentación y una tabla de beneficios con criterios de validación.
+
 ## 2. Público, alcance y límites
 
 - Estudiantes universitarios del Área 1: ciencias físico-matemáticas e ingeniería.

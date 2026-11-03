@@ -1,0 +1,28 @@
+\apartado{Fase 1 (H0): pruebas de viabilidad}
+\subsection{T03: laboratorio interactivo aislado}
+El laboratorio propone composición libre dentro de capacidades revisadas. Un shell confiable en origen distinto recibe un paquete autorizado; el código generado se interpreta en una VM limitada dentro de un Worker. El SDK ofrece operaciones de texto, controles, fórmulas, gráficas, dibujo y estado. No entrega objetos del navegador, credenciales ni acceso de red al código generado.
+
+El prototipo debe comprobar tres familias: exploración de funciones, simulación de movimiento y visualización de ordenamiento. En cada caso, el comportamiento numérico se contrasta con valores conocidos; una animación convincente no es evidencia matemática suficiente. Las pruebas de ataque intentan navegación, red, acceso al DOM, mensajes falsificados y agotamiento de recursos.
+
+\small
+\begin{tabularx}{\linewidth}{P{3.6cm}Y}
+\toprule
+\textbf{Hipótesis técnica} & \textbf{Evidencia que permitiría aceptarla}\\
+\midrule
+El SDK resulta expresivo & Tres experiencias distintas con controles y explicaciones útiles.\\
+La frontera de capacidades se sostiene & Ataques rechazados, sin solicitudes externas y sin objetos host filtrados.\\
+Un fallo resulta recuperable & Interrupción de cómputo excesivo, alternativa textual y reinicio operativo.\\
+La memoria y fluidez son viables & Mediciones de paquete, memoria total y tiempo por evento en navegador.\\
+\bottomrule
+\end{tabularx}
+\normalsize
+Los límites del plan son parámetros candidatos que deben medirse. Pasar el corpus no demuestra ausencia universal de vulnerabilidades. Si seguridad o expresividad fallan, se revisa la arquitectura antes de integrar la generación; no se relajan restricciones para ocultar el problema.
+
+\subsection{T04: extracción, visión y recuperación}
+La prueba documental utiliza PDF, PPTX e imágenes representativas, con respuestas esperadas y separación entre desarrollo y evaluación reservada. Se evalúan localizadores por página o diapositiva, fórmulas, símbolos, material escaneado y preguntas que necesitan varias páginas. La numeración física inicia en uno y se distingue de etiquetas impresas.
+
+El candidato inicial de recuperación es BM25 con filtros por materia y fuentes, y un conjunto acotado de bloques. La calidad debe medirse; si falla, se investiga expansión de consulta u otro adaptador. Una corrección de transcripción genera versión, evitando convertir ambigüedad en certeza.
+
+\destacado{Criterio de salida de H0}{Se requiere evidencia del runtime y del pipeline documental. Si falta credencial, presupuesto, herramienta o capacidad visual real, se registra el bloqueo preciso y las pruebas locales disponibles. Los mocks no acreditan visión live ni fidelidad de la respuesta de IA.}
+
+El informe de viabilidad deberá indicar herramientas y licencias, formatos evaluados, símbolos problemáticos, latencia y consumo observado cuando corresponda. T04 es una evaluación temprana, no la biblioteca documental completa de hitos posteriores.

@@ -1,1 +1,1 @@
-export const label = 'Renderer aislado';
+export const label = "Renderer aislado";

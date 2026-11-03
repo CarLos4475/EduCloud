@@ -1,0 +1,38 @@
+\apartado{Arquitectura propuesta y flujo de información}
+La figura representa el destino arquitectónico de la v1. Las fases H0 y H1 desarrollan la base y el espacio académico; los componentes de IA, cola y almacenamiento documental se muestran para explicar sus relaciones futuras, sin atribuirles implementación completa.
+
+\begin{center}
+\begin{tikzpicture}[>=Latex,node distance=0.75cm and 0.7cm,
+ box/.style={draw=Azul,line width=0.9pt,fill=Marfil,align=center,minimum height=0.95cm,text width=3.25cm,font=\small},
+ future/.style={box,dashed,fill=white},arr/.style={->,draw=Azul,thick}]
+\node[box] (user) {Estudiante\\Navegador web};
+\node[box,right=of user] (auth) {Firebase Auth\\Identidad de persona};
+\node[box,below=of user] (web) {Web React\\Contenedor Cloud Run};
+\node[box,below=of web] (api) {API FastAPI\\Actor y autorización};
+\node[box,right=of api] (db) {Firestore\\Registros y metadatos};
+\node[future,below=of api] (tasks) {Cloud Tasks\\Despacho\\autenticado};
+\node[future,right=of tasks] (store) {\mbox{Cloud Storage}\\privado\\Originales y derivados};
+\node[future,below=of tasks] (worker) {Worker HTTP privado\\Cloud Run};
+\node[future,right=of worker] (ai) {Proveedor DeepSeek\\Adaptador del servidor};
+\node[future,left=of worker] (renderer) {Renderer separado\\VM limitada + SDK};
+\draw[arr] (user)--(web);
+\draw[arr] (user)--(auth);
+\draw[arr] (web)--node[left,font=\scriptsize]{token}(api);
+\draw[arr] (api)--(db);
+\draw[arr] (api)--(tasks);
+\draw[arr] (tasks)--(worker);
+\draw[arr] (api)--(store);
+\draw[arr] (worker)--(store);
+\draw[arr] (worker)--(ai);
+\draw[arr] (worker.south) -- ++(0,-0.35) -| ([xshift=0.55cm]db.east) -- (db.east);
+\draw[arr] (web.west) to[out=180,in=90] (renderer.north);
+\end{tikzpicture}
+\end{center}
+\begin{center}\small\textbf{Figura 1.} Arquitectura de destino. Trazo discontinuo: capacidades de integración posterior. Elaboración propia a partir del plan del proyecto.\end{center}
+
+\subsection{Recorrido síncrono y recorrido diferido}
+En H1, el navegador obtiene una sesión y solicita datos al API. El servidor valida el token, habilitación del piloto y pertenencia del recurso. Consulta o modifica registros y devuelve un resultado con revisión y errores definidos. Los datos persistentes no deben depender de la memoria de una instancia de contenedor.
+
+Posteriormente, una operación lenta creará un trabajo persistente. La cola notificará al worker, que verificará el alcance y actualizará el estado. El navegador consultará el progreso: cerrar una pestaña no debe perder el trabajo. Un recurso interactivo autorizado se enviará al renderer en otro origen; ese componente no recibirá secretos ni acceso general a documentos.
+
+\textbf{Fronteras principales:} navegador--API (actor humano), API--datos (propiedad), Tasks--worker (identidad de servicio), servidor--IA (contenido mínimo autorizado) y aplicación--renderer (mensajes acotados). Cada frontera requiere pruebas específicas; una flecha en un diagrama no acredita el permiso.
