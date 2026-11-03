@@ -29,3 +29,27 @@ docs/academico/**/portada.png
 
 .uv-cache/
 .mypy_cache/
+
+# Credenciales locales y exportaciones de datos
+.gcloud/
+credentials.json
+service-account*.json
+serviceAccount*.json
+*-firebase-adminsdk-*.json
+*.pem
+*.key
+*.p12
+*.pfx
+firebase-export*/
+firestore_export/
+auth_export/
+
+# Cachés y configuración personal de herramientas
+.agents/
+.cache/
+.idea/
+.DS_Store
+Thumbs.db
+*.tsbuildinfo
+.coverage
+htmlcov/
