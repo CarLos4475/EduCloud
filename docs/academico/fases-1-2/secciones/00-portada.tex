@@ -1,34 +1,44 @@
 \begin{titlepage}
 \thispagestyle{empty}
-\begin{tikzpicture}[remember picture,overlay]
-\fill[Azul] (current page.north west) rectangle ([yshift=-4.2cm]current page.north east);
-\fill[Oro] ([yshift=-4.2cm]current page.north west) rectangle ([yshift=-4.45cm]current page.north east);
-\fill[Arena] ([xshift=-1.2cm,yshift=1.2cm]current page.south east) rectangle ([xshift=-4cm,yshift=4cm]current page.south east);
-\draw[Azul,line width=1.4pt] ([xshift=-1.5cm,yshift=1.5cm]current page.south east) rectangle ([xshift=-4.3cm,yshift=4.3cm]current page.south east);
-\node[anchor=north west,align=left,text width=16cm,text=white,font=\Large\bfseries] at ([xshift=2.15cm,yshift=-1.1cm]current page.north west) {\Institucion};
-\node[anchor=north west,align=left,text width=16cm,text=white,font=\large] at ([xshift=2.15cm,yshift=-2.25cm]current page.north west) {\Plantel};
-\end{tikzpicture}\par
-\vspace*{2.7cm}
-{\color{Azul}\small\bfseries INFORME ACADÉMICO\par}
-\vspace{0.5cm}
-{\color{Azul}\Huge\bfseries\TituloProyecto\par}
+\begin{spacing}{1}
+\begin{center}
+\vspace*{0.5cm}
+{\large\bfseries\MakeUppercase{\Institucion}\par}
+\vspace{0.25cm}
+{\large\MakeUppercase{\Plantel}\par}
+\vspace{0.15cm}
+{\normalsize\Carrera\par}
+
+\vspace{1.35cm}
+{\large\bfseries\MakeUppercase{\Asignatura}\par}
+
+\vspace{1.35cm}
+{\LARGE\bfseries\TituloProyecto\par}
 \vspace{0.4cm}
-{\LARGE Arquitectura cloud y desarrollo inicial\par}
+{\large Arquitectura cloud y desarrollo inicial\par}
 \vspace{0.3cm}
-{\Large Fase 1: base técnica y viabilidad\par Fase 2: espacio académico\par}
-\vspace{0.8cm}
-\textcolor{Oro}{\rule{0.36\linewidth}{3pt}}\par
-\vspace{0.6cm}
-\begin{tabularx}{\linewidth}{P{2.6cm}Y}
-\textbf{Asignatura} & \Asignatura\\
-\textbf{Integrantes} & \Integrantes\\
-\textbf{Profesor(a)} & \Profesor\\
-\textbf{Grupo} & \Grupo\\
-\textbf{Fecha} & \FechaEntrega\\
-\end{tabularx}
-\vfill
-\begin{minipage}{0.68\linewidth}
-\small\textcolor{Gris}{Versión \VersionInforme. El informe distingue diseño, implementación y verificación. Los campos académicos son editables; la portada no afirma afiliación oficial ni utiliza escudos institucionales.}
+{\normalsize Fase 1: base técnica y viabilidad\par
+Fase 2: espacio académico\par}
+\end{center}
+
+\vspace{2.2cm}
+\begin{flushright}
+\begin{minipage}{0.58\textwidth}
+\textbf{Alumnos:}\\[0.15cm]
+\Integrantes
+
+\vspace{0.5cm}
+\textbf{Profesor(a):}\\[0.1cm]
+\Profesor
+
+\vspace{0.5cm}
+\textbf{Fecha de entrega:}\\[0.1cm]
+\FechaEntrega
+
+\vspace{0.5cm}
+\LugarEntrega
 \end{minipage}
+\end{flushright}
+\end{spacing}
 \end{titlepage}
-\setcounter{page}{2}
+\pagenumbering{arabic}

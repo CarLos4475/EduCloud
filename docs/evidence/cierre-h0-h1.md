@@ -10,6 +10,7 @@ Fecha: 2 de noviembre de 2026, horario de Ciudad de México. Ejecución directa,
 - `pnpm test:e2e`: seis recorridos Playwright, incluida comprobación axe sin hallazgos en el inicio examinado.
 - Builds de web y renderer completados. Auditoría de dependencias de producción sin vulnerabilidades conocidas en este corte.
 - Informe: dos pasadas de pdfLaTeX, ocho páginas A4; sin desbordamientos ni referencias indefinidas; revisión visual de la página de cierre actualizada.
+- Actualización editorial posterior: portada y estilo del LaTeX del usuario, con datos académicos confirmados y sin grupo. El mismo contenido ocupa ahora nueve páginas carta a 12 puntos e interlineado 1.5; recompilación y revisión visual sin desbordamientos ni referencias indefinidas.
 - Preflight remoto de solo lectura: no quedaron cuentas sintéticas del smoke.
 - `pnpm dev:cloud`: arranque real comprobado, pantalla de acceso visible, `/health` 200 y ruta privada sin token 401; no se creó ninguna cuenta durante esta comprobación.
 

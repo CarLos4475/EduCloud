@@ -1,6 +1,16 @@
 # Reporte de elaboración del informe
 
-## Corte vigente: cierre H0/H1
+## Adaptación de estilo solicitada
+
+Se adoptaron la portada y el formato del LaTeX proporcionado por el usuario, conservando el contenido de EduCloud: carta, 12 puntos, Times, interlineado de 1.5, sangría de 1.25 cm, márgenes laterales de 3 cm y superior/inferior de 2.5 cm. Portada sin decoraciones, institución y título centrados, datos a la derecha; pie con línea, identificación institucional y número de página. El cuerpo usa escala de grises e hipervínculos sin color visible. No se incorporaron el tema de investigación, nombres, profesor ni fecha del documento ajeno. Los campos académicos siguen editables.
+
+Esta adaptación reemplaza visualmente la versión A4 de ocho páginas descrita en los registros históricos inferiores. El texto del cuerpo se conservó; `compacto.tex` y `14-fuentes.tex` no cambiaron, y en arquitectura solo se ajustó la sangría de un párrafo. La salida vigente tiene nueve páginas carta, incluida la portada sin numerar.
+
+Se compilaron dos pasadas finales sin advertencias de desbordamiento o referencias indefinidas y se inspeccionaron las nueve páginas renderizadas, con detalle de portada y arquitectura. El usuario indicó los tres alumnos y al profesor Diego Romero Mora, y pidió omitir grupo; esos datos sustituyen los campos de portada correspondientes. Los nombres del documento de referencia no se utilizaron como fuente de identidad.
+
+El usuario confirmó también la Universidad Nacional Autónoma de México, la Facultad de Estudios Superiores Acatlán y la Licenciatura en Matemáticas Aplicadas y Computación. La portada se completó con esa identificación académica y el lugar de la referencia, Naucalpan de Juárez, Estado de México.
+
+## Corte anterior: cierre H0/H1
 
 El PDF vigente tiene **8 páginas A4** y presenta la motivación, el pitch, la arquitectura cloud y los resultados de H0/H1. Se recompiló dos veces con pdfLaTeX después de actualizar el estado real; `pdfinfo` confirmó ocho páginas y el log no contiene desbordamientos ni referencias indefinidas. Se inspeccionó la página 7 renderizada, que documenta Firebase/Firestore y DeepSeek reales, la restricción institucional y los límites de la evaluación sintética. La revisión visual completa de la versión resumida se conserva en el registro inferior.
 

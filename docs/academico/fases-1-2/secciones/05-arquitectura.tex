@@ -35,4 +35,4 @@ En H1, el navegador obtiene una sesión y solicita datos al API. El servidor val
 
 Posteriormente, una operación lenta creará un trabajo persistente. La cola notificará al worker, que verificará el alcance y actualizará el estado. El navegador consultará el progreso: cerrar una pestaña no debe perder el trabajo. Un recurso interactivo autorizado se enviará al renderer en otro origen; ese componente no recibirá secretos ni acceso general a documentos.
 
-\textbf{Fronteras principales:} navegador--API (actor humano), API--datos (propiedad), Tasks--worker (identidad de servicio), servidor--IA (contenido mínimo autorizado) y aplicación--renderer (mensajes acotados). Cada frontera requiere pruebas específicas; una flecha en un diagrama no acredita el permiso.
+\noindent\textbf{Fronteras principales:} navegador--API (actor humano), API--datos (propiedad), Tasks--worker (identidad de servicio), servidor--IA (contenido mínimo autorizado) y aplicación--renderer (mensajes acotados). Cada frontera requiere pruebas específicas; una flecha en un diagrama no acredita el permiso.

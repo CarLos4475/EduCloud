@@ -9,7 +9,7 @@ Registro actualizado por el integrador; no sustituye resultados de prueba.
 | Entrega | Estado | Evidencia / pendiente |
 |---|---|---|
 | Justificación, motivación y propuesta de valor H0 | Completada | Especificación §1.1 e informe resumido con pitch |
-| Informe escolar LaTeX/PDF | Versión resumida verificada | 8 páginas, compilación y revisión visual; reemplaza versión de 19 páginas |
+| Informe escolar LaTeX/PDF | Versión resumida verificada | 9 páginas con el estilo académico del usuario, portada UNAM/FES y datos confirmados; reemplaza versión A4 de 8 páginas y la extensa de 19 |
 | T01 Base local | Implementada y revisada | Smoke de tres servicios y revisión; Ctrl+C interactivo aún no verificado |
 | T02 Contratos | Completada para H0/H1 | Entradas/salidas H1, OpenAPI/TS, puertos y protocolo. Contratos futuros se amplían con sus módulos |
 | T03 Laboratorio aislado | Completada como viabilidad H0 | Tres familias y variante DeepSeek; límites, DOM/red y recuperación |

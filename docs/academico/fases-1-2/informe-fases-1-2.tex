@@ -1,45 +1,59 @@
-\documentclass[11pt,a4paper]{article}
+\documentclass[12pt,letterpaper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{lmodern}
-\usepackage[margin=2.25cm,headheight=15pt]{geometry}
+% NewTX reproduce la referencia; Times es la alternativa de TeX Live mínimo.
+\IfFileExists{newtxtext.sty}{\usepackage{newtxtext}\usepackage{newtxmath}}{\usepackage{mathptmx}}
+\usepackage[letterpaper,top=2.5cm,bottom=2.5cm,left=3cm,right=3cm,footskip=1.25cm]{geometry}
+\usepackage{setspace,ragged2e}
+\onehalfspacing
 \usepackage{microtype}
 \usepackage{xcolor}
 \usepackage{array,tabularx,booktabs,longtable}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,fit,backgrounds,calc}
-\usepackage{hyperref}
-\definecolor{Azul}{HTML}{122245}
-\definecolor{Oro}{HTML}{B59957}
-\definecolor{Marfil}{HTML}{F5F2EA}
-\definecolor{Arena}{HTML}{E9DEC7}
-\definecolor{Gris}{HTML}{505764}
-\hypersetup{colorlinks=true,linkcolor=Azul,urlcolor=Azul,citecolor=Azul,pdftitle={Plataforma universitaria: fases 1 y 2},pdfauthor={Equipo académico por completar}}
+\usepackage[hidelinks]{hyperref}
+% Los nombres se conservan para los diagramas, ahora en escala de grises.
+\definecolor{Azul}{gray}{0}
+\definecolor{Oro}{gray}{0.35}
+\definecolor{Marfil}{gray}{0.97}
+\definecolor{Arena}{gray}{0.92}
+\definecolor{Gris}{gray}{0.25}
+\hypersetup{pdftitle={Plataforma universitaria: fases 1 y 2},pdfsubject={Cómputo en la Nube},pdfauthor={Equipo académico por completar}}
 \urlstyle{same}
-\renewcommand{\contentsname}{Contenido}
+\renewcommand{\contentsname}{Índice}
 \renewcommand{\refname}{Fuentes consultadas}
 \renewcommand{\figurename}{Figura}
 \renewcommand{\tablename}{Tabla}
 \renewcommand{\arraystretch}{1.22}
 \setlength{\tabcolsep}{5pt}
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{6pt}
-\setlength{\emergencystretch}{2em}
+\setlength{\parindent}{1.25cm}
+\setlength{\parskip}{0pt}
+\setlength{\emergencystretch}{4em}
 \setcounter{tocdepth}{1}
 \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 \newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\AddToHook{env/tabularx/before}{\noindent}
 \newcommand{\codigo}[1]{\texttt{\small #1}}
-\newcommand{\apartado}[1]{\clearpage\section{#1}}
-\newcommand{\destacado}[2]{\par\medskip\begingroup\setlength{\fboxsep}{9pt}\noindent\colorbox{Marfil}{\parbox{\dimexpr\linewidth-18pt\relax}{\textcolor{Azul}{\textbf{#1}}\par #2}}\endgroup\par\medskip}
+\newcommand{\apartado}[1]{\section{#1}}
+\newcommand{\destacado}[2]{\subsection*{#1}#2\par}
+\raggedbottom
 \makeatletter
-\def\@oddhead{\small\textcolor{Azul}{CÓMPUTO EN LA NUBE}\hfil\textcolor{Gris}{Fases 1 y 2}}
-\def\@evenhead{\@oddhead}
-\def\@oddfoot{\small\textcolor{Gris}{Plataforma universitaria de estudio}\hfil\thepage}
-\def\@evenfoot{\@oddfoot}
+% Mismo formato de títulos y pie que la referencia, sin paquetes adicionales.
+\renewcommand{\section}{\@startsection{section}{1}{0pt}{-18pt}{12pt}{\normalfont\bfseries\large}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0pt}{-15pt}{9pt}{\normalfont\bfseries\normalsize}}
+\renewcommand{\@seccntformat}[1]{\csname the#1\endcsname.\hspace{0.6em}}
+\def\ps@academico{%
+  \def\@oddhead{}\def\@evenhead{}%
+  \def\@oddfoot{\vbox{\hrule height 0.4pt\kern6pt\hbox to\textwidth{\normalfont\small\PieInstitucional\hfil\thepage}}}%
+  \let\@evenfoot\@oddfoot}
 \makeatother
 \input{datos-portada}
+\hypersetup{pdfauthor={\AutoresPDF}}
+\pagestyle{academico}
 \begin{document}
 \input{secciones/00-portada}
+\justifying
+\setlength{\parindent}{1.25cm}
 \input{secciones/compacto}
 \input{secciones/14-fuentes}
 \end{document}
