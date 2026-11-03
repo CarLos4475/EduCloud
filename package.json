@@ -1,0 +1,22 @@
+{
+  "name": "campus",
+  "private": true,
+  "packageManager": "pnpm@11.0.8",
+  "engines": {
+    "node": ">=24.15.0 <25"
+  },
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "check": "pnpm -r run check && uv run --project backend ruff check backend && uv run --project backend mypy backend/src",
+    "test:unit": "pnpm -r run test:unit && uv run --project backend pytest backend/tests/unit -q",
+    "test:integration": "node scripts/unavailable.mjs test:integration",
+    "test:e2e": "node scripts/unavailable.mjs test:e2e",
+    "test:security": "node scripts/unavailable.mjs test:security",
+    "contracts:generate": "node scripts/unavailable.mjs contracts:generate",
+    "contracts:check": "node scripts/unavailable.mjs contracts:check",
+    "eval:ai": "node scripts/unavailable.mjs eval:ai",
+    "test:cloud": "node scripts/unavailable.mjs test:cloud",
+    "demo:seed": "node scripts/unavailable.mjs demo:seed",
+    "demo:reset": "node scripts/unavailable.mjs demo:reset"
+  }
+}

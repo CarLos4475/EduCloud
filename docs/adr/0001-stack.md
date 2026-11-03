@@ -1,0 +1,5 @@
+# ADR 0001: Base técnica
+
+Estado: aceptada para T01, 2026-11-02. Se usa monorepo pnpm con React 19.3.1, Vite 8.3.5, TypeScript 5.9.3 y Vitest 5.1.0; API FastAPI 0.162.0 con Python 3.13 probado (3.12–3.13 admitido), uvicorn 0.54.0 y pytest 9.2.0. Versiones transitivas exactas en `pnpm-lock.yaml` y `backend/uv.lock`. Node probado 24.15.0, pnpm 11.0.8 y uv 0.11.8. React, Vite, FastAPI, uvicorn, pytest, Vitest y TypeScript usan licencia MIT; Python PSF, Node MIT. Comprobar licencias transitivas antes de distribuir.
+
+[React npm](https://www.npmjs.com/package/react), [Vite npm](https://www.npmjs.com/package/vite), [FastAPI PyPI](https://pypi.org/project/fastapi/), [Node LTS](https://nodejs.org/en/about/previous-releases). La elección separa la web del origen del renderer previsto; el esqueleto todavía no ofrece aislamiento de código ni garantía de seguridad. No se añade parser PDF: selección y revisión de licencia/funcionalidad quedan pendientes antes de distribuirlo. No se incluyen SDK cloud ni proveedor de IA en T01. Los comandos pendientes fallan, evitando resultados falsamente verdes.
