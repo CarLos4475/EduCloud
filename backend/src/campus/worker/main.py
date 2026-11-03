@@ -58,8 +58,10 @@ def poll():
     state = study_runtime()
     print("Worker local: trabajos persistentes; sin servidor público.", flush=True)
     while True:
+        pending = []
         try:
-            for reference in state.records.pending_jobs():
+            pending = state.records.pending_jobs()
+            for reference in pending:
                 state.run_job(reference)
         except (
             GoogleAPIError,
@@ -74,7 +76,9 @@ def poll():
                 "Worker: dependencia no disponible; se reintentará la consulta.",
                 flush=True,
             )
-        time.sleep(1)
+            pending = []
+        # An empty Firestore query still consumes a read; avoid 86,400 idle queries/day.
+        time.sleep(1 if pending else 5)
 
 
 if __name__ == "__main__":

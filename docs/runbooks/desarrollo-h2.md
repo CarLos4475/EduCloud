@@ -36,6 +36,8 @@ Verificación: `pnpm check`, `pnpm test:unit`, `pnpm test:integration` y builds 
 
 El worker procesa trabajos sin depender de una pestaña abierta. Para reanudar tras reinicio basta arrancarlo con `pnpm dev`. Los leases duran cinco minutos. Un trabajo externo interrumpido no se repite automáticamente; la interfaz requiere aceptar posible consumo adicional si no hubo uso confirmado. Cancelar descarta resultados tardíos, pero no garantiza detener un cargo iniciado.
 
+Cuando no hay trabajos, el poller local espera cinco segundos entre consultas para reducir lecturas de Firestore. Cloud Tasks sustituirá ese sondeo en el despliegue de H6.
+
 Defaults: dos trabajos IA activos por cuenta, veinte preguntas/minuto, cien mil tokens diarios reservados/observados, dos tickets simultáneos, veinte MiB por documento, diez por imagen, doscientas páginas y quinientos MiB de originales por cuenta. El presupuesto se configura en `CAMPUS_DAILY_TOKEN_BUDGET`; una reserva se ajusta al consumo observado al terminar. No es un sistema de facturación comercial.
 
 `needs_review` nunca entra silenciosamente a recuperación. Confirmar una página crea versión nueva; los fallos parciales pueden corregirse manualmente. Las presentaciones con imágenes/gráficas requieren revisión; no se promete reconstrucción visual completa de diapositivas. El visor ofrece texto con localizador y descarga del original; la vista PDF depende del soporte del navegador.
