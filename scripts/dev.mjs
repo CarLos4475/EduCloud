@@ -16,6 +16,14 @@ const pnpmCommand = pnpm.toLowerCase().endsWith(".exe")
   : process.execPath;
 const pnpmPrefix = pnpmCommand === pnpm ? [] : [pnpm];
 const services = [
+  [
+    join(
+      "backend",
+      ".venv",
+      process.platform === "win32" ? "Scripts/python.exe" : "bin/python",
+    ),
+    ["-m", "campus.worker.main"],
+  ],
   [pnpmCommand, [...pnpmPrefix, "--filter", "@campus/web", "dev"]],
   [pnpmCommand, [...pnpmPrefix, "--filter", "@campus/renderer", "dev"]],
   [
@@ -32,9 +40,7 @@ const services = [
       "127.0.0.1",
       "--port",
       "8000",
-      "--reload",
-      "--reload-dir",
-      "backend/src",
+      ...(process.platform === "win32" ? [] : ["--reload", "--reload-dir", "backend/src"]),
     ],
   ],
 ];

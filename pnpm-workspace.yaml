@@ -3,6 +3,7 @@ packages:
   - packages/*
 overrides:
   '@grpc/grpc-js': '^1.13.6'
+  katex: '^0.19.1'
 allowBuilds:
   '@firebase/util': false
   protobufjs: false

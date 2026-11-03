@@ -31,12 +31,127 @@ export interface ApiError {
   details?: Record<string, unknown> | null;
 }
 
+export interface BlockRead {
+  materialId: string;
+  extractionVersion: string;
+  blockId: string;
+  locator: string;
+  quote?: string | null;
+  text: string;
+  status: string;
+  warning?: string | null;
+}
+
+export interface CitationRead {
+  materialId: string;
+  extractionVersion: string;
+  blockId: string;
+  locator: string;
+  quote?: string | null;
+  sourceId: string;
+}
+
+export interface ConversationInput {
+  subjectId: string;
+  title?: string;
+  personalityId?: "patient" | "socratic" | "direct";
+  assistanceMode?: "explain" | "hints" | "solution" | "practice";
+  materialIds?: (string)[];
+  sourceMode?: "selected_material" | "general";
+  preferences?: string;
+}
+
+export interface ConversationRead {
+  subjectId: string;
+  title?: string;
+  personalityId?: "patient" | "socratic" | "direct";
+  assistanceMode?: "explain" | "hints" | "solution" | "practice";
+  materialIds?: (string)[];
+  sourceMode?: "selected_material" | "general";
+  preferences?: string;
+  id: string;
+  revision: number;
+  createdAt: string;
+  activeTurnId?: string | null;
+}
+
+export interface ConversationUpdate {
+  subjectId: string;
+  title?: string;
+  personalityId?: "patient" | "socratic" | "direct";
+  assistanceMode?: "explain" | "hints" | "solution" | "practice";
+  materialIds?: (string)[];
+  sourceMode?: "selected_material" | "general";
+  preferences?: string;
+  expectedRevision: number;
+}
+
 export interface HTTPValidationError {
   detail?: (ValidationError)[];
 }
 
+export interface JobRead {
+  id: string;
+  revision: number;
+  kind: string;
+  entityId: string;
+  status: "queued" | "running" | "needs_review" | "succeeded" | "failed" | "cancel_requested" | "canceled";
+  stage: string;
+  progress: number;
+  attempts: number;
+  result?: Record<string, unknown> | null;
+  error?: string | null;
+  usageUnknown?: boolean;
+  usage?: Record<string, unknown> | null;
+  createdAt: string;
+}
+
+export interface MaterialAccepted {
+  material: MaterialRead;
+  job: JobRead;
+}
+
+export interface MaterialRead {
+  id: string;
+  revision: number;
+  name: string;
+  mediaType: string;
+  subjectId: string;
+  size: number;
+  status: string;
+  sha256: string;
+  error?: string | null;
+  createdAt: string;
+  extractionVersion?: string | null;
+  jobId?: string | null;
+  topicIds?: (string)[];
+  blocks?: (BlockRead)[] | null;
+  suggestedTopicIds?: (string)[];
+  pageCount?: number;
+  failedPages?: number;
+  reviewedPages?: number;
+  indexVersion?: string | null;
+  indexJobId?: string | null;
+}
+
+export interface ObjectReceipt {
+  generation: string;
+  sha256: string;
+  size: number;
+}
+
 export interface Page_AgendaRecord_ {
   items: (AgendaRecord)[];
+  nextCursor?: string | null;
+}
+
+export interface Page_ConversationRead_ {
+  items: (ConversationRead)[];
+  nextCursor?: string | null;
+}
+
+export interface Page_MaterialRead_ {
+  items: (MaterialRead)[];
   nextCursor?: string | null;
 }
 
@@ -57,6 +172,11 @@ export interface Page_SubjectRecord_ {
 
 export interface Page_TopicRecord_ {
   items: (TopicRecord)[];
+  nextCursor?: string | null;
+}
+
+export interface Page_TurnRead_ {
+  items: (TurnRead)[];
   nextCursor?: string | null;
 }
 
@@ -84,6 +204,10 @@ export interface ProfileUpdate {
   expectedRevision: number;
 }
 
+export interface RetryInput {
+  acceptPossibleCharge?: boolean;
+}
+
 export interface ScheduleInput {
   subjectId: string;
   weekday: number;
@@ -106,6 +230,14 @@ export interface ScheduleRecord {
   revision: number;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface SourceRef {
+  materialId: string;
+  extractionVersion: string;
+  blockId: string;
+  locator: string;
+  quote?: string | null;
 }
 
 export interface SubjectInput {
@@ -146,6 +278,43 @@ export interface TopicRecord {
   revision: number;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface TranscriptEdit {
+  blockId: string;
+  text: string;
+}
+
+export interface TranscriptInput {
+  expectedRevision: number;
+  edits: (TranscriptEdit)[];
+  topicIds?: (string)[];
+}
+
+export interface TurnInput {
+  question: string;
+  allowGeneralForTurn?: boolean;
+}
+
+export interface TurnRead {
+  id: string;
+  revision: number;
+  createdAt: string;
+  conversationId: string;
+  question: string;
+  text: string;
+  citations: (CitationRead)[];
+  needsConsent: boolean;
+  sourcesChanged: boolean;
+  partialSources?: boolean;
+  sourceMode: string;
+  jobId: string;
+  status: string;
+  stage: string;
+  error?: string | null;
+  usageUnknown: boolean;
+  sequence: number;
+  usage?: Record<string, unknown> | null;
 }
 
 export interface UpdateAgendaInput {
@@ -195,20 +364,31 @@ export interface UpdateTopicInput {
   prerequisiteIds?: (string)[] | null;
 }
 
+export interface UploadComplete {
+  generation: string;
+}
+
+export interface UploadInput {
+  name: string;
+  mediaType: string;
+  size: number;
+  sha256: string;
+}
+
+export interface UploadTicket {
+  uploadId: string;
+  materialId: string;
+  signedUrl: string;
+  requiredHeaders: Record<string, string>;
+  expiresAt: string;
+}
+
 export interface ValidationError {
   loc: (string | number)[];
   msg: string;
   type: string;
   input?: unknown;
   ctx?: Record<string, unknown>;
-}
-
-export interface SourceRef {
-  materialId: string;
-  extractionVersion: string;
-  blockId: string;
-  locator: string;
-  quote?: string | null;
 }
 
 export interface SourcePolicy {

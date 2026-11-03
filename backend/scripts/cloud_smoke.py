@@ -36,7 +36,10 @@ def main():
     if "--preflight" in sys.argv:
         fixtures = []
         for user in auth.list_users().iterate_all():
-            if re.fullmatch(r"h1-smoke-[a-f0-9]{32}@(example\.test|pcpuma\.acatlan\.unam\.mx)", user.email or ""):
+            if re.fullmatch(
+                r"h1-smoke-[a-f0-9]{32}@(example\.test|pcpuma\.acatlan\.unam\.mx)",
+                user.email or "",
+            ):
                 fixtures.append({"uid": user.uid, "synthetic": True})
         print(
             json.dumps(

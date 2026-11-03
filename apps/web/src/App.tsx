@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, lazy, Suspense, useEffect, useRef, useState } from "react";
 import {
   onAuthStateChanged,
   signOut,
@@ -10,6 +10,13 @@ import { allRows, api, auth, isEmulator, Row } from "./api";
 import { Login } from "./features/auth/Login";
 import { Editor, EditorState } from "./features/academic/Editor";
 import { Illustration } from "./components/Illustration";
+import { MaterialsPanel } from "./features/materials/MaterialsPanel";
+const TutorPanel = lazy(() =>
+  import("./features/tutor/TutorPanel").then((module) => ({
+    default: module.TutorPanel,
+  })),
+);
+import "./styles/study.css";
 
 type Data = Record<string, Row[]>;
 const empty = (): Data => ({
@@ -726,13 +733,12 @@ export function App() {
                 data.agenda.filter((a) => a.subjectId === subject.id),
               )}
             </section>
-            <div className="quiet-panel">
-              <h3>Tu biblioteca de estudio</h3>
-              <p>
-                Próximamente podrás reunir tus apuntes y conversar con el tutor
-                sobre ellos.
-              </p>
-            </div>
+            <MaterialsPanel
+              key={`${user.uid}:${subject.id}`}
+              subjectId={subject.id}
+              topics={data.topics.filter((t) => t.subjectId === subject.id)}
+              onTopicsChanged={() => void load()}
+            />
           </>
         )}
 
@@ -936,29 +942,20 @@ export function App() {
         />
       )}
       {tutor && (
-        <aside
-          className="tutor-drawer"
-          role="dialog"
-          aria-label="Tutor"
-          aria-modal="false"
+        <Suspense
+          fallback={
+            <aside className="tutor-drawer study-tutor" role="status">
+              Abriendo tu tutor…
+            </aside>
+          }
         >
-          <button
-            className="icon-button"
-            aria-label="Cerrar tutor"
-            onClick={() => setTutor(false)}
-          >
-            ×
-          </button>
-          <span className="eyebrow">TU COMPAÑERO DE ESTUDIO</span>
-          <h2>Un lugar para tus preguntas.</h2>
-          <p>
-            El tutor se está preparando. Podrás usar tus apuntes para explicar,
-            explorar y practicar.
-          </p>
-          <button className="secondary" onClick={() => setTutor(false)}>
-            Volver a mi espacio
-          </button>
-        </aside>
+          <TutorPanel
+            key={user.uid}
+            subjects={data.subjects.filter((s) => !s.archived)}
+            initialSubjectId={selected}
+            onClose={() => setTutor(false)}
+          />
+        </Suspense>
       )}
     </div>
   );

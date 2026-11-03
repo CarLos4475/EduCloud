@@ -242,6 +242,129 @@
         "title": "ApiError",
         "type": "object"
       },
+      "BlockRead": {
+        "properties": {
+          "blockId": {
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Blockid",
+            "type": "string"
+          },
+          "extractionVersion": {
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Extractionversion",
+            "type": "string"
+          },
+          "locator": {
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Locator",
+            "type": "string"
+          },
+          "materialId": {
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Materialid",
+            "type": "string"
+          },
+          "quote": {
+            "anyOf": [
+              {
+                "maxLength": 500,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quote"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "warning": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Warning"
+          }
+        },
+        "required": [
+          "materialId",
+          "extractionVersion",
+          "blockId",
+          "locator",
+          "text",
+          "status"
+        ],
+        "title": "BlockRead",
+        "type": "object"
+      },
+      "CitationRead": {
+        "additionalProperties": false,
+        "properties": {
+          "blockId": {
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Blockid",
+            "type": "string"
+          },
+          "extractionVersion": {
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Extractionversion",
+            "type": "string"
+          },
+          "locator": {
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Locator",
+            "type": "string"
+          },
+          "materialId": {
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Materialid",
+            "type": "string"
+          },
+          "quote": {
+            "anyOf": [
+              {
+                "maxLength": 500,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quote"
+          },
+          "sourceId": {
+            "title": "Sourceid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "materialId",
+          "extractionVersion",
+          "blockId",
+          "locator",
+          "sourceId"
+        ],
+        "title": "CitationRead",
+        "type": "object"
+      },
       "ContractEvent": {
         "additionalProperties": false,
         "properties": {
@@ -295,6 +418,235 @@
           "payload"
         ],
         "title": "ContractEvent",
+        "type": "object"
+      },
+      "ConversationInput": {
+        "additionalProperties": false,
+        "properties": {
+          "assistanceMode": {
+            "default": "explain",
+            "enum": [
+              "explain",
+              "hints",
+              "solution",
+              "practice"
+            ],
+            "title": "Assistancemode",
+            "type": "string"
+          },
+          "materialIds": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10,
+            "title": "Materialids",
+            "type": "array"
+          },
+          "personalityId": {
+            "default": "patient",
+            "enum": [
+              "patient",
+              "socratic",
+              "direct"
+            ],
+            "title": "Personalityid",
+            "type": "string"
+          },
+          "preferences": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Preferences",
+            "type": "string"
+          },
+          "sourceMode": {
+            "default": "selected_material",
+            "enum": [
+              "selected_material",
+              "general"
+            ],
+            "title": "Sourcemode",
+            "type": "string"
+          },
+          "subjectId": {
+            "pattern": "^[a-f0-9]{32}$",
+            "title": "Subjectid",
+            "type": "string"
+          },
+          "title": {
+            "default": "Nueva conversación",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "subjectId"
+        ],
+        "title": "ConversationInput",
+        "type": "object"
+      },
+      "ConversationRead": {
+        "properties": {
+          "activeTurnId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Activeturnid"
+          },
+          "assistanceMode": {
+            "default": "explain",
+            "enum": [
+              "explain",
+              "hints",
+              "solution",
+              "practice"
+            ],
+            "title": "Assistancemode",
+            "type": "string"
+          },
+          "createdAt": {
+            "title": "Createdat",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "materialIds": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10,
+            "title": "Materialids",
+            "type": "array"
+          },
+          "personalityId": {
+            "default": "patient",
+            "enum": [
+              "patient",
+              "socratic",
+              "direct"
+            ],
+            "title": "Personalityid",
+            "type": "string"
+          },
+          "preferences": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Preferences",
+            "type": "string"
+          },
+          "revision": {
+            "title": "Revision",
+            "type": "integer"
+          },
+          "sourceMode": {
+            "default": "selected_material",
+            "enum": [
+              "selected_material",
+              "general"
+            ],
+            "title": "Sourcemode",
+            "type": "string"
+          },
+          "subjectId": {
+            "pattern": "^[a-f0-9]{32}$",
+            "title": "Subjectid",
+            "type": "string"
+          },
+          "title": {
+            "default": "Nueva conversación",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "subjectId",
+          "id",
+          "revision",
+          "createdAt"
+        ],
+        "title": "ConversationRead",
+        "type": "object"
+      },
+      "ConversationUpdate": {
+        "additionalProperties": false,
+        "properties": {
+          "assistanceMode": {
+            "default": "explain",
+            "enum": [
+              "explain",
+              "hints",
+              "solution",
+              "practice"
+            ],
+            "title": "Assistancemode",
+            "type": "string"
+          },
+          "expectedRevision": {
+            "minimum": 1.0,
+            "title": "Expectedrevision",
+            "type": "integer"
+          },
+          "materialIds": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10,
+            "title": "Materialids",
+            "type": "array"
+          },
+          "personalityId": {
+            "default": "patient",
+            "enum": [
+              "patient",
+              "socratic",
+              "direct"
+            ],
+            "title": "Personalityid",
+            "type": "string"
+          },
+          "preferences": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Preferences",
+            "type": "string"
+          },
+          "sourceMode": {
+            "default": "selected_material",
+            "enum": [
+              "selected_material",
+              "general"
+            ],
+            "title": "Sourcemode",
+            "type": "string"
+          },
+          "subjectId": {
+            "pattern": "^[a-f0-9]{32}$",
+            "title": "Subjectid",
+            "type": "string"
+          },
+          "title": {
+            "default": "Nueva conversación",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "subjectId",
+          "expectedRevision"
+        ],
+        "title": "ConversationUpdate",
         "type": "object"
       },
       "HTTPValidationError": {
@@ -399,6 +751,108 @@
         "title": "InteractivePackageV1",
         "type": "object"
       },
+      "JobRead": {
+        "properties": {
+          "attempts": {
+            "title": "Attempts",
+            "type": "integer"
+          },
+          "createdAt": {
+            "title": "Createdat",
+            "type": "string"
+          },
+          "entityId": {
+            "title": "Entityid",
+            "type": "string"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "progress": {
+            "title": "Progress",
+            "type": "integer"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Result"
+          },
+          "revision": {
+            "title": "Revision",
+            "type": "integer"
+          },
+          "stage": {
+            "title": "Stage",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "queued",
+              "running",
+              "needs_review",
+              "succeeded",
+              "failed",
+              "cancel_requested",
+              "canceled"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "usage": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Usage"
+          },
+          "usageUnknown": {
+            "default": false,
+            "title": "Usageunknown",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "revision",
+          "kind",
+          "entityId",
+          "status",
+          "stage",
+          "progress",
+          "attempts",
+          "createdAt"
+        ],
+        "title": "JobRead",
+        "type": "object"
+      },
       "JobSpec": {
         "additionalProperties": false,
         "properties": {
@@ -435,6 +889,196 @@
         "title": "JobSpec",
         "type": "object"
       },
+      "MaterialAccepted": {
+        "properties": {
+          "job": {
+            "$ref": "#/components/schemas/JobRead"
+          },
+          "material": {
+            "$ref": "#/components/schemas/MaterialRead"
+          }
+        },
+        "required": [
+          "material",
+          "job"
+        ],
+        "title": "MaterialAccepted",
+        "type": "object"
+      },
+      "MaterialRead": {
+        "properties": {
+          "blocks": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/BlockRead"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Blocks"
+          },
+          "createdAt": {
+            "title": "Createdat",
+            "type": "string"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "extractionVersion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Extractionversion"
+          },
+          "failedPages": {
+            "default": 0,
+            "title": "Failedpages",
+            "type": "integer"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "indexJobId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Indexjobid"
+          },
+          "indexVersion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Indexversion"
+          },
+          "jobId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jobid"
+          },
+          "mediaType": {
+            "title": "Mediatype",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "pageCount": {
+            "default": 0,
+            "title": "Pagecount",
+            "type": "integer"
+          },
+          "reviewedPages": {
+            "default": 0,
+            "title": "Reviewedpages",
+            "type": "integer"
+          },
+          "revision": {
+            "title": "Revision",
+            "type": "integer"
+          },
+          "sha256": {
+            "title": "Sha256",
+            "type": "string"
+          },
+          "size": {
+            "title": "Size",
+            "type": "integer"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "subjectId": {
+            "title": "Subjectid",
+            "type": "string"
+          },
+          "suggestedTopicIds": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Suggestedtopicids",
+            "type": "array"
+          },
+          "topicIds": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Topicids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "revision",
+          "name",
+          "mediaType",
+          "subjectId",
+          "size",
+          "status",
+          "sha256",
+          "createdAt"
+        ],
+        "title": "MaterialRead",
+        "type": "object"
+      },
+      "ObjectReceipt": {
+        "properties": {
+          "generation": {
+            "title": "Generation",
+            "type": "string"
+          },
+          "sha256": {
+            "title": "Sha256",
+            "type": "string"
+          },
+          "size": {
+            "title": "Size",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "generation",
+          "sha256",
+          "size"
+        ],
+        "title": "ObjectReceipt",
+        "type": "object"
+      },
       "Page_AgendaRecord_": {
         "additionalProperties": false,
         "properties": {
@@ -462,6 +1106,64 @@
           "items"
         ],
         "title": "Page[AgendaRecord]",
+        "type": "object"
+      },
+      "Page_ConversationRead_": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ConversationRead"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "nextCursor": {
+            "anyOf": [
+              {
+                "maxLength": 512,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nextcursor"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "Page[ConversationRead]",
+        "type": "object"
+      },
+      "Page_MaterialRead_": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/MaterialRead"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "nextCursor": {
+            "anyOf": [
+              {
+                "maxLength": 512,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nextcursor"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "Page[MaterialRead]",
         "type": "object"
       },
       "Page_PeriodRecord_": {
@@ -578,6 +1280,35 @@
           "items"
         ],
         "title": "Page[TopicRecord]",
+        "type": "object"
+      },
+      "Page_TurnRead_": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/TurnRead"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "nextCursor": {
+            "anyOf": [
+              {
+                "maxLength": 512,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nextcursor"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "Page[TurnRead]",
         "type": "object"
       },
       "PeriodInput": {
@@ -720,6 +1451,18 @@
           "expectedRevision"
         ],
         "title": "ProfileUpdate",
+        "type": "object"
+      },
+      "RetryInput": {
+        "additionalProperties": false,
+        "properties": {
+          "acceptPossibleCharge": {
+            "default": false,
+            "title": "Acceptpossiblecharge",
+            "type": "boolean"
+          }
+        },
+        "title": "RetryInput",
         "type": "object"
       },
       "ScheduleInput": {
@@ -1159,6 +1902,195 @@
         "title": "TopicRecord",
         "type": "object"
       },
+      "TranscriptEdit": {
+        "additionalProperties": false,
+        "properties": {
+          "blockId": {
+            "pattern": "^block-[1-9][0-9]{0,2}$",
+            "title": "Blockid",
+            "type": "string"
+          },
+          "text": {
+            "maxLength": 30000,
+            "minLength": 1,
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "blockId",
+          "text"
+        ],
+        "title": "TranscriptEdit",
+        "type": "object"
+      },
+      "TranscriptInput": {
+        "additionalProperties": false,
+        "properties": {
+          "edits": {
+            "items": {
+              "$ref": "#/components/schemas/TranscriptEdit"
+            },
+            "maxItems": 50,
+            "title": "Edits",
+            "type": "array"
+          },
+          "expectedRevision": {
+            "minimum": 1.0,
+            "title": "Expectedrevision",
+            "type": "integer"
+          },
+          "topicIds": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 30,
+            "title": "Topicids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "expectedRevision",
+          "edits"
+        ],
+        "title": "TranscriptInput",
+        "type": "object"
+      },
+      "TurnInput": {
+        "additionalProperties": false,
+        "properties": {
+          "allowGeneralForTurn": {
+            "default": false,
+            "title": "Allowgeneralforturn",
+            "type": "boolean"
+          },
+          "question": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Question",
+            "type": "string"
+          }
+        },
+        "required": [
+          "question"
+        ],
+        "title": "TurnInput",
+        "type": "object"
+      },
+      "TurnRead": {
+        "properties": {
+          "citations": {
+            "items": {
+              "$ref": "#/components/schemas/CitationRead"
+            },
+            "title": "Citations",
+            "type": "array"
+          },
+          "conversationId": {
+            "title": "Conversationid",
+            "type": "string"
+          },
+          "createdAt": {
+            "title": "Createdat",
+            "type": "string"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "jobId": {
+            "title": "Jobid",
+            "type": "string"
+          },
+          "needsConsent": {
+            "title": "Needsconsent",
+            "type": "boolean"
+          },
+          "partialSources": {
+            "default": false,
+            "title": "Partialsources",
+            "type": "boolean"
+          },
+          "question": {
+            "title": "Question",
+            "type": "string"
+          },
+          "revision": {
+            "title": "Revision",
+            "type": "integer"
+          },
+          "sequence": {
+            "title": "Sequence",
+            "type": "integer"
+          },
+          "sourceMode": {
+            "title": "Sourcemode",
+            "type": "string"
+          },
+          "sourcesChanged": {
+            "title": "Sourceschanged",
+            "type": "boolean"
+          },
+          "stage": {
+            "title": "Stage",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "usage": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Usage"
+          },
+          "usageUnknown": {
+            "title": "Usageunknown",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "revision",
+          "createdAt",
+          "conversationId",
+          "question",
+          "text",
+          "citations",
+          "needsConsent",
+          "sourcesChanged",
+          "sourceMode",
+          "jobId",
+          "status",
+          "stage",
+          "usageUnknown",
+          "sequence"
+        ],
+        "title": "TurnRead",
+        "type": "object"
+      },
       "UpdateAgendaInput": {
         "additionalProperties": false,
         "properties": {
@@ -1559,6 +2491,93 @@
         "title": "UpdateTopicInput",
         "type": "object"
       },
+      "UploadComplete": {
+        "additionalProperties": false,
+        "properties": {
+          "generation": {
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Generation",
+            "type": "string"
+          }
+        },
+        "required": [
+          "generation"
+        ],
+        "title": "UploadComplete",
+        "type": "object"
+      },
+      "UploadInput": {
+        "additionalProperties": false,
+        "properties": {
+          "mediaType": {
+            "maxLength": 120,
+            "title": "Mediatype",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 180,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Sha256",
+            "type": "string"
+          },
+          "size": {
+            "exclusiveMinimum": 0.0,
+            "maximum": 20971520.0,
+            "title": "Size",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "mediaType",
+          "size",
+          "sha256"
+        ],
+        "title": "UploadInput",
+        "type": "object"
+      },
+      "UploadTicket": {
+        "properties": {
+          "expiresAt": {
+            "title": "Expiresat",
+            "type": "string"
+          },
+          "materialId": {
+            "title": "Materialid",
+            "type": "string"
+          },
+          "requiredHeaders": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Requiredheaders",
+            "type": "object"
+          },
+          "signedUrl": {
+            "title": "Signedurl",
+            "type": "string"
+          },
+          "uploadId": {
+            "title": "Uploadid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "uploadId",
+          "materialId",
+          "signedUrl",
+          "requiredHeaders",
+          "expiresAt"
+        ],
+        "title": "UploadTicket",
+        "type": "object"
+      },
       "ValidationError": {
         "properties": {
           "ctx": {
@@ -1934,6 +2953,84 @@
         ]
       }
     },
+    "/api/v1/catalog/personalities": {
+      "get": {
+        "operationId": "personalities_api_v1_catalog_personalities_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Personalities",
+        "tags": [
+          "study"
+        ]
+      }
+    },
+    "/api/v1/citations/resolve": {
+      "post": {
+        "operationId": "citation_api_v1_citations_resolve_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SourceRef"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BlockRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Citation",
+        "tags": [
+          "study"
+        ]
+      }
+    },
     "/api/v1/contracts": {
       "get": {
         "description": "Deliberately visible until real domain routes are implemented.",
@@ -1961,6 +3058,804 @@
         "summary": "Contract Status",
         "tags": [
           "contracts"
+        ]
+      }
+    },
+    "/api/v1/conversations": {
+      "get": {
+        "operationId": "conversations_api_v1_conversations_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "subjectId",
+            "required": true,
+            "schema": {
+              "title": "Subjectid",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 50,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 512,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_ConversationRead_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Conversations",
+        "tags": [
+          "study"
+        ]
+      },
+      "post": {
+        "operationId": "new_conversation_api_v1_conversations_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConversationInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "New Conversation",
+        "tags": [
+          "study"
+        ]
+      }
+    },
+    "/api/v1/conversations/{key}": {
+      "get": {
+        "operationId": "get_conversation_api_v1_conversations__key__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Conversation",
+        "tags": [
+          "study"
+        ]
+      },
+      "patch": {
+        "operationId": "update_conversation_api_v1_conversations__key__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConversationUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Conversation",
+        "tags": [
+          "study"
+        ]
+      }
+    },
+    "/api/v1/conversations/{key}/turns": {
+      "get": {
+        "operationId": "history_api_v1_conversations__key__turns_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 50,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 512,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_TurnRead_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "History",
+        "tags": [
+          "study"
+        ]
+      },
+      "post": {
+        "operationId": "send_turn_api_v1_conversations__key__turns_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "maxLength": 128,
+              "minLength": 1,
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TurnInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TurnRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Send Turn",
+        "tags": [
+          "study"
+        ]
+      }
+    },
+    "/api/v1/jobs/{key}": {
+      "get": {
+        "operationId": "job_api_v1_jobs__key__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Job",
+        "tags": [
+          "study"
+        ]
+      }
+    },
+    "/api/v1/jobs/{key}/cancel": {
+      "post": {
+        "operationId": "cancel_api_v1_jobs__key__cancel_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Cancel",
+        "tags": [
+          "study"
+        ]
+      }
+    },
+    "/api/v1/jobs/{key}/retry": {
+      "post": {
+        "operationId": "retry_api_v1_jobs__key__retry_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RetryInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Retry",
+        "tags": [
+          "study"
+        ]
+      }
+    },
+    "/api/v1/materials/{key}": {
+      "get": {
+        "operationId": "material_api_v1_materials__key__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaterialRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Material",
+        "tags": [
+          "study"
+        ]
+      }
+    },
+    "/api/v1/materials/{key}/original": {
+      "get": {
+        "operationId": "original_api_v1_materials__key__original_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Original",
+        "tags": [
+          "study"
+        ]
+      }
+    },
+    "/api/v1/materials/{key}/transcript": {
+      "patch": {
+        "operationId": "transcript_api_v1_materials__key__transcript_patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TranscriptInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaterialRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Transcript",
+        "tags": [
+          "study"
         ]
       }
     },
@@ -3045,6 +4940,161 @@
         ]
       }
     },
+    "/api/v1/subjects/{subject}/materials": {
+      "get": {
+        "operationId": "materials_api_v1_subjects__subject__materials_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "subject",
+            "required": true,
+            "schema": {
+              "title": "Subject",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 50,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 512,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_MaterialRead_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Materials",
+        "tags": [
+          "study"
+        ]
+      }
+    },
+    "/api/v1/subjects/{subject}/uploads": {
+      "post": {
+        "operationId": "ticket_api_v1_subjects__subject__uploads_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "subject",
+            "required": true,
+            "schema": {
+              "title": "Subject",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadTicket"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Ticket",
+        "tags": [
+          "study"
+        ]
+      }
+    },
     "/api/v1/topics": {
       "get": {
         "operationId": "topics_listing_api_v1_topics_get",
@@ -3350,6 +5400,278 @@
         "summary": "Topics Update",
         "tags": [
           "academic"
+        ]
+      }
+    },
+    "/api/v1/turns/{key}": {
+      "get": {
+        "operationId": "turn_api_v1_turns__key__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TurnRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Turn",
+        "tags": [
+          "study"
+        ]
+      }
+    },
+    "/api/v1/turns/{key}/events": {
+      "get": {
+        "operationId": "events_api_v1_turns__key__events_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "after",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "After",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Events",
+        "tags": [
+          "study"
+        ]
+      }
+    },
+    "/api/v1/uploads/{key}/complete": {
+      "post": {
+        "operationId": "complete_api_v1_uploads__key__complete_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "maxLength": 128,
+              "minLength": 1,
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadComplete"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaterialAccepted"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Complete",
+        "tags": [
+          "study"
+        ]
+      }
+    },
+    "/api/v1/uploads/{key}/content": {
+      "put": {
+        "operationId": "upload_api_v1_uploads__key__content_put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Upload-Token",
+            "required": true,
+            "schema": {
+              "maxLength": 128,
+              "title": "X-Upload-Token",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObjectReceipt"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Upload",
+        "tags": [
+          "study"
         ]
       }
     },

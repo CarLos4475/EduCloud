@@ -1,6 +1,7 @@
 import base64
 import json
 import os
+import time
 
 import httpx
 from pydantic import Field
@@ -14,10 +15,81 @@ class Transcription(ContractModel):
     needs_review: bool = True
 
 
+class ProviderFailure(Exception):
+    def __init__(self, code, usage=None):
+        self.code, self.usage = code, usage
+        super().__init__(code)
+
+
 class DeepSeekProvider:
-    def __init__(self):
+    def __init__(self, transport=None):
         self.key = os.getenv("DEEPSEEK_API_KEY", "")
         self.model = os.getenv("DEEPSEEK_MODEL", "deepseek-flash")
+        self.transport = transport
+
+    def tutor_answer(self, messages, on_progress=None):
+        if not self.key:
+            raise ProviderFailure("provider_not_configured", {"total_tokens": 0})
+        fragments, usage, completed, stopped = [], None, False, False
+        last_checkpoint = time.monotonic()
+        size = 0
+        try:
+            with (
+                httpx.Client(
+                    timeout=httpx.Timeout(90, connect=15), transport=self.transport
+                ) as client,
+                client.stream(
+                    "POST",
+                    "https://api.deepseek.com/chat/completions",
+                    headers={"Authorization": f"Bearer {self.key}"},
+                    json={
+                        "model": self.model,
+                        "messages": messages,
+                        "stream": True,
+                        "stream_options": {"include_usage": True},
+                        "response_format": {"type": "json_object"},
+                        "max_tokens": 3000,
+                    },
+                ) as response,
+            ):
+                if response.status_code != 200:
+                    raise ProviderFailure(
+                        f"provider_{response.status_code}",
+                        {"total_tokens": 0}
+                        if 400 <= response.status_code < 500
+                        and response.status_code != 408
+                        else None,
+                    )
+                for line in response.iter_lines():
+                    if not line.startswith("data:"):
+                        continue
+                    content = line[5:].strip()
+                    if content == "[DONE]":
+                        completed = True
+                        break
+                    event = json.loads(content)
+                    if event.get("usage"):
+                        usage = event["usage"]
+                    for choice in event.get("choices", []):
+                        fragment = choice.get("delta", {}).get("content") or ""
+                        fragments.append(fragment)
+                        size += len(fragment)
+                        if choice.get("finish_reason") == "stop":
+                            stopped = True
+                    if size > 70000:
+                        raise ProviderFailure("provider_output_limit", usage)
+                    if on_progress and time.monotonic() - last_checkpoint >= 3:
+                        on_progress()
+                        last_checkpoint = time.monotonic()
+            if not completed or not stopped:
+                raise ProviderFailure("provider_interrupted", usage)
+            if not usage or "total_tokens" not in usage:
+                raise ProviderFailure("provider_usage_missing")
+            return json.loads("".join(fragments)), usage
+        except httpx.HTTPError:
+            raise ProviderFailure("provider_timeout", usage) from None
+        except (ValueError, KeyError, TypeError):
+            raise ProviderFailure("provider_invalid_output", usage) from None
 
     def complete(self, messages, json_mode=False, max_tokens=1500):
         if not self.key:
@@ -31,18 +103,27 @@ class DeepSeekProvider:
         if json_mode:
             body["response_format"] = {"type": "json_object"}
         # Fixed endpoint, never a URL supplied by a document or generated resource.
-        with httpx.Client(timeout=90) as client:
+        with httpx.Client(timeout=90, transport=self.transport) as client:
             response = client.post(
                 "https://api.deepseek.com/chat/completions",
                 headers={"Authorization": f"Bearer {self.key}"},
                 json=body,
             )
         if response.status_code != 200:
-            raise RuntimeError(
-                f"El proveedor no pudo completar la solicitud (HTTP {response.status_code})."
+            raise ProviderFailure(
+                f"provider_{response.status_code}",
+                {"total_tokens": 0}
+                if 400 <= response.status_code < 500 and response.status_code != 408
+                else None,
             )
-        data = response.json()
-        return data["choices"][0]["message"]["content"], data.get("usage", {})
+        try:
+            data = response.json()
+            usage = data.get("usage")
+            if not isinstance(usage, dict) or "total_tokens" not in usage:
+                raise ProviderFailure("provider_usage_missing")
+            return data["choices"][0]["message"]["content"], usage
+        except (ValueError, KeyError, TypeError):
+            raise ProviderFailure("provider_invalid_output") from None
 
     def transcribe_image(self, content: bytes, media_type="image/png"):
         text, usage = self.complete(
@@ -66,7 +147,10 @@ class DeepSeekProvider:
             ],
             json_mode=True,
         )
-        result = Transcription.model_validate(json.loads(text))
+        try:
+            result = Transcription.model_validate(json.loads(text))
+        except ValueError:
+            raise ProviderFailure("provider_invalid_transcription", usage) from None
         # Transcription is a draft until confirmed, regardless of model confidence.
         result.needs_review = True
         return result, usage

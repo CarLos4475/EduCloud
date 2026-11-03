@@ -25,22 +25,26 @@ export const persistenceReady = setPersistence(auth, browserSessionPersistence);
 export type Row = { id: string; revision: number; [key: string]: unknown };
 export type Page<T> = { items: T[]; nextCursor: string | null };
 
+export const apiBase =
+  import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api/v1";
+
+export async function authorizedFetch(path: string, options: RequestInit = {}) {
+  const token = await auth.currentUser?.getIdToken();
+  return fetch(apiBase + path, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...options.headers,
+    },
+  });
+}
+
 export async function api<T>(
   path: string,
   options: RequestInit = {},
 ): Promise<T> {
-  const token = await auth.currentUser?.getIdToken();
-  const response = await fetch(
-    (import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api/v1") + path,
-    {
-      ...options,
-      headers: {
-        "Content-Type": "application/json",
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        ...options.headers,
-      },
-    },
-  );
+  const response = await authorizedFetch(path, options);
   if (response.status === 204) return undefined as T;
   const result = await response.json();
   if (!response.ok)
@@ -59,4 +63,22 @@ export async function allRows(collection: string): Promise<Row[]> {
     cursor = page.nextCursor;
   } while (cursor);
   return result;
+}
+
+export async function studyRows<T>(
+  path: string,
+  options: RequestInit = {},
+): Promise<Page<T>> {
+  const items: T[] = [];
+  let cursor: string | null = null;
+  do {
+    const separator = path.includes("?") ? "&" : "?";
+    const result: Page<T> = await api<Page<T>>(
+      `${path}${separator}limit=50${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ""}`,
+      options,
+    );
+    items.push(...result.items);
+    cursor = result.nextCursor;
+  } while (cursor);
+  return { items, nextCursor: null };
 }

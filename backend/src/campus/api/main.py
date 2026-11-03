@@ -7,18 +7,27 @@ from fastapi.responses import JSONResponse
 from pydantic import ValidationError
 
 from campus.adapters.records import RevisionConflict
+from campus.api.body_limit import BodyLimit
 from campus.api.routes import contracts_router
 from campus.api.routes.academic import router as academic_router
+from campus.api.routes.study import router as study_router
 from campus.services.academic import DomainError
 
 app = FastAPI(title="Campus API")
 app.include_router(contracts_router)
 app.include_router(academic_router)
+app.include_router(study_router)
+app.add_middleware(BodyLimit)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://127.0.0.1:5173", "http://localhost:5173"],
     allow_methods=["GET", "PUT", "POST", "PATCH", "DELETE"],
-    allow_headers=["Authorization", "Content-Type"],
+    allow_headers=[
+        "Authorization",
+        "Content-Type",
+        "Idempotency-Key",
+        "X-Upload-Token",
+    ],
 )
 
 
@@ -28,6 +37,8 @@ async def request_id(request: Request, call_next):
     response = await call_next(request)
     response.headers["X-Request-Id"] = request.state.request_id
     response.headers["X-Content-Type-Options"] = "nosniff"
+    if request.url.path.startswith("/api/v1/"):
+        response.headers["Cache-Control"] = "no-store"
     return response
 
 

@@ -18,6 +18,13 @@ class Settings:
         project = os.getenv("GOOGLE_CLOUD_PROJECT", "demo-campus")
         emulator_auth = os.getenv("FIREBASE_AUTH_EMULATOR_HOST")
         emulator_data = os.getenv("FIRESTORE_EMULATOR_HOST")
+        if os.getenv("K_SERVICE") and (
+            environment == "local"
+            or project.startswith("demo-")
+            or emulator_auth
+            or emulator_data
+        ):
+            raise ValueError("Cloud Run no admite modo local ni emuladores.")
         if environment != "local" and (
             emulator_auth or emulator_data or project.startswith("demo-")
         ):

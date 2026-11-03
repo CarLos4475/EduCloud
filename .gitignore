@@ -29,6 +29,7 @@ docs/academico/**/portada.png
 
 .uv-cache/
 .mypy_cache/
+.data/
 
 # Credenciales locales y exportaciones de datos
 .gcloud/

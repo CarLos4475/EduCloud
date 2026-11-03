@@ -5,6 +5,8 @@ from typing import Any, Protocol
 
 
 class Records(Protocol):
+    def save_many(self, owner, changes): ...
+    def pending_jobs(self): ...
     def atomic(self, operation): ...
     def get(self, owner: str, collection: str, key: str) -> dict[str, Any] | None: ...
     def list(self, owner: str, collection: str) -> list[dict[str, Any]]: ...
@@ -56,6 +58,27 @@ class MemoryRecords:
     def remove(self, owner, collection, key):
         self.data.pop((owner, collection, key), None)
 
+    def save_many(self, owner, changes):
+        with self.lock:
+            for collection, key, value, expected in changes:
+                current = self.get(owner, collection, key)
+                if (expected is None and current is not None) or (
+                    expected is not None
+                    and (not current or current["revision"] != expected)
+                ):
+                    raise RevisionConflict()
+            for collection, key, value, expected in changes:
+                self.data[(owner, collection, key)] = deepcopy(value)
+
+    def pending_jobs(self):
+        with self.lock:
+            return [
+                deepcopy(row)
+                for (_, collection, _), row in self.data.items()
+                if collection == "jobs"
+                and row["status"] in ("queued", "running", "cancel_requested")
+            ][:50]
+
 
 class FirestoreRecords:
     def __init__(self, project: str, credentials=None) -> None:
@@ -72,6 +95,8 @@ class FirestoreRecords:
     def atomic(self, operation):
         from google.cloud import firestore
 
+        if self.context.get() is not None:
+            return operation()
         transaction = self.client.transaction()
 
         @firestore.transactional
@@ -132,3 +157,41 @@ class FirestoreRecords:
             self.context.get().delete(ref)
         else:
             ref.delete()
+
+    def save_many(self, owner, changes):
+        def write():
+            tx = self.context.get()
+            refs = [
+                self.collection(owner, collection).document(key)
+                for collection, key, _, _ in changes
+            ]
+            snapshots = [ref.get(transaction=tx) for ref in refs]
+            for snapshot, (_, _, _, expected) in zip(snapshots, changes):
+                current = snapshot.to_dict() if snapshot.exists else None
+                if (expected is None and current is not None) or (
+                    expected is not None
+                    and (not current or current["revision"] != expected)
+                ):
+                    raise RevisionConflict()
+            for ref, (_, _, value, expected) in zip(refs, changes):
+                if expected is None:
+                    tx.create(ref, value)
+                else:
+                    tx.set(ref, value)
+
+        return self.atomic(write)
+
+    def pending_jobs(self):
+        from google.cloud.firestore_v1.base_query import FieldFilter
+
+        return [
+            snapshot.to_dict()
+            for snapshot in self.client.collection_group("jobs")
+            .where(
+                filter=FieldFilter(
+                    "status", "in", ["queued", "running", "cancel_requested"]
+                )
+            )
+            .limit(50)
+            .stream()
+        ]

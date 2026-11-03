@@ -6,6 +6,9 @@ dependencies = [
     "fastapi>=0.115,<1",
     "firebase-admin>=7.7.0",
     "google-cloud-firestore>=2.34.1",
+    "google-cloud-storage>=3.17.1",
+    "google-cloud-tasks>=2.26.0",
+    "httpx>=0.28,<1",
     "pillow>=13.0.0",
     "pydantic>=2.11,<3",
     "pypdf>=6.21.4",
@@ -28,5 +31,5 @@ build-backend = "hatchling.build"
 packages = ["src/campus"]
 
 [[tool.mypy.overrides]]
-module = ["firebase_admin", "firebase_admin.*", "pypdfium2", "pypdfium2.*"]
+module = ["firebase_admin", "firebase_admin.*", "pypdfium2", "pypdfium2.*", "google.cloud.storage", "google.cloud.storage.*"]
 ignore_missing_imports = true

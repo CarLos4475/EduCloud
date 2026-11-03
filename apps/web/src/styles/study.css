@@ -1,0 +1,304 @@
+.materials-panel {
+  margin: 36px 0;
+  padding-top: 24px;
+  border-top: 2px solid var(--navy, #122245);
+}
+.material-upload-grid {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 24px;
+  margin: 24px 0;
+}
+.material-upload-grid label,
+.transcript-editor > label,
+.transcript-editor form > label,
+.tutor-context label:not(.check-label),
+.tutor-composer > label:not(.check-label) {
+  display: grid;
+  gap: 6px;
+  font-weight: bold;
+  margin-bottom: 14px;
+}
+.upload-drop {
+  align-content: center;
+  padding: 24px;
+  border: 2px dashed #b59957;
+  background: #e9dec7;
+}
+.upload-drop input {
+  width: 100%;
+  padding: 12px 0;
+  background: none;
+  border: 0;
+}
+.material-list {
+  display: grid;
+  gap: 12px;
+}
+.material-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid #122245;
+  background: #f5f2ea;
+  box-shadow: 3px 3px #b59957;
+}
+.material-card h3 {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.material-card p {
+  margin: 6px 0 0;
+}
+.transcript-editor {
+  border: 2px solid #122245;
+  padding: 24px;
+  margin: 24px 0;
+}
+.transcript-editor textarea {
+  width: 100%;
+  resize: vertical;
+  line-height: 1.5;
+}
+.check-label {
+  display: flex;
+  align-items: start;
+  gap: 9px;
+  font-weight: normal;
+  margin: 10px 0;
+}
+.check-label input {
+  width: 18px;
+  min-width: 18px;
+  height: 18px;
+  margin: 2px 0 0;
+  accent-color: #122245;
+}
+.button-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 14px 0;
+}
+.source-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: #122245b3;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+.source-viewer::backdrop {
+  background: #122245b3;
+}
+.source-viewer {
+  background: #f5f2ea;
+  border: 2px solid #122245;
+  max-width: 960px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: auto;
+  padding: 28px;
+  box-shadow: 6px 6px #b59957;
+}
+.source-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-family: inherit;
+  padding: 16px;
+  border: 1px solid #b59957;
+}
+.source-viewer blockquote {
+  border-left: 4px solid #b59957;
+  margin: 20px 0;
+  padding-left: 16px;
+}
+.original-image {
+  max-width: 100%;
+  max-height: 650px;
+  object-fit: contain;
+}
+.pdf-preview {
+  width: 100%;
+  height: 600px;
+  border: 1px solid #122245;
+}
+.tutor-drawer.study-tutor {
+  width: min(820px, 96vw);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  background: #f5f2ea;
+  overflow-y: auto;
+  box-shadow: -12px 0 40px #12224544;
+}
+.tutor-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 24px 28px;
+  border-bottom: 2px solid #122245;
+  background: #122245;
+  color: #f5f2ea;
+}
+.tutor-heading h2 {
+  margin: 8px 0 0;
+  font-size: 1.65rem;
+}
+.tutor-heading .icon-button {
+  color: #f5f2ea;
+  border: 1px solid #b59957;
+}
+.tutor-context {
+  padding: 20px 28px;
+  border-bottom: 1px solid #b59957;
+}
+.tutor-context select,
+.tutor-context textarea {
+  width: 100%;
+}
+.tutor-context summary {
+  font-weight: bold;
+  cursor: pointer;
+  padding: 8px 0;
+}
+.tutor-settings {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 16px;
+  padding-top: 12px;
+}
+.tutor-settings fieldset,
+.tutor-settings > label:last-child {
+  grid-column: 1/-1;
+}
+.tutor-settings fieldset {
+  max-height: 180px;
+  overflow-y: auto;
+  border: 1px solid #b59957;
+}
+.conversation-history {
+  padding: 24px 28px;
+  flex: 1;
+}
+.tutor-empty {
+  padding: 28px 0;
+}
+.tutor-empty .handwritten {
+  font-size: 2rem;
+  color: #806a31;
+}
+.turn {
+  margin-bottom: 28px;
+}
+.student-message {
+  background: #e9dec7;
+  border: 1px solid #122245;
+  padding: 16px;
+  margin-left: 35px;
+}
+.student-message p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.tutor-message {
+  padding: 20px 0;
+  border-bottom: 1px solid #b59957;
+}
+.tutor-message .eyebrow {
+  font-size: 0.65rem;
+}
+.safe-markdown {
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+.safe-markdown pre {
+  padding: 14px;
+  overflow-x: auto;
+  border: 1px solid #b59957;
+  background: #e9dec766;
+}
+.safe-markdown h1,
+.safe-markdown h2,
+.safe-markdown h3 {
+  font-family: inherit;
+  font-size: 1.2rem;
+}
+.safe-markdown .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 4px 0;
+}
+.citation-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0;
+}
+.citation-chip {
+  border: 1px solid #122245;
+  background: #e9dec7;
+  padding: 6px 10px;
+  font-family: inherit;
+  cursor: pointer;
+}
+.turn-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.tutor-composer {
+  padding: 20px 28px;
+  border-top: 2px solid #122245;
+  background: #f5f2ea;
+}
+.tutor-composer textarea {
+  width: 100%;
+  resize: vertical;
+}
+.tutor-composer small {
+  display: block;
+  margin-top: 12px;
+}
+.study-tutor > .error-banner {
+  margin: 16px 28px 0;
+}
+.source-warning {
+  background: #e9dec7;
+  padding: 12px;
+}
+@media (max-width: 700px) {
+  .material-upload-grid {
+    grid-template-columns: 1fr;
+  }
+  .material-card {
+    align-items: start;
+    flex-direction: column;
+  }
+  .tutor-drawer.study-tutor {
+    width: 100vw;
+  }
+  .tutor-heading,
+  .tutor-context,
+  .conversation-history,
+  .tutor-composer {
+    padding: 18px;
+  }
+  .tutor-heading h2 {
+    font-size: 1.3rem;
+  }
+  .tutor-settings {
+    grid-template-columns: 1fr;
+  }
+  .source-viewer {
+    padding: 18px;
+  }
+  .student-message {
+    margin-left: 12px;
+  }
+}

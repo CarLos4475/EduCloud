@@ -1,8 +1,8 @@
 # Plataforma de estudio con IA · Plan de la v1.0
 
-Fecha: 2 de noviembre de 2026. Estado: **arranque autorizado de H0 y H1; seguimiento en el registro de avance**.
+Fecha del plan: 2 de noviembre de 2026. Actualización: 3 de noviembre de 2026. Estado: **H0/H1 cerrados; H2 autorizado y verificado; despliegue público pendiente por decisión del usuario**.
 
-Este paquete convierte la conversación y los conceptos visuales en un proyecto ejecutable. La v1 será una aplicación real para pruebas internas con varias cuentas, orientada a estudiantes universitarios de ciencias físico-matemáticas e ingeniería. El usuario autorizó comenzar las dos primeras etapas y documentarlas en LaTeX. Aún no se han aprovisionado ni desplegado servicios cloud. Consultar el [registro de avance](evidence/avance-fases-1-2.md) para distinguir trabajo terminado de trabajo previsto.
+Este paquete convierte la conversación y los conceptos visuales en un proyecto ejecutable. La v1 es una aplicación para piloto interno, orientada a estudiantes universitarios de ciencias físico-matemáticas e ingeniería. El usuario autorizó H0/H1 y su documentación LaTeX, y después H2 con publicación del código verificado en GitHub. Firebase Auth y Firestore reales están configurados; la web sigue local. Consultar el [avance de H0/H1](evidence/avance-fases-1-2.md) y el [cierre H2](evidence/cierre-h2.md) para distinguir implementación, pruebas reales y capacidades de despliegue pendientes.
 
 ## Lectura recomendada
 
