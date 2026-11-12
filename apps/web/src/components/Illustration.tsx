@@ -1,3 +1,4 @@
+import { ArtImage } from "./Icons";
 export const illustrations = [
   ["grid", "Retícula"],
   ["wave", "Ondas"],
@@ -13,7 +14,7 @@ export const illustrations = [
   ["nodes", "Conexiones"],
 ] as const;
 
-export function Illustration({ id }: { id: string }) {
+function IllustrationSvg({ id }: { id: string }) {
   const index = illustrations.findIndex(([key]) => key === id);
   return (
     <svg
@@ -133,5 +134,14 @@ export function Illustration({ id }: { id: string }) {
         </>
       )}
     </svg>
+  );
+}
+
+/** Usa la ilustración de /art/subjects si existe; si no, el dibujo vectorial. */
+export function Illustration({ id }: { id: string }) {
+  return (
+    <ArtImage src={`/art/subjects/${id}.png`} className="illustration">
+      <IllustrationSvg id={id} />
+    </ArtImage>
   );
 }

@@ -26,3 +26,14 @@ Capturas de escritorio con IA real (DeepSeek) y emuladores locales de Auth/Fires
 | [11-tutor-con-formulas.png](11-tutor-con-formulas.png) | Tutor con respuesta, fórmulas, cita y botones para llevarla al repaso |
 | [12-pasaporte.png](12-pasaporte.png) | Pasaporte con estampillas ganadas y por ganar |
 | [13-practica-guardada.png](13-practica-guardada.png) | Resultado de un cuestionario guardado en el progreso |
+
+## Con ilustraciones e iconos propios (11 de noviembre de 2026)
+
+| Archivo | Contenido |
+|---|---|
+| [14-tutor-rediseno-ajustes.png](14-tutor-rediseno-ajustes.png), [15-tutor-rediseno-respuesta.png](15-tutor-rediseno-respuesta.png), [16-tutor-rediseno-movil.png](16-tutor-rediseno-movil.png) | Tutor rediseñado con iconos propios |
+| [17-acceso-con-ilustracion.png](17-acceso-con-ilustracion.png) | Acceso con la ilustración de bienvenida |
+| [18-inicio-con-ilustraciones.png](18-inicio-con-ilustraciones.png) | Inicio con iconos del menú, ilustración y materia |
+| [19-pasaporte-con-estampillas.png](19-pasaporte-con-estampillas.png) | Pasaporte con las ocho estampillas por ganar |
+| [20-tutor-con-ilustraciones.png](20-tutor-con-ilustraciones.png) | Tutor con mascota, personalidades y modos |
+| [21-inicio-movil-ilustraciones.png](21-inicio-movil-ilustraciones.png) | Inicio en móvil |

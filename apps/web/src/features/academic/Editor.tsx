@@ -1,4 +1,4 @@
-import { FormEvent, useRef, useEffect } from "react";
+import { FormEvent, useRef, useEffect, useState } from "react";
 import { Row } from "../../api";
 import { Illustration, illustrations } from "../../components/Illustration";
 
@@ -25,6 +25,9 @@ export function Editor({
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const { collection, row } = state;
+  // Al crear una clase se pueden elegir varios días; al editar, un bloque es de un solo día.
+  const [days, setDays] = useState<number[]>([0]);
+  const [daysError, setDaysError] = useState("");
   useEffect(() => {
     dialog.current?.showModal();
   }, []);
@@ -46,6 +49,14 @@ export function Editor({
       if (key in result) result[key] = Number(result[key]);
     if (collection === "topics")
       result.prerequisiteIds = data.getAll("prerequisiteIds");
+    if (collection === "schedule" && !row) {
+      if (!days.length) {
+        setDaysError("Elige al menos un día.");
+        return;
+      }
+      result.weekdays = [...days].sort();
+      delete result.weekday;
+    }
     if (collection === "schedule")
       result.excludedDates = String(data.get("excludedDates") || "")
         .split(",")
@@ -297,24 +308,82 @@ export function Editor({
         )}
         {collection === "schedule" && (
           <>
-            <label>
-              Día
-              <select name="weekday" defaultValue={value("weekday", "0")}>
-                {[
-                  "Lunes",
-                  "Martes",
-                  "Miércoles",
-                  "Jueves",
-                  "Viernes",
-                  "Sábado",
-                  "Domingo",
-                ].map((d, i) => (
-                  <option key={i} value={i}>
-                    {d}
-                  </option>
-                ))}
-              </select>
-            </label>
+            {!row ? (
+              <fieldset className="day-picker">
+                <legend>Días de la semana</legend>
+                <div className="day-chips">
+                  {["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"].map(
+                    (d, i) => (
+                      <label
+                        key={d}
+                        className={`day-chip ${days.includes(i) ? "selected" : ""}`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={days.includes(i)}
+                          onChange={(e) => {
+                            setDaysError("");
+                            setDays((current) =>
+                              e.target.checked
+                                ? [...current, i]
+                                : current.filter((n) => n !== i),
+                            );
+                          }}
+                        />
+                        {d}
+                      </label>
+                    ),
+                  )}
+                </div>
+                <div className="day-presets">
+                  <button
+                    type="button"
+                    className="text-button"
+                    onClick={() => setDays([0, 1, 2, 3, 4])}
+                  >
+                    Lunes a viernes
+                  </button>
+                  <button
+                    type="button"
+                    className="text-button"
+                    onClick={() => setDays([0, 2, 4])}
+                  >
+                    Lun, mié y vie
+                  </button>
+                  <button
+                    type="button"
+                    className="text-button"
+                    onClick={() => setDays([1, 3])}
+                  >
+                    Mar y jue
+                  </button>
+                </div>
+                {daysError && (
+                  <p role="alert" className="form-error">
+                    {daysError}
+                  </p>
+                )}
+              </fieldset>
+            ) : (
+              <label>
+                Día
+                <select name="weekday" defaultValue={value("weekday", "0")}>
+                  {[
+                    "Lunes",
+                    "Martes",
+                    "Miércoles",
+                    "Jueves",
+                    "Viernes",
+                    "Sábado",
+                    "Domingo",
+                  ].map((d, i) => (
+                    <option key={i} value={i}>
+                      {d}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
             <div className="form-grid">
               <label>
                 Desde
@@ -352,7 +421,9 @@ export function Editor({
                   ", ",
                 )}
               />
-              <small>Fechas YYYY-MM-DD separadas por comas.</small>
+              <small>
+                Escribe las fechas como año-mes-día, separadas por comas.
+              </small>
             </label>
             <label>
               Notas

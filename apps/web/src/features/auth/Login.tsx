@@ -1,4 +1,5 @@
 import { FormEvent, useState } from "react";
+import { ArtImage } from "../../components/Icons";
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
@@ -59,12 +60,14 @@ export function Login() {
           <br />
           Dale espacio a lo que quieres entender.
         </p>
-        <div className="story-grid" aria-hidden="true">
-          <span>∫</span>
-          <span>↗</span>
-          <span>∿</span>
-          <span>∴</span>
-        </div>
+        <ArtImage src="/art/login-hero.png" className="login-art">
+          <div className="story-grid" aria-hidden="true">
+            <span>∫</span>
+            <span>↗</span>
+            <span>∿</span>
+            <span>∴</span>
+          </div>
+        </ArtImage>
       </section>
       <section className="login-form">
         <span className="eyebrow">ABRE TU ESPACIO</span>

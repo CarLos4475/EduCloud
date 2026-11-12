@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../../api";
 import { Skeleton } from "../../components/Skeleton";
+import { ArtImage } from "../../components/Icons";
 
 type Stamp = {
   id: string;
@@ -52,7 +53,9 @@ export function PassportPanel() {
               className={`stamp ${stamp.earned ? "earned" : "locked"}`}
             >
               <span className="stamp-mark" aria-hidden="true">
-                {MARKS[stamp.id] ?? "★"}
+                <ArtImage src={`/art/stamps/${stamp.id}.png`}>
+                  {MARKS[stamp.id] ?? "★"}
+                </ArtImage>
               </span>
               <strong>{stamp.title}</strong>
               <small>

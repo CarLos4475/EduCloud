@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import { api, authorizedFetch, studyRows, Row } from "../../api";
 import { SafeMarkdown } from "../../components/SafeMarkdown";
 import { Skeleton } from "../../components/Skeleton";
+import { ArtImage, Icon, type IconName } from "../../components/Icons";
 import {
   Material,
   SourceRef,
@@ -34,6 +35,43 @@ type Turn = Row & {
 };
 const terminal = (turn: Turn) =>
   ["succeeded", "failed", "canceled"].includes(turn.status);
+
+const PERSONALITIES: {
+  id: string;
+  label: string;
+  hint: string;
+  icon: IconName;
+}[] = [
+  {
+    id: "patient",
+    label: "Paso a paso",
+    hint: "Explica con calma y ejemplos.",
+    icon: "steps",
+  },
+  {
+    id: "socratic",
+    label: "Preguntemos",
+    hint: "Te guía con preguntas.",
+    icon: "bulb",
+  },
+  {
+    id: "direct",
+    label: "Al grano",
+    hint: "Respuestas claras y cortas.",
+    icon: "bolt",
+  },
+];
+const MODES: { id: string; label: string; icon: IconName }[] = [
+  { id: "explain", label: "Explicación", icon: "book" },
+  { id: "hints", label: "Pistas", icon: "compass" },
+  { id: "solution", label: "Solución completa", icon: "check" },
+  { id: "practice", label: "Práctica", icon: "target" },
+];
+const SUGGESTIONS = [
+  "Explícame el tema paso a paso",
+  "Dame un ejemplo resuelto",
+  "¿Qué debo repasar primero?",
+];
 
 export function TutorPanel({
   subjects,
@@ -305,9 +343,16 @@ export function TutorPanel({
       }}
     >
       <header className="tutor-heading">
-        <div>
-          <span className="eyebrow">TU COMPAÑERO DE ESTUDIO</span>
-          <h2>Vamos a entenderlo.</h2>
+        <div className="tutor-title">
+          <span className="tutor-avatar large" aria-hidden="true">
+            <ArtImage src="/art/tutor-avatar.png">
+              <Icon name="spark" size={28} />
+            </ArtImage>
+          </span>
+          <div>
+            <span className="eyebrow">TU COMPAÑERO DE ESTUDIO</span>
+            <h2>Vamos a entenderlo.</h2>
+          </div>
         </div>
         <button
           ref={closeButton}
@@ -315,7 +360,7 @@ export function TutorPanel({
           aria-label="Cerrar tutor"
           onClick={onClose}
         >
-          ×
+          <Icon name="close" />
         </button>
       </header>
       {error && (
@@ -324,88 +369,155 @@ export function TutorPanel({
         </p>
       )}
       {!subjects.length ? (
-        <p>Crea una materia para empezar a estudiar con tu tutor.</p>
+        <p className="tutor-none">
+          Crea una materia para empezar a estudiar con tu tutor.
+        </p>
       ) : (
         <>
           <div className="tutor-context">
-            <label>
-              Materia del tutor
-              <select
-                value={subject}
-                disabled={busy || Boolean(pending)}
-                onChange={(e) => setSubject(e.target.value)}
-              >
-                {subjects.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {String(s.name)}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label>
-              Conversación
-              <select
-                value={conversationId}
-                disabled={busy || Boolean(pending)}
-                onChange={(e) => void chooseConversation(e.target.value)}
-              >
-                <option value="">Nueva conversación</option>
-                {conversations.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.title}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <div className="tutor-pickers">
+              <label>
+                <span className="field-label">
+                  <Icon name="book" size={16} /> Materia del tutor
+                </span>
+                <select
+                  value={subject}
+                  disabled={busy || Boolean(pending)}
+                  onChange={(e) => setSubject(e.target.value)}
+                >
+                  {subjects.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {String(s.name)}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                <span className="field-label">
+                  <Icon name="chat" size={16} /> Conversación
+                </span>
+                <select
+                  value={conversationId}
+                  disabled={busy || Boolean(pending)}
+                  onChange={(e) => void chooseConversation(e.target.value)}
+                >
+                  <option value="">Nueva conversación</option>
+                  {conversations.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.title}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <div className="tutor-summary" aria-hidden="true">
+              <span className="chip tone-gold">
+                <Icon
+                  name={
+                    PERSONALITIES.find((p) => p.id === personalityId)?.icon ??
+                    "steps"
+                  }
+                  size={14}
+                />
+                {PERSONALITIES.find((p) => p.id === personalityId)?.label}
+              </span>
+              <span className={`chip mode-${assistanceMode}`}>
+                <Icon
+                  name={
+                    MODES.find((m) => m.id === assistanceMode)?.icon ?? "book"
+                  }
+                  size={14}
+                />
+                {MODES.find((m) => m.id === assistanceMode)?.label}
+              </span>
+              <span className="chip tone-navy">
+                <Icon
+                  name={sourceMode === "general" ? "globe" : "file"}
+                  size={14}
+                />
+                {sourceMode === "general"
+                  ? "Conocimiento general"
+                  : `${materialIds.length} ${materialIds.length === 1 ? "apunte" : "apuntes"}`}
+              </span>
+            </div>
             <details open={!conversationId}>
-              <summary>Tu tutor y sus fuentes</summary>
+              <summary>
+                <Icon name="compass" size={18} /> Tu tutor y sus fuentes
+              </summary>
               <div className="tutor-settings">
-                <label>
-                  Personalidad
-                  <select
-                    value={personalityId}
-                    disabled={Boolean(pending)}
-                    onChange={(e) => setPersonalityId(e.target.value)}
-                  >
-                    <option value="patient">Paso a paso</option>
-                    <option value="socratic">Preguntemos</option>
-                    <option value="direct">Al grano</option>
-                  </select>
-                </label>
-                <label>
-                  Tipo de ayuda
-                  <select
-                    value={assistanceMode}
-                    disabled={Boolean(pending)}
-                    onChange={(e) => setAssistanceMode(e.target.value)}
-                  >
-                    <option value="explain">Explicación</option>
-                    <option value="hints">Pistas</option>
-                    <option value="solution">Solución completa</option>
-                    <option value="practice">Práctica</option>
-                  </select>
-                </label>
-                <label>
-                  Modo de fuentes
-                  <select
-                    value={sourceMode}
-                    disabled={Boolean(pending)}
-                    onChange={(e) => setSourceMode(e.target.value)}
-                  >
-                    <option value="selected_material">
-                      Priorizar mis apuntes
-                    </option>
-                    <option value="general">
-                      Conocimiento general autorizado para este chat
-                    </option>
-                  </select>
-                </label>
-                <fieldset disabled={Boolean(pending)}>
-                  <legend>Apuntes seleccionados (hasta 10)</legend>
+                <fieldset className="card-choices" disabled={Boolean(pending)}>
+                  <legend>¿Cómo quieres que te ayude?</legend>
+                  {PERSONALITIES.map((p) => (
+                    <label
+                      key={p.id}
+                      className={`choice-card ${personalityId === p.id ? "selected" : ""}`}
+                    >
+                      <input
+                        type="radio"
+                        name="personality"
+                        checked={personalityId === p.id}
+                        onChange={() => setPersonalityId(p.id)}
+                      />
+                      <span className="choice-icon">
+                        <ArtImage src={`/art/personalities/${p.id}.png`}>
+                          <Icon name={p.icon} size={22} />
+                        </ArtImage>
+                      </span>
+                      <strong>{p.label}</strong>
+                      <small>{p.hint}</small>
+                    </label>
+                  ))}
+                </fieldset>
+                <fieldset className="segmented" disabled={Boolean(pending)}>
+                  <legend>¿Qué necesitas ahora?</legend>
+                  {MODES.map((m) => (
+                    <label
+                      key={m.id}
+                      className={`segment mode-${m.id} ${assistanceMode === m.id ? "selected" : ""}`}
+                    >
+                      <input
+                        type="radio"
+                        name="assistance"
+                        checked={assistanceMode === m.id}
+                        onChange={() => setAssistanceMode(m.id)}
+                      />
+                      <ArtImage src={`/art/icons/mode-${m.id}.png`}>
+                        <Icon name={m.icon} size={16} />
+                      </ArtImage>
+                      {m.label}
+                    </label>
+                  ))}
+                </fieldset>
+                <fieldset className="segmented" disabled={Boolean(pending)}>
+                  <legend>¿De dónde saca la información?</legend>
+                  {[
+                    ["selected_material", "Mis apuntes primero", "file"],
+                    ["general", "Conocimiento general", "globe"],
+                  ].map(([id, label, icon]) => (
+                    <label
+                      key={id}
+                      className={`segment ${sourceMode === id ? "selected" : ""}`}
+                    >
+                      <input
+                        type="radio"
+                        name="source-mode"
+                        checked={sourceMode === id}
+                        onChange={() => setSourceMode(id)}
+                      />
+                      <Icon name={icon as IconName} size={16} />
+                      {label}
+                    </label>
+                  ))}
+                </fieldset>
+                <fieldset className="source-chips" disabled={Boolean(pending)}>
+                  <legend>Apuntes que puede usar (hasta 10)</legend>
                   {materials
                     .filter((m) => ["ready", "partial"].includes(m.status))
                     .map((m) => (
-                      <label className="check-label" key={m.id}>
+                      <label
+                        className={`source-chip ${materialIds.includes(m.id) ? "selected" : ""}`}
+                        key={m.id}
+                      >
                         <input
                           aria-label={`Fuente: ${m.name}`}
                           type="checkbox"
@@ -420,8 +532,11 @@ export function TutorPanel({
                             )
                           }
                         />
-                        {m.name}
-                        {m.status === "partial" ? " · cobertura parcial" : ""}
+                        <Icon name="file" size={16} />
+                        <span>
+                          {m.name}
+                          {m.status === "partial" ? " · cobertura parcial" : ""}
+                        </span>
                       </label>
                     ))}
                   {!materials.some((m) =>
@@ -433,8 +548,11 @@ export function TutorPanel({
                     </p>
                   )}
                 </fieldset>
-                <label>
-                  Preferencias para esta conversación
+                <label className="tutor-notes">
+                  <span className="field-label">
+                    <Icon name="pencil" size={16} /> Preferencias para esta
+                    conversación
+                  </span>
                   <textarea
                     value={preferences}
                     disabled={Boolean(pending)}
@@ -450,206 +568,261 @@ export function TutorPanel({
           <div className="conversation-history" aria-live="polite">
             {!turns.length && (
               <div className="tutor-empty">
+                <span className="tutor-avatar hero" aria-hidden="true">
+                  <ArtImage src="/art/tutor-empty.png">
+                    <Icon name="spark" size={44} />
+                  </ArtImage>
+                </span>
                 <p className="handwritten">Una pregunta abre el camino.</p>
                 <p>
-                  Elige tus fuentes y pide una explicación, pistas o una
+                  Elige tus apuntes y pide una explicación, pistas o una
                   solución completa. Tu conversación queda guardada por materia.
                 </p>
+                <div className="suggestions">
+                  {SUGGESTIONS.map((text) => (
+                    <button
+                      type="button"
+                      key={text}
+                      className="suggestion"
+                      onClick={() => setQuestion(text)}
+                    >
+                      {text}
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
             {turns.map((t) => (
               <article className="turn" key={t.id}>
                 <div className="student-message">
-                  <span className="eyebrow">TU PREGUNTA</span>
+                  <span className="who">
+                    <Icon name="pencil" size={14} /> Tú
+                  </span>
                   <p>{t.question}</p>
                 </div>
-                <div className="tutor-message">
-                  <span className="eyebrow">
-                    TU TUTOR ·{" "}
-                    {t.sourceMode === "general"
-                      ? "CONOCIMIENTO GENERAL AUTORIZADO"
-                      : "TUS APUNTES"}
+                <div className="tutor-row">
+                  <span className="tutor-avatar" aria-hidden="true">
+                    <ArtImage src="/art/tutor-avatar.png">
+                      <Icon name="spark" size={20} />
+                    </ArtImage>
                   </span>
-                  {t.text && <SafeMarkdown text={t.text} />}
-                  {t.sourcesChanged && (
-                    <p className="source-warning">
-                      Estos apuntes cambiaron después de iniciar la respuesta.
-                      Las citas muestran la versión utilizada.
-                    </p>
-                  )}
-                  {t.partialSources && (
-                    <p className="source-warning">
-                      Cobertura parcial: algunas páginas del material no
-                      pudieron procesarse y no respaldan esta respuesta.
-                    </p>
-                  )}
-                  <div className="citation-list">
-                    {t.citations.map((ref, index) => (
-                      <button
-                        className="citation-chip"
-                        key={index}
-                        aria-label={`Abrir cita ${ref.sourceId || index + 1}, ${ref.locator}`}
-                        onClick={() => setSource(ref)}
-                      >
-                        {ref.sourceId || index + 1} ·{" "}
-                        {referenceLabel(ref.locator)}
-                      </button>
-                    ))}
-                  </div>
-                  {t.needsConsent && (
-                    <button
-                      className="secondary"
-                      disabled={busy || Boolean(pending)}
-                      onClick={() =>
-                        void send({ question: t.question, general: true })
-                      }
+                  <div className="tutor-message">
+                    <span
+                      className={`source-badge ${t.sourceMode === "general" ? "general" : "notes"}`}
                     >
-                      Responder con conocimiento general esta vez
-                    </button>
-                  )}
-                  {!terminal(t) && (
-                    <>
-                      <p role="status">
-                        {t.stage === "queued"
-                          ? "Tu pregunta está en la fila…"
-                          : "Buscando la respuesta en tus apuntes…"}{" "}
-                        {connection}
+                      <Icon
+                        name={t.sourceMode === "general" ? "globe" : "file"}
+                        size={14}
+                      />
+                      {t.sourceMode === "general"
+                        ? "Conocimiento general autorizado"
+                        : "Con tus apuntes"}
+                    </span>
+                    {t.text && <SafeMarkdown text={t.text} />}
+                    {t.sourcesChanged && (
+                      <p className="source-warning">
+                        Estos apuntes cambiaron después de iniciar la respuesta.
+                        Las citas muestran la versión utilizada.
                       </p>
-                      <Skeleton lines={3} />
-                      <button
-                        className="text-button"
-                        onClick={() =>
-                          void api(`/jobs/${t.jobId}/cancel`, {
-                            method: "POST",
-                          }).catch((e) => setError((e as Error).message))
-                        }
-                      >
-                        Cancelar respuesta
-                      </button>
-                    </>
-                  )}
-                  {t.status === "succeeded" && (
-                    <div className="turn-actions">
-                      <button
-                        className="text-button"
-                        disabled={!("speechSynthesis" in window)}
-                        onClick={() => speak(t.text)}
-                      >
-                        {speaking ? "Detener lectura" : "Escuchar respuesta"}
-                      </button>
-                    </div>
-                  )}
-                  {t.status === "succeeded" && (
-                    <div className="make-resource">
-                      {made?.turnId === t.id ? (
-                        <p role="status">
-                          ¡Listo! Lo estamos preparando.{" "}
-                          <button
-                            className="text-button"
-                            onClick={() => onOpenResource(subject, made.id)}
-                          >
-                            Verlo en mis recursos
-                          </button>
-                        </p>
-                      ) : (
-                        <>
-                          <span>Llévalo a tu repaso:</span>
-                          {[
-                            ["flashcards", "Tarjetas"],
-                            ["quiz", "Cuestionario"],
-                            ["summary", "Resumen"],
-                          ].map(([kind, label]) => (
-                            <button
-                              key={kind}
-                              className="secondary"
-                              disabled={busy}
-                              onClick={() => void makeResource(t, kind)}
-                            >
-                              {label}
-                            </button>
-                          ))}
-                        </>
-                      )}
-                    </div>
-                  )}
-                  {["failed", "canceled"].includes(t.status) && (
-                    <div>
-                      <p>
-                        {t.status === "canceled"
-                          ? "Respuesta cancelada."
-                          : "No se pudo completar la respuesta. Tu pregunta sigue guardada."}
+                    )}
+                    {t.partialSources && (
+                      <p className="source-warning">
+                        Cobertura parcial: algunas páginas del material no
+                        pudieron procesarse y no respaldan esta respuesta.
                       </p>
-                      {t.usageUnknown && (
-                        <label className="check-label">
-                          <input
-                            type="checkbox"
-                            checked={acceptCharge}
-                            onChange={(e) => setAcceptCharge(e.target.checked)}
-                          />
-                          Puede que el intento anterior ya cuente en tu límite
-                          de hoy. Quiero intentarlo de nuevo.
-                        </label>
-                      )}
+                    )}
+                    <div className="citation-list">
+                      {t.citations.map((ref, index) => (
+                        <button
+                          className="citation-chip"
+                          key={index}
+                          aria-label={`Abrir cita ${ref.sourceId || index + 1}, ${ref.locator}`}
+                          onClick={() => setSource(ref)}
+                        >
+                          <Icon name="file" size={14} />
+                          {ref.sourceId || index + 1} ·{" "}
+                          {referenceLabel(ref.locator)}
+                        </button>
+                      ))}
+                    </div>
+                    {t.needsConsent && (
                       <button
                         className="secondary"
-                        disabled={busy || (t.usageUnknown && !acceptCharge)}
-                        onClick={() => {
-                          setBusy(true);
-                          void api(`/jobs/${t.jobId}/retry`, {
-                            method: "POST",
-                            body: JSON.stringify({
-                              acceptPossibleCharge: acceptCharge,
-                            }),
-                          })
-                            .then(() => api<Turn>(`/turns/${t.id}`))
-                            .then((value) =>
-                              setTurns((rows) =>
-                                rows.map((row) =>
-                                  row.id === value.id ? value : row,
-                                ),
-                              ),
-                            )
-                            .catch((e) => setError((e as Error).message))
-                            .finally(() => setBusy(false));
-                        }}
+                        disabled={busy || Boolean(pending)}
+                        onClick={() =>
+                          void send({ question: t.question, general: true })
+                        }
                       >
-                        Reintentar respuesta
+                        <Icon name="globe" size={16} /> Responder con
+                        conocimiento general esta vez
                       </button>
-                    </div>
-                  )}
+                    )}
+                    {!terminal(t) && (
+                      <>
+                        <p role="status">
+                          {t.stage === "queued"
+                            ? "Tu pregunta está en la fila…"
+                            : "Buscando la respuesta en tus apuntes…"}{" "}
+                          {connection}
+                        </p>
+                        <Skeleton lines={3} />
+                        <button
+                          className="text-button"
+                          onClick={() =>
+                            void api(`/jobs/${t.jobId}/cancel`, {
+                              method: "POST",
+                            }).catch((e) => setError((e as Error).message))
+                          }
+                        >
+                          Cancelar respuesta
+                        </button>
+                      </>
+                    )}
+                    {t.status === "succeeded" && (
+                      <div className="turn-actions">
+                        <button
+                          className="text-button with-icon"
+                          disabled={!("speechSynthesis" in window)}
+                          onClick={() => speak(t.text)}
+                        >
+                          <Icon
+                            name={speaking ? "stop" : "speaker"}
+                            size={16}
+                          />
+                          {speaking ? "Detener lectura" : "Escuchar respuesta"}
+                        </button>
+                      </div>
+                    )}
+                    {t.status === "succeeded" && (
+                      <div className="make-resource">
+                        {made?.turnId === t.id ? (
+                          <p role="status">
+                            ¡Listo! Lo estamos preparando.{" "}
+                            <button
+                              className="text-button"
+                              onClick={() => onOpenResource(subject, made.id)}
+                            >
+                              Verlo en mis recursos
+                            </button>
+                          </p>
+                        ) : (
+                          <>
+                            <span>Llévalo a tu repaso:</span>
+                            {(
+                              [
+                                ["flashcards", "Tarjetas", "cards"],
+                                ["quiz", "Cuestionario", "quiz"],
+                                ["summary", "Resumen", "summary"],
+                              ] as const
+                            ).map(([kind, label, icon]) => (
+                              <button
+                                key={kind}
+                                className="secondary with-icon"
+                                disabled={busy}
+                                onClick={() => void makeResource(t, kind)}
+                              >
+                                <Icon name={icon} size={16} />
+                                {label}
+                              </button>
+                            ))}
+                          </>
+                        )}
+                      </div>
+                    )}
+                    {["failed", "canceled"].includes(t.status) && (
+                      <div>
+                        <p>
+                          {t.status === "canceled"
+                            ? "Respuesta cancelada."
+                            : "No se pudo completar la respuesta. Tu pregunta sigue guardada."}
+                        </p>
+                        {t.usageUnknown && (
+                          <label className="check-label">
+                            <input
+                              type="checkbox"
+                              checked={acceptCharge}
+                              onChange={(e) =>
+                                setAcceptCharge(e.target.checked)
+                              }
+                            />
+                            Puede que el intento anterior ya cuente en tu límite
+                            de hoy. Quiero intentarlo de nuevo.
+                          </label>
+                        )}
+                        <button
+                          className="secondary with-icon"
+                          disabled={busy || (t.usageUnknown && !acceptCharge)}
+                          onClick={() => {
+                            setBusy(true);
+                            void api(`/jobs/${t.jobId}/retry`, {
+                              method: "POST",
+                              body: JSON.stringify({
+                                acceptPossibleCharge: acceptCharge,
+                              }),
+                            })
+                              .then(() => api<Turn>(`/turns/${t.id}`))
+                              .then((value) =>
+                                setTurns((rows) =>
+                                  rows.map((row) =>
+                                    row.id === value.id ? value : row,
+                                  ),
+                                ),
+                              )
+                              .catch((e) => setError((e as Error).message))
+                              .finally(() => setBusy(false));
+                          }}
+                        >
+                          <Icon name="retry" size={16} />
+                          Reintentar respuesta
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </article>
             ))}
           </div>
-          <form className="tutor-composer" onSubmit={submit}>
+          <form
+            className={`tutor-composer ${turns.length ? "sticky" : ""}`}
+            onSubmit={submit}
+          >
             <label>
-              Tu pregunta
+              <span className="field-label">Tu pregunta</span>
               <textarea
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
                 maxLength={2000}
-                rows={3}
+                rows={2}
                 required
                 disabled={busy || Boolean(pending)}
+                placeholder="Escribe lo que no te queda claro…"
               />
             </label>
-            {sourceMode === "selected_material" && (
-              <label className="check-label">
-                <input
-                  type="checkbox"
-                  checked={general}
-                  onChange={(e) => setGeneral(e.target.checked)}
-                  disabled={Boolean(pending)}
-                />
-                Autorizar conocimiento general solo para esta pregunta
-              </label>
-            )}
-            <button
-              className="primary"
-              disabled={busy || Boolean(pending) || !question.trim()}
-            >
-              Enviar pregunta
-            </button>
+            <div className="composer-row">
+              {sourceMode === "selected_material" ? (
+                <label
+                  className={`general-toggle ${general ? "selected" : ""}`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={general}
+                    onChange={(e) => setGeneral(e.target.checked)}
+                    disabled={Boolean(pending)}
+                  />
+                  <Icon name="globe" size={16} />
+                  Autorizar conocimiento general solo para esta pregunta
+                </label>
+              ) : (
+                <span />
+              )}
+              <button
+                className="primary with-icon"
+                disabled={busy || Boolean(pending) || !question.trim()}
+              >
+                Enviar pregunta
+                <Icon name="send" size={18} />
+              </button>
+            </div>
             <small>
               La IA puede equivocarse. Comprueba las fuentes y los cálculos.
             </small>

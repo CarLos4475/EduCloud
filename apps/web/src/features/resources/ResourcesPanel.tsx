@@ -4,7 +4,8 @@ import { Skeleton } from "../../components/Skeleton";
 import { ProgressPanel } from "../progress/ProgressPanel";
 import { ResourceViewer } from "./ResourceViewer";
 import type { MaterialLite, ResourceDetail, ResourceRow, Kind } from "./types";
-import { KINDS } from "./types";
+import { KINDS, KIND_ICONS } from "./types";
+import { ArtImage, Icon } from "../../components/Icons";
 
 const ACTIVE = ["queued", "running", "cancel_requested"];
 
@@ -186,6 +187,11 @@ export function ResourcesPanel({
                   checked={kind === k.id}
                   onChange={() => setKind(k.id)}
                 />
+                <span className="kind-icon" aria-hidden="true">
+                  <ArtImage src={`/art/kinds/${k.id}.png`}>
+                    <Icon name={KIND_ICONS[k.id]} size={22} />
+                  </ArtImage>
+                </span>
                 <strong>{k.label}</strong>
                 <span>{k.hint}</span>
               </label>
@@ -290,6 +296,9 @@ export function ResourcesPanel({
       ) : (
         !creating && (
           <div className="empty-state">
+            <ArtImage src="/art/empty-resources.png" className="empty-art">
+              {null}
+            </ArtImage>
             <h3>Todavía no tienes recursos.</h3>
             <p>
               Crea un resumen, tarjetas o un cuestionario a partir de tus

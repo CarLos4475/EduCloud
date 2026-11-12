@@ -12,6 +12,7 @@ import { Editor, EditorState } from "./features/academic/Editor";
 import { Illustration } from "./components/Illustration";
 import { MaterialsPanel } from "./features/materials/MaterialsPanel";
 import { PageSkeleton, Skeleton } from "./components/Skeleton";
+import { ArtImage, Icon, type IconName } from "./components/Icons";
 import { DataPanel } from "./features/account/DataPanel";
 import {
   PassportPanel,
@@ -110,17 +111,26 @@ export function App() {
     setBusy(true);
     setError("");
     try {
-      await api(
-        `/${editor.collection}${editor.row ? `/${editor.row.id}` : ""}`,
-        {
-          method: editor.row ? "PATCH" : "POST",
-          body: JSON.stringify(
-            editor.row
-              ? { ...value, expectedRevision: editor.row.revision }
-              : value,
-          ),
-        },
-      );
+      const { weekdays, ...single } = value;
+      if (!editor.row && Array.isArray(weekdays)) {
+        // Una clase en varios días son varios bloques, uno por día.
+        for (const weekday of weekdays as number[])
+          await api(`/${editor.collection}`, {
+            method: "POST",
+            body: JSON.stringify({ ...single, weekday }),
+          });
+      } else
+        await api(
+          `/${editor.collection}${editor.row ? `/${editor.row.id}` : ""}`,
+          {
+            method: editor.row ? "PATCH" : "POST",
+            body: JSON.stringify(
+              editor.row
+                ? { ...value, expectedRevision: editor.row.revision }
+                : value,
+            ),
+          },
+        );
       setEditor(null);
       setNotice("Guardado en tu espacio.");
       await load();
@@ -398,22 +408,29 @@ export function App() {
         >
           MI
           <br />
-          CAMPUS<span>✦</span>
+          CAMPUS
+          <span>
+            <ArtImage src="/art/logo.png">✦</ArtImage>
+          </span>
         </button>
         <nav aria-label="Navegación principal">
           {[
-            ["home", "⌂", "Inicio"],
-            ["subjects", "▦", "Materias"],
-            ["agenda", "▤", "Agenda"],
-            ["schedule", "◷", "Horario"],
-            ["profile", "◇", "Mi perfil"],
+            ["home", "home", "Inicio"],
+            ["subjects", "book", "Materias"],
+            ["agenda", "calendar", "Agenda"],
+            ["schedule", "clock", "Horario"],
+            ["profile", "user", "Mi perfil"],
           ].map(([key, icon, label]) => (
             <button
               key={key}
               className={nav === key ? "active" : ""}
               onClick={() => navigate(key)}
             >
-              <span aria-hidden="true">{icon}</span>
+              <span aria-hidden="true" className="nav-icon">
+                <ArtImage src={`/art/icons/nav-${key}.png`}>
+                  <Icon name={icon as IconName} size={22} />
+                </ArtImage>
+              </span>
               {label}
             </button>
           ))}
@@ -492,38 +509,42 @@ export function App() {
               </h1>
               <p className="handwritten">Un tema a la vez.</p>
               <div className="hero-mark" aria-hidden="true">
-                <Illustration id="geometry" />
+                <ArtImage src="/art/home-hero.png">
+                  <Illustration id="geometry" />
+                </ArtImage>
               </div>
             </section>
-            {profile && Number(profile.tutorialStep || 0) < 5 && (
-              <section className="onboarding">
-                <div>
-                  <span className="eyebrow">PRIMERA PARADA</span>
-                  <h3>Construye tu semestre a tu manera.</h3>
-                  <p>
-                    Crea una materia, elige su dibujo y anota tu primer
-                    pendiente. El resto puede esperar.
-                  </p>
-                </div>
-                <div>
-                  <button
-                    className="primary"
-                    onClick={() => {
-                      setNav("subjects");
-                      setEditor({ collection: "subjects" });
-                    }}
-                  >
-                    Crear mi primera materia
-                  </button>
-                  <button
-                    className="text-button"
-                    onClick={() => void skipTutorial()}
-                  >
-                    Lo haré después
-                  </button>
-                </div>
-              </section>
-            )}
+            {profile &&
+              Number(profile.tutorialStep || 0) < 5 &&
+              !data.subjects.length && (
+                <section className="onboarding">
+                  <div>
+                    <span className="eyebrow">PRIMERA PARADA</span>
+                    <h3>Construye tu semestre a tu manera.</h3>
+                    <p>
+                      Crea una materia, elige su dibujo y anota tu primer
+                      pendiente. El resto puede esperar.
+                    </p>
+                  </div>
+                  <div>
+                    <button
+                      className="primary"
+                      onClick={() => {
+                        setNav("subjects");
+                        setEditor({ collection: "subjects" });
+                      }}
+                    >
+                      Crear mi primera materia
+                    </button>
+                    <button
+                      className="text-button"
+                      onClick={() => void skipTutorial()}
+                    >
+                      Lo haré después
+                    </button>
+                  </div>
+                </section>
+              )}
             <div className="home-columns">
               <section>
                 <div className="section-heading">
@@ -797,6 +818,9 @@ export function App() {
             ])}
             {!data.agenda.length && (
               <div className="empty-state">
+                <ArtImage src="/art/empty-agenda.png" className="empty-art">
+                  {null}
+                </ArtImage>
                 <h3>Sin pendientes todavía.</h3>
                 <p>Agrega una tarea, un examen o un momento de estudio.</p>
               </div>
@@ -844,6 +868,7 @@ export function App() {
                         <p>{String(s.notes || "")}</p>
                         <button
                           className="text-button"
+                          aria-label={`Editar clase ${subjectName(s.subjectId)}`}
                           onClick={() =>
                             setEditor({ collection: "schedule", row: s })
                           }

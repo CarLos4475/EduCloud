@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { api, authorizedFetch, studyRows, Row } from "../../api";
 import { Skeleton } from "../../components/Skeleton";
+import { ArtImage } from "../../components/Icons";
 
 export type SourceRef = {
   materialId: string;
@@ -467,9 +468,14 @@ export function MaterialsPanel({
         ))}
       </div>
       {!materials.length && (
-        <p className="quiet-panel">
-          Todavía no hay apuntes. Guarda una nota o sube tu primer documento.
-        </p>
+        <div className="quiet-panel empty-materials">
+          <ArtImage src="/art/empty-materials.png" className="empty-art">
+            {null}
+          </ArtImage>
+          <p>
+            Todavía no hay apuntes. Guarda una nota o sube tu primer documento.
+          </p>
+        </div>
       )}
       {current && (
         <section

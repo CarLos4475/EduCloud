@@ -39,3 +39,7 @@ Corpus sintético de dos apuntes cortos (circuitos y cálculo); 16 casos en tota
 - El cuestionario muestra la respuesta correcta al cliente: es práctica libre, no un examen.
 - Las estampillas y el progreso se calculan al consultarlos; no hay historial de rachas.
 - La IA puede fallar o cortarse; la interfaz ofrece reintentar sin perder la versión anterior.
+
+## Ilustraciones e iconos (11 de noviembre de 2026)
+
+Se integraron 45 imágenes generadas con los prompts de [docs/design/prompts-imagenes.md](../design/prompts-imagenes.md) en `apps/web/public/art/` (mascota del tutor, personalidades, tipos de recurso, 8 estampillas, 12 ilustraciones de materias, iconos del menú y de los modos, logo, acceso, inicio y estados vacíos). Cada espacio tiene un icono de respaldo si falta el archivo. También: tutor rediseñado con iconos y color por modo, clases en varios días en el horario y corrección del aviso de primera materia en Inicio. Verificado con 70 pruebas de backend, unitarias, `pnpm check` y 16 recorridos e2e.

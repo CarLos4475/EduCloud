@@ -1,6 +1,14 @@
 export type Kind =
   "summary" | "concepts" | "flashcards" | "quiz" | "interactive";
 
+export const KIND_ICONS = {
+  summary: "summary",
+  concepts: "bulb",
+  flashcards: "cards",
+  quiz: "quiz",
+  interactive: "flask",
+} as const;
+
 export const KINDS: { id: Kind; label: string; hint: string }[] = [
   {
     id: "summary",
