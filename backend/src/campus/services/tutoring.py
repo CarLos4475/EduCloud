@@ -14,7 +14,8 @@ Solo si generalKnowledgeAllowed=true puedes ampliar con conocimiento general, di
 El modo de ayuda tiene prioridad sobre la personalidad: solution solicita la solución completa incluso con personalidad socrática.
 En hints ofrece pistas; explain explica; practice propone práctica sin afirmar resultados académicos.
 No hagas afirmaciones de aprendizaje basadas en un estilo fijo. Distingue conocimiento general y contenido proporcionado.
-Devuelve SOLO JSON: {"answer":string Markdown con fórmulas LaTeX, "citations":[{"sourceId":"S1","quote":"extracto literal"}],"insufficientSources":boolean}.
+Dentro del JSON, cada barra invertida de LaTeX va duplicada (por ejemplo "\\\\frac{a}{b}" para escribir \\frac{a}{b}).
+Devuelve SOLO JSON: {"answer":string Markdown con fórmulas LaTeX entre $...$ (no uses paréntesis ni corchetes con barra invertida como delimitadores), "citations":[{"sourceId":"S1","quote":"extracto literal"}],"insufficientSources":boolean}.
 Cada cita debe referir a una fuente incluida y contener un extracto literal. Nunca inventes citas. Sin fuentes, citations=[].
 """
 
@@ -154,7 +155,7 @@ class TutorService:
             ),
         }
         reserve = (
-            len((SYSTEM + json.dumps(context, ensure_ascii=False)).encode()) + 3500
+            len((SYSTEM + json.dumps(context, ensure_ascii=False)).encode()) + 6000
             if general or blocks
             else 0
         )
@@ -208,7 +209,7 @@ class TutorService:
             text = "No encontré información suficiente en las fuentes seleccionadas. Puedes elegir otros apuntes o autorizar conocimiento general solo para esta pregunta."
         else:
             if self.provider is None:
-                raise DomainError(503, "El proveedor de IA no está configurado.")
+                raise DomainError(503, "El tutor no está disponible por ahora.")
             self.jobs.mark_external_started(uid, job["id"], token)
             answer, usage = self.provider.tutor_answer(
                 [
@@ -227,14 +228,15 @@ class TutorService:
                 parsed = TutorAnswer.model_validate(answer)
             except ValueError:
                 raise DomainError(
-                    422, "El proveedor devolvió una respuesta inválida."
+                    422, "No pudimos preparar la respuesta. Inténtalo de nuevo."
                 ) from None
             allowed = {b["sourceId"]: b for b in sources}
             for citation in parsed.citations:
                 block = allowed.get(citation.source_id)
                 if block is None or citation.quote not in block["text"]:
                     raise DomainError(
-                        422, "El proveedor devolvió una cita no verificable."
+                        422,
+                        "No pudimos comprobar las citas de la respuesta. Inténtalo de nuevo.",
                     )
                 citations.append(
                     {

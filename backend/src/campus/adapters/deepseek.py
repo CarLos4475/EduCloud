@@ -1,6 +1,7 @@
 import base64
 import json
 import os
+import re
 import time
 
 import httpx
@@ -15,6 +16,27 @@ class Transcription(ContractModel):
     needs_review: bool = True
 
 
+# LaTeX commands that begin like a JSON escape (\b \f \n \r \t): "\frac" would silently
+# become a form feed followed by "rac". Matching whole command names keeps real "\n".
+LATEX_LOOKALIKES = (
+    "beta|bar|begin|boldsymbol|binom|bullet|frac|forall|flat|nu|neq|ne|nabla|not|neg|"
+    "rho|right|rightarrow|rangle|rceil|rfloor|rm|theta|tau|tan|times|text|textbf|to|"
+    "top|triangle|tilde|therefore|tfrac"
+)
+LATEX_COMMAND = re.compile(r"(?<!\\)\\(?=(?:" + LATEX_LOOKALIKES + r")(?![A-Za-z]))")
+BAD_ESCAPE = re.compile(r'\\(?!["\\/bfnrtu])')
+
+
+def parse_model_json(text):
+    """Models often write LaTeX with single backslashes inside JSON strings."""
+    text = LATEX_COMMAND.sub(r"\\\\", text)
+    try:
+        return json.loads(text)
+    except ValueError:
+        # Double any remaining backslash that does not start a valid JSON escape.
+        return json.loads(BAD_ESCAPE.sub(r"\\\\", text))
+
+
 class ProviderFailure(Exception):
     def __init__(self, code, usage=None):
         self.code, self.usage = code, usage
@@ -27,10 +49,14 @@ class DeepSeekProvider:
         self.model = os.getenv("DEEPSEEK_MODEL", "deepseek-flash")
         self.transport = transport
 
-    def tutor_answer(self, messages, on_progress=None):
+    def structured_answer(self, messages, on_progress=None, max_tokens=6000):
+        """Streaming JSON generation for study resources; same safeguards as tutoring."""
+        return self.tutor_answer(messages, on_progress, max_tokens=max_tokens)
+
+    def tutor_answer(self, messages, on_progress=None, max_tokens=6000):
         if not self.key:
             raise ProviderFailure("provider_not_configured", {"total_tokens": 0})
-        fragments, usage, completed, stopped = [], None, False, False
+        fragments, usage, completed, stopped, truncated = [], None, False, False, False
         last_checkpoint = time.monotonic()
         size = 0
         try:
@@ -48,7 +74,7 @@ class DeepSeekProvider:
                         "stream": True,
                         "stream_options": {"include_usage": True},
                         "response_format": {"type": "json_object"},
-                        "max_tokens": 3000,
+                        "max_tokens": max_tokens,
                     },
                 ) as response,
             ):
@@ -76,16 +102,21 @@ class DeepSeekProvider:
                         size += len(fragment)
                         if choice.get("finish_reason") == "stop":
                             stopped = True
+                        elif choice.get("finish_reason") == "length":
+                            truncated = True
                     if size > 70000:
                         raise ProviderFailure("provider_output_limit", usage)
                     if on_progress and time.monotonic() - last_checkpoint >= 3:
                         on_progress()
                         last_checkpoint = time.monotonic()
+            if truncated:
+                # The model spent its output budget (reasoning included) before finishing.
+                raise ProviderFailure("provider_truncated", usage)
             if not completed or not stopped:
                 raise ProviderFailure("provider_interrupted", usage)
             if not usage or "total_tokens" not in usage:
                 raise ProviderFailure("provider_usage_missing")
-            return json.loads("".join(fragments)), usage
+            return parse_model_json("".join(fragments)), usage
         except httpx.HTTPError:
             raise ProviderFailure("provider_timeout", usage) from None
         except (ValueError, KeyError, TypeError):

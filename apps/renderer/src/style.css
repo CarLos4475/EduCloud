@@ -59,3 +59,20 @@ svg {
     animation: none !important;
   }
 }
+
+/* Orden y espacio para recursos generados */
+#resource label,
+#resource p,
+#resource div {
+  display: block;
+  margin: 10px 0;
+}
+#resource label {
+  font-weight: bold;
+}
+#resource button {
+  margin: 6px 6px 6px 0;
+}
+#resource .katex-display {
+  margin: 12px 0;
+}

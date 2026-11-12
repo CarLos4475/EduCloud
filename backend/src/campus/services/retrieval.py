@@ -20,7 +20,10 @@ class RetrievalService:
                 uid, "materialVersions", f"{key}_{version}"
             )
             if not record or not record.get("indexKey"):
-                raise DomainError(409, "El índice de esta versión debe reconstruirse.")
+                raise DomainError(
+                    409,
+                    "Estamos preparando de nuevo este material. Inténtalo en un momento.",
+                )
             self.cache[cache_key] = (
                 self.materials.version(uid, key, version),
                 json.loads(
@@ -103,6 +106,41 @@ class RetrievalService:
                     "score": block["score"],
                 }
             )
+        return result
+
+    def overview(self, uid, subject, material_ids, budget=18000, per_block=3000):
+        """Opening blocks of each selected material, for resources not tied to a query."""
+        result = []
+        for key in material_ids:
+            material = self.materials.get(uid, key)
+            if material["subjectId"] != subject:
+                raise DomainError(404, "El material no pertenece a la materia.")
+            if material["status"] not in ("ready", "partial"):
+                continue
+            for block in self.materials.version(
+                uid, key, material["extractionVersion"]
+            ):
+                text = block["text"][: min(per_block, budget)]
+                if not text.strip():
+                    continue
+                budget -= len(text)
+                result.append(
+                    {
+                        "sourceRef": {
+                            name: block[name]
+                            for name in (
+                                "materialId",
+                                "extractionVersion",
+                                "blockId",
+                                "locator",
+                            )
+                        },
+                        "text": text,
+                        "score": 0.0,
+                    }
+                )
+                if budget <= 0:
+                    return result
         return result
 
     def citation(self, uid, ref):

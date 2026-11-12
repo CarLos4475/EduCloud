@@ -36,7 +36,7 @@ def validate_bytes(content, media_type):
                     raise ValueError()
         except (ValueError, zipfile.BadZipFile):
             raise DomainError(
-                422, "La presentación no es válida o es demasiado grande."
+                422, "El archivo no es válido o es demasiado grande."
             ) from None
     elif media_type.startswith("image/"):
         try:
@@ -115,7 +115,8 @@ class UploadService:
                 > 500 * 1024 * 1024
             ):
                 raise DomainError(
-                    429, "Se alcanzó la cuota de almacenamiento o cargas simultáneas."
+                    429,
+                    "Llegaste al límite de espacio o de archivos subiéndose a la vez.",
                 )
             material = new_row(
                 **data,

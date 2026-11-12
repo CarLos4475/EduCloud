@@ -11,6 +11,13 @@ import { Login } from "./features/auth/Login";
 import { Editor, EditorState } from "./features/academic/Editor";
 import { Illustration } from "./components/Illustration";
 import { MaterialsPanel } from "./features/materials/MaterialsPanel";
+import { PageSkeleton, Skeleton } from "./components/Skeleton";
+import { DataPanel } from "./features/account/DataPanel";
+import {
+  PassportPanel,
+  PassportSummary,
+} from "./features/progress/PassportPanel";
+import { ResourcesPanel } from "./features/resources/ResourcesPanel";
 const TutorPanel = lazy(() =>
   import("./features/tutor/TutorPanel").then((module) => ({
     default: module.TutorPanel,
@@ -53,6 +60,7 @@ export function App() {
   const [busy, setBusy] = useState(false);
   const [pendingIds, setPendingIds] = useState<string[]>([]);
   const [tutor, setTutor] = useState(false);
+  const [openResource, setOpenResource] = useState<string | null>(null);
   const session = useRef(0);
 
   useEffect(
@@ -158,6 +166,22 @@ export function App() {
     try {
       await api(`/${collection}/${row.id}`, { method: "DELETE" });
       await load();
+    } catch (e) {
+      setError((e as Error).message);
+    }
+  }
+  async function removeSubject(subject: Row) {
+    if (
+      !window.confirm(
+        `¿Eliminar "${String(subject.name)}" con todos sus temas, pendientes, apuntes, conversaciones y recursos? Esto no se puede deshacer. Si solo quieres dejarla a un lado, mejor archívala.`,
+      )
+    )
+      return;
+    try {
+      await api(`/subjects/${subject.id}`, { method: "DELETE" });
+      setSelected(null);
+      await load();
+      setNotice("Materia eliminada.");
     } catch (e) {
       setError((e as Error).message);
     }
@@ -316,8 +340,8 @@ export function App() {
 
   if (initializing)
     return (
-      <main className="startup" aria-live="polite">
-        Preparando tu espacio…
+      <main className="startup">
+        <PageSkeleton label="Preparando tu espacio…" />
       </main>
     );
   if (!user) return <Login />;
@@ -452,9 +476,9 @@ export function App() {
           </p>
         )}
         {loading && (
-          <span className="loading" role="status">
-            Actualizando tu espacio…
-          </span>
+          <div className="loading">
+            <Skeleton lines={1} label="Actualizando tu espacio…" />
+          </div>
         )}
 
         {nav === "home" && (
@@ -567,10 +591,7 @@ export function App() {
                 <section className="passport-note">
                   <span className="eyebrow">CADA PASO CUENTA</span>
                   <h3>Tu camino, a la vista.</h3>
-                  <p>
-                    El progreso y el pasaporte se sumarán cuando comiences a
-                    practicar con tu tutor.
-                  </p>
+                  <PassportSummary onOpen={() => navigate("profile")} />
                   <div aria-hidden="true">✧ ── ✧ ── ✧</div>
                 </section>
               </aside>
@@ -657,6 +678,12 @@ export function App() {
                       ? "Restaurar materia"
                       : "Archivar materia"}
                   </button>
+                  <button
+                    className="text-button danger"
+                    onClick={() => void removeSubject(subject)}
+                  >
+                    Eliminar materia
+                  </button>
                 </div>
               </div>
               <Illustration id={String(subject.illustrationId)} />
@@ -738,6 +765,12 @@ export function App() {
               subjectId={subject.id}
               topics={data.topics.filter((t) => t.subjectId === subject.id)}
               onTopicsChanged={() => void load()}
+            />
+            <ResourcesPanel
+              key={`resources:${user.uid}:${subject.id}`}
+              subjectId={subject.id}
+              openId={openResource}
+              onOpened={() => setOpenResource(null)}
             />
           </>
         )}
@@ -839,6 +872,7 @@ export function App() {
               <h1>Mi espacio.</h1>
             </div>
             <div className="profile-grid">
+              <PassportPanel />
               <section className="panel">
                 <h2>Tu perfil</h2>
                 <form onSubmit={saveProfile}>
@@ -916,6 +950,7 @@ export function App() {
                 )}
               </section>
             </div>
+            <DataPanel />
           </>
         )}
         <footer className="workspace-footer">
@@ -944,8 +979,8 @@ export function App() {
       {tutor && (
         <Suspense
           fallback={
-            <aside className="tutor-drawer study-tutor" role="status">
-              Abriendo tu tutor…
+            <aside className="tutor-drawer study-tutor">
+              <Skeleton lines={6} label="Abriendo tu tutor…" />
             </aside>
           }
         >
@@ -954,6 +989,12 @@ export function App() {
             subjects={data.subjects.filter((s) => !s.archived)}
             initialSubjectId={selected}
             onClose={() => setTutor(false)}
+            onOpenResource={(subjectId, resourceId) => {
+              setTutor(false);
+              setNav("subjects");
+              setSelected(subjectId);
+              setOpenResource(resourceId);
+            }}
           />
         </Suspense>
       )}

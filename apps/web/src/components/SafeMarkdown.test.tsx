@@ -18,3 +18,16 @@ describe("academic responses", () => {
     expect(html).toContain("print(1)");
   });
 });
+
+describe("math delimiters", () => {
+  it("accepts parenthesis and bracket delimiters as well as dollars", async () => {
+    const { normalizeMath } = await import("./SafeMarkdown");
+    expect(normalizeMath("si \\(V = I R\\) entonces")).toBe(
+      "si $V = I R$ entonces",
+    );
+    expect(normalizeMath("\\[I = \\frac{V}{R}\\]")).toBe(
+      "$$I = \\frac{V}{R}$$",
+    );
+    expect(normalizeMath("ya está $V$ bien")).toBe("ya está $V$ bien");
+  });
+});

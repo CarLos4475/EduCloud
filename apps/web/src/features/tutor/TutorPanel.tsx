@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { api, authorizedFetch, studyRows, Row } from "../../api";
 import { SafeMarkdown } from "../../components/SafeMarkdown";
+import { Skeleton } from "../../components/Skeleton";
 import {
   Material,
   SourceRef,
@@ -38,10 +39,12 @@ export function TutorPanel({
   subjects,
   initialSubjectId,
   onClose,
+  onOpenResource,
 }: {
   subjects: Row[];
   initialSubjectId: string | null;
   onClose: () => void;
+  onOpenResource: (subjectId: string, resourceId: string) => void;
 }) {
   const [subject, setSubject] = useState(
     initialSubjectId || subjects[0]?.id || "",
@@ -63,6 +66,30 @@ export function TutorPanel({
   const [source, setSource] = useState<SourceRef | null>(null);
   const [acceptCharge, setAcceptCharge] = useState(false);
   const [speaking, setSpeaking] = useState(false);
+  const [made, setMade] = useState<{ turnId: string; id: string } | null>(null);
+  async function makeResource(turn: Turn, kind: string) {
+    setBusy(true);
+    setError("");
+    try {
+      const created = await api<{ id: string }>("/resources", {
+        method: "POST",
+        headers: { "Idempotency-Key": crypto.randomUUID() },
+        body: JSON.stringify({
+          subjectId: subject,
+          kind,
+          instruction: turn.question,
+          materialIds,
+          allowGeneral:
+            general || sourceMode === "general" || !materialIds.length,
+        }),
+      });
+      setMade({ turnId: turn.id, id: created.id });
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
   const lastRequest = useRef<{ payload: string; key: string } | null>(null);
   const closeButton = useRef<HTMLButtonElement>(null);
   const pending = turns.find((t) => !terminal(t));
@@ -484,10 +511,11 @@ export function TutorPanel({
                     <>
                       <p role="status">
                         {t.stage === "queued"
-                          ? "Tu pregunta está en cola…"
-                          : "Preparando una respuesta con tus fuentes…"}{" "}
+                          ? "Tu pregunta está en la fila…"
+                          : "Buscando la respuesta en tus apuntes…"}{" "}
                         {connection}
                       </p>
+                      <Skeleton lines={3} />
                       <button
                         className="text-button"
                         onClick={() =>
@@ -509,11 +537,39 @@ export function TutorPanel({
                       >
                         {speaking ? "Detener lectura" : "Escuchar respuesta"}
                       </button>
-                      <small>
-                        {t.usage?.total_tokens !== undefined
-                          ? `${t.usage.total_tokens} tokens observados`
-                          : ""}
-                      </small>
+                    </div>
+                  )}
+                  {t.status === "succeeded" && (
+                    <div className="make-resource">
+                      {made?.turnId === t.id ? (
+                        <p role="status">
+                          ¡Listo! Lo estamos preparando.{" "}
+                          <button
+                            className="text-button"
+                            onClick={() => onOpenResource(subject, made.id)}
+                          >
+                            Verlo en mis recursos
+                          </button>
+                        </p>
+                      ) : (
+                        <>
+                          <span>Llévalo a tu repaso:</span>
+                          {[
+                            ["flashcards", "Tarjetas"],
+                            ["quiz", "Cuestionario"],
+                            ["summary", "Resumen"],
+                          ].map(([kind, label]) => (
+                            <button
+                              key={kind}
+                              className="secondary"
+                              disabled={busy}
+                              onClick={() => void makeResource(t, kind)}
+                            >
+                              {label}
+                            </button>
+                          ))}
+                        </>
+                      )}
                     </div>
                   )}
                   {["failed", "canceled"].includes(t.status) && (
@@ -530,8 +586,8 @@ export function TutorPanel({
                             checked={acceptCharge}
                             onChange={(e) => setAcceptCharge(e.target.checked)}
                           />
-                          El consumo anterior es desconocido; acepto un posible
-                          consumo adicional al reintentar.
+                          Puede que el intento anterior ya cuente en tu límite
+                          de hoy. Quiero intentarlo de nuevo.
                         </label>
                       )}
                       <button

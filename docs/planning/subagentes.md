@@ -2,7 +2,7 @@
 
 **Actualización de ejecución:** el usuario prefirió continuar con un solo agente por el costo de la orquestación. Desde T02 se trabaja directamente, con pruebas focalizadas y registro breve de avance. La distribución siguiente queda como referencia opcional para el futuro, no como requisito de nuevas delegaciones.
 
-Este documento organiza trabajo futuro. La petición actual es preparar el plan; no ejecutar las tareas. La lectura de los documentos por un revisor no autoriza programar, instalar ni desplegar.
+Este documento conserva la organización original como referencia histórica; no activa delegaciones ni describe la petición actual. H0–H2 están cerrados y la ejecución actual es con un solo agente. Consultar [el contexto vigente](../CONTEXTO.md) antes de retomar. Leer el plan no autoriza ejecutar hitos futuros ni levantar la pausa de despliegue.
 
 ## 1. Responsabilidades
 

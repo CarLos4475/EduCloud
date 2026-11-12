@@ -1,6 +1,6 @@
 # Plataforma de estudio con IA v1.0 — Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **Ejecución vigente:** trabajar directamente con un solo agente por preferencia del usuario; no iniciar subagentes a partir de este plan. Consultar [AGENTS.md](../../../AGENTS.md) y [CONTEXTO.md](../../CONTEXTO.md) antes de retomar. Las listas originales conservan el diseño previsto y se interpretan junto con los cierres.
 
 **Goal:** entregar una plataforma universitaria funcional para piloto interno que organice materias libres, transforme material propio en tutoría y recursos interactivos, registre evidencia de aprendizaje y permita un pasaporte privado entre amigos.
 
@@ -10,11 +10,11 @@
 
 **Spec:** [diseño de producto](../specs/2026-11-02-plataforma-estudio-design.md), [arquitectura y contratos](../../planning/arquitectura-y-contratos.md), [validación](../../planning/validacion-y-demo.md), [coordinación](../../planning/subagentes.md).
 
-**Estado:** el usuario autorizó H0/H1 (T01–T08) y su documentación LaTeX; posteriormente autorizó H2 (T09–T13) y su subida a GitHub una vez verificada. H3–H7 y el despliegue público no forman parte del corte actual. Las listas se interpretan junto con los registros de cierre y sus ajustes de alcance.
+**Estado al 11 de noviembre de 2026:** H0/H1 (T01–T08) y H2 (T09–T13) están verificados y publicados en GitHub. H3–H7 no están completados. El usuario pidió acceso remoto y luego pausó implementación e infraestructura hasta avisar que la facturación está activa. También pidió esqueletos para todas las esperas; su aplicación general está pendiente. No levantar la pausa por leer este plan.
 
 **Cierre H0/H1:** T01–T08 implementadas y verificadas; véase [evidencia y límites](../../evidence/cierre-h0-h1.md). La ejecución pasó a ser directa por preferencia del usuario. Las listas siguientes conservan el diseño original: contratos de módulos futuros se amplían con sus consumidores y los casos amplios de evaluación académica siguen en H7. Firebase Auth/Firestore reales comprobados; Cloud Run corresponde a H6.
 
-**Actualización H2 (3 de noviembre):** el usuario autorizó la fase 3, T09–T13, y subirla a GitHub una vez verificada. Biblioteca y tutor implementados; [evidencia H2](../../evidence/cierre-h2.md). No se autorizó desplegar la web. Storage/Tasks reales quedan condicionados a facturación e infraestructura de H6; Firestore y DeepSeek reales sí se comprobaron. Las listas originales se conservan como referencia y sus ajustes se explican en el cierre y ADR 0005.
+**Cierre H2 (3 de noviembre):** biblioteca y tutor implementados; [evidencia H2](../../evidence/cierre-h2.md). En ese cierre aún no se había solicitado despliegue; la solicitud posterior y su pausa se describen arriba. Storage/Tasks reales siguen pendientes de facturación e infraestructura; Firestore y DeepSeek reales sí se comprobaron. Las listas originales se conservan como referencia y sus ajustes se explican en el cierre y ADR 0005.
 
 ## Global Constraints
 

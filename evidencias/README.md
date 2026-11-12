@@ -12,3 +12,17 @@ Capturas tomadas durante la validación local de H0/H1 el 2 de noviembre de 2026
 | [06-revision-material-movil.png](06-revision-material-movil.png) | Biblioteca y revisión de imagen en móvil | 3 de noviembre; imagen sintética y transcripción de prueba confirmada |
 
 La aplicación aún no está desplegada públicamente. Estas imágenes documentan su aspecto; los resultados de pruebas están en [cierre H0/H1](../docs/evidence/cierre-h0-h1.md).
+
+## Corte H3/H4 (11 de noviembre de 2026)
+
+Capturas de escritorio con IA real (DeepSeek) y emuladores locales de Auth/Firestore; cuentas y apuntes sintéticos.
+
+| Archivo | Contenido |
+|---|---|
+| [07-recurso-resumen.png](07-recurso-resumen.png) | Resumen generado a partir de los apuntes, con fórmulas y fuentes |
+| [08-recurso-tarjetas.png](08-recurso-tarjetas.png) | Tarjetas de estudio con repaso guardado |
+| [09-recurso-cuestionario.png](09-recurso-cuestionario.png) | Cuestionario con retroalimentación |
+| [10-recurso-interactivo.png](10-recurso-interactivo.png) | Experimento interactivo en el visor aislado |
+| [11-tutor-con-formulas.png](11-tutor-con-formulas.png) | Tutor con respuesta, fórmulas, cita y botones para llevarla al repaso |
+| [12-pasaporte.png](12-pasaporte.png) | Pasaporte con estampillas ganadas y por ganar |
+| [13-practica-guardada.png](13-practica-guardada.png) | Resultado de un cuestionario guardado en el progreso |

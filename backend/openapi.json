@@ -1,6 +1,21 @@
 {
   "components": {
     "schemas": {
+      "AccountDeletion": {
+        "additionalProperties": false,
+        "properties": {
+          "confirm": {
+            "const": "ELIMINAR",
+            "title": "Confirm",
+            "type": "string"
+          }
+        },
+        "required": [
+          "confirm"
+        ],
+        "title": "AccountDeletion",
+        "type": "object"
+      },
       "Actor": {
         "additionalProperties": false,
         "properties": {
@@ -240,6 +255,73 @@
           "requestId"
         ],
         "title": "ApiError",
+        "type": "object"
+      },
+      "AttemptInput": {
+        "additionalProperties": false,
+        "properties": {
+          "answers": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "maxItems": 15,
+            "minItems": 1,
+            "title": "Answers",
+            "type": "array"
+          }
+        },
+        "required": [
+          "answers"
+        ],
+        "title": "AttemptInput",
+        "type": "object"
+      },
+      "AttemptRead": {
+        "properties": {
+          "createdAt": {
+            "title": "Createdat",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/QuestionResult"
+            },
+            "title": "Results",
+            "type": "array"
+          },
+          "score": {
+            "title": "Score",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          },
+          "versionId": {
+            "title": "Versionid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "versionId",
+          "score",
+          "total",
+          "results",
+          "createdAt"
+        ],
+        "title": "AttemptRead",
         "type": "object"
       },
       "BlockRead": {
@@ -1195,6 +1277,35 @@
         "title": "Page[PeriodRecord]",
         "type": "object"
       },
+      "Page_ResourceRead_": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ResourceRead"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "nextCursor": {
+            "anyOf": [
+              {
+                "maxLength": 512,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nextcursor"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "Page[ResourceRead]",
+        "type": "object"
+      },
       "Page_ScheduleRecord_": {
         "additionalProperties": false,
         "properties": {
@@ -1309,6 +1420,32 @@
           "items"
         ],
         "title": "Page[TurnRead]",
+        "type": "object"
+      },
+      "PassportRead": {
+        "properties": {
+          "earned": {
+            "title": "Earned",
+            "type": "integer"
+          },
+          "stamps": {
+            "items": {
+              "$ref": "#/components/schemas/StampRead"
+            },
+            "title": "Stamps",
+            "type": "array"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "earned",
+          "total",
+          "stamps"
+        ],
+        "title": "PassportRead",
         "type": "object"
       },
       "PeriodInput": {
@@ -1453,6 +1590,439 @@
         "title": "ProfileUpdate",
         "type": "object"
       },
+      "ProgressRead": {
+        "properties": {
+          "averageScore": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Averagescore"
+          },
+          "cardsKnown": {
+            "title": "Cardsknown",
+            "type": "integer"
+          },
+          "cardsToReview": {
+            "title": "Cardstoreview",
+            "type": "integer"
+          },
+          "lastScore": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lastscore"
+          },
+          "materialsReady": {
+            "title": "Materialsready",
+            "type": "integer"
+          },
+          "quizAttempts": {
+            "title": "Quizattempts",
+            "type": "integer"
+          },
+          "recommendations": {
+            "items": {
+              "$ref": "#/components/schemas/Recommendation"
+            },
+            "title": "Recommendations",
+            "type": "array"
+          },
+          "resourcesReady": {
+            "title": "Resourcesready",
+            "type": "integer"
+          },
+          "subjectId": {
+            "title": "Subjectid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "subjectId",
+          "materialsReady",
+          "resourcesReady",
+          "quizAttempts",
+          "cardsKnown",
+          "cardsToReview",
+          "recommendations"
+        ],
+        "title": "ProgressRead",
+        "type": "object"
+      },
+      "QuestionResult": {
+        "properties": {
+          "correct": {
+            "title": "Correct",
+            "type": "boolean"
+          },
+          "correctIndex": {
+            "title": "Correctindex",
+            "type": "integer"
+          },
+          "picked": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Picked"
+          }
+        },
+        "required": [
+          "correctIndex",
+          "correct"
+        ],
+        "title": "QuestionResult",
+        "type": "object"
+      },
+      "Recommendation": {
+        "properties": {
+          "resourceId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resourceid"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "title": "Recommendation",
+        "type": "object"
+      },
+      "ResourceChange": {
+        "additionalProperties": false,
+        "properties": {
+          "allowGeneral": {
+            "default": false,
+            "title": "Allowgeneral",
+            "type": "boolean"
+          },
+          "instruction": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "title": "Instruction",
+            "type": "string"
+          }
+        },
+        "required": [
+          "instruction"
+        ],
+        "title": "ResourceChange",
+        "type": "object"
+      },
+      "ResourceDetail": {
+        "properties": {
+          "archived": {
+            "default": false,
+            "title": "Archived",
+            "type": "boolean"
+          },
+          "createdAt": {
+            "title": "Createdat",
+            "type": "string"
+          },
+          "currentVersionId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Currentversionid"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "summary",
+              "concepts",
+              "flashcards",
+              "quiz",
+              "interactive"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "latestStatus": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lateststatus"
+          },
+          "latestVersionId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latestversionid"
+          },
+          "materialIds": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Materialids",
+            "type": "array"
+          },
+          "revision": {
+            "title": "Revision",
+            "type": "integer"
+          },
+          "subjectId": {
+            "title": "Subjectid",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "versionCount": {
+            "default": 0,
+            "title": "Versioncount",
+            "type": "integer"
+          },
+          "versions": {
+            "items": {
+              "$ref": "#/components/schemas/VersionRead"
+            },
+            "title": "Versions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "revision",
+          "subjectId",
+          "kind",
+          "title",
+          "materialIds",
+          "createdAt",
+          "versions"
+        ],
+        "title": "ResourceDetail",
+        "type": "object"
+      },
+      "ResourceInput": {
+        "additionalProperties": false,
+        "properties": {
+          "allowGeneral": {
+            "default": false,
+            "title": "Allowgeneral",
+            "type": "boolean"
+          },
+          "instruction": {
+            "default": "",
+            "maxLength": 1000,
+            "title": "Instruction",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "summary",
+              "concepts",
+              "flashcards",
+              "quiz",
+              "interactive"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "materialIds": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10,
+            "title": "Materialids",
+            "type": "array"
+          },
+          "subjectId": {
+            "pattern": "^[a-f0-9]{32}$",
+            "title": "Subjectid",
+            "type": "string"
+          },
+          "title": {
+            "default": "",
+            "maxLength": 120,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "subjectId",
+          "kind"
+        ],
+        "title": "ResourceInput",
+        "type": "object"
+      },
+      "ResourceRead": {
+        "properties": {
+          "archived": {
+            "default": false,
+            "title": "Archived",
+            "type": "boolean"
+          },
+          "createdAt": {
+            "title": "Createdat",
+            "type": "string"
+          },
+          "currentVersionId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Currentversionid"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "summary",
+              "concepts",
+              "flashcards",
+              "quiz",
+              "interactive"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "latestStatus": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lateststatus"
+          },
+          "latestVersionId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latestversionid"
+          },
+          "materialIds": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Materialids",
+            "type": "array"
+          },
+          "revision": {
+            "title": "Revision",
+            "type": "integer"
+          },
+          "subjectId": {
+            "title": "Subjectid",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "versionCount": {
+            "default": 0,
+            "title": "Versioncount",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "revision",
+          "subjectId",
+          "kind",
+          "title",
+          "materialIds",
+          "createdAt"
+        ],
+        "title": "ResourceRead",
+        "type": "object"
+      },
+      "ResourceUpdate": {
+        "additionalProperties": false,
+        "properties": {
+          "archived": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Archived"
+          },
+          "expectedRevision": {
+            "minimum": 1.0,
+            "title": "Expectedrevision",
+            "type": "integer"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "maxLength": 120,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          }
+        },
+        "required": [
+          "expectedRevision"
+        ],
+        "title": "ResourceUpdate",
+        "type": "object"
+      },
       "RetryInput": {
         "additionalProperties": false,
         "properties": {
@@ -1463,6 +2033,53 @@
           }
         },
         "title": "RetryInput",
+        "type": "object"
+      },
+      "ReviewInput": {
+        "additionalProperties": false,
+        "properties": {
+          "cards": {
+            "additionalProperties": {
+              "enum": [
+                "known",
+                "again"
+              ],
+              "type": "string"
+            },
+            "maxProperties": 30,
+            "title": "Cards",
+            "type": "object"
+          }
+        },
+        "required": [
+          "cards"
+        ],
+        "title": "ReviewInput",
+        "type": "object"
+      },
+      "ReviewRead": {
+        "properties": {
+          "cards": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Cards",
+            "type": "object"
+          },
+          "revision": {
+            "default": 0,
+            "title": "Revision",
+            "type": "integer"
+          },
+          "versionId": {
+            "title": "Versionid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "versionId"
+        ],
+        "title": "ReviewRead",
         "type": "object"
       },
       "ScheduleInput": {
@@ -1674,6 +2291,95 @@
           "locator"
         ],
         "title": "SourceRef",
+        "type": "object"
+      },
+      "StampRead": {
+        "properties": {
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "earned": {
+            "title": "Earned",
+            "type": "boolean"
+          },
+          "earnedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Earnedat"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "description",
+          "earned"
+        ],
+        "title": "StampRead",
+        "type": "object"
+      },
+      "StateInput": {
+        "additionalProperties": false,
+        "properties": {
+          "expectedRevision": {
+            "anyOf": [
+              {
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expectedrevision"
+          },
+          "state": {
+            "additionalProperties": true,
+            "title": "State",
+            "type": "object"
+          }
+        },
+        "required": [
+          "state"
+        ],
+        "title": "StateInput",
+        "type": "object"
+      },
+      "StateRead": {
+        "properties": {
+          "revision": {
+            "default": 0,
+            "title": "Revision",
+            "type": "integer"
+          },
+          "state": {
+            "additionalProperties": true,
+            "title": "State",
+            "type": "object"
+          },
+          "versionId": {
+            "title": "Versionid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "versionId"
+        ],
+        "title": "StateRead",
         "type": "object"
       },
       "SubjectInput": {
@@ -2616,6 +3322,127 @@
           "type"
         ],
         "title": "ValidationError",
+        "type": "object"
+      },
+      "VersionRead": {
+        "properties": {
+          "citations": {
+            "items": {
+              "$ref": "#/components/schemas/SourceRef"
+            },
+            "title": "Citations",
+            "type": "array"
+          },
+          "content": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Content"
+          },
+          "createdAt": {
+            "title": "Createdat",
+            "type": "string"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "instruction": {
+            "title": "Instruction",
+            "type": "string"
+          },
+          "jobId": {
+            "title": "Jobid",
+            "type": "string"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model"
+          },
+          "number": {
+            "title": "Number",
+            "type": "integer"
+          },
+          "promptVersion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Promptversion"
+          },
+          "resourceId": {
+            "title": "Resourceid",
+            "type": "string"
+          },
+          "sourcesChanged": {
+            "default": false,
+            "title": "Sourceschanged",
+            "type": "boolean"
+          },
+          "stage": {
+            "title": "Stage",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "textAlternative": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Textalternative"
+          },
+          "usageUnknown": {
+            "default": false,
+            "title": "Usageunknown",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "resourceId",
+          "number",
+          "instruction",
+          "status",
+          "stage",
+          "jobId",
+          "createdAt"
+        ],
+        "title": "VersionRead",
         "type": "object"
       }
     }
@@ -4016,6 +4843,107 @@
         ]
       }
     },
+    "/api/v1/me/delete": {
+      "post": {
+        "operationId": "delete_account_api_v1_me_delete_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccountDeletion"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Delete Account",
+        "tags": [
+          "study"
+        ]
+      }
+    },
+    "/api/v1/passport": {
+      "get": {
+        "operationId": "passport_api_v1_passport_get",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PassportRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Passport",
+        "tags": [
+          "study"
+        ]
+      }
+    },
     "/api/v1/periods": {
       "get": {
         "operationId": "periods_listing_api_v1_periods_get",
@@ -4321,6 +5249,644 @@
         "summary": "Periods Update",
         "tags": [
           "academic"
+        ]
+      }
+    },
+    "/api/v1/resources": {
+      "post": {
+        "operationId": "create_resource_api_v1_resources_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "maxLength": 128,
+              "minLength": 1,
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResourceInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceDetail"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Resource",
+        "tags": [
+          "study"
+        ]
+      }
+    },
+    "/api/v1/resources/versions/{key}/attempts": {
+      "post": {
+        "operationId": "attempt_api_v1_resources_versions__key__attempts_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AttemptInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Attempt",
+        "tags": [
+          "study"
+        ]
+      }
+    },
+    "/api/v1/resources/versions/{key}/review": {
+      "get": {
+        "operationId": "get_review_api_v1_resources_versions__key__review_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Review",
+        "tags": [
+          "study"
+        ]
+      },
+      "put": {
+        "operationId": "put_review_api_v1_resources_versions__key__review_put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Put Review",
+        "tags": [
+          "study"
+        ]
+      }
+    },
+    "/api/v1/resources/versions/{key}/state": {
+      "delete": {
+        "operationId": "delete_state_api_v1_resources_versions__key__state_delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Delete State",
+        "tags": [
+          "study"
+        ]
+      },
+      "get": {
+        "operationId": "get_state_api_v1_resources_versions__key__state_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StateRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get State",
+        "tags": [
+          "study"
+        ]
+      },
+      "put": {
+        "operationId": "put_state_api_v1_resources_versions__key__state_put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StateInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StateRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Put State",
+        "tags": [
+          "study"
+        ]
+      }
+    },
+    "/api/v1/resources/{key}": {
+      "get": {
+        "operationId": "get_resource_api_v1_resources__key__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceDetail"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Resource",
+        "tags": [
+          "study"
+        ]
+      },
+      "patch": {
+        "operationId": "update_resource_api_v1_resources__key__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResourceUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceDetail"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Resource",
+        "tags": [
+          "study"
+        ]
+      }
+    },
+    "/api/v1/resources/{key}/versions": {
+      "post": {
+        "operationId": "change_resource_api_v1_resources__key__versions_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "maxLength": 128,
+              "minLength": 1,
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResourceChange"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceDetail"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Change Resource",
+        "tags": [
+          "study"
         ]
       }
     },
@@ -5022,6 +6588,161 @@
           }
         },
         "summary": "Materials",
+        "tags": [
+          "study"
+        ]
+      }
+    },
+    "/api/v1/subjects/{subject}/progress": {
+      "get": {
+        "operationId": "progress_api_v1_subjects__subject__progress_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "subject",
+            "required": true,
+            "schema": {
+              "title": "Subject",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProgressRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Progress",
+        "tags": [
+          "study"
+        ]
+      }
+    },
+    "/api/v1/subjects/{subject}/resources": {
+      "get": {
+        "operationId": "resources_api_v1_subjects__subject__resources_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "subject",
+            "required": true,
+            "schema": {
+              "title": "Subject",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "archived",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Archived",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 50,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 512,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_ResourceRead_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Resources",
         "tags": [
           "study"
         ]

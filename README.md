@@ -2,6 +2,8 @@
 
 Funcionan identidad, perfil, materias libres, temas, periodos, agenda y horario. H2 incorpora biblioteca privada, extracción y revisión de apuntes, tutor con fuentes verificables, personalidades, modos de ayuda e historial recuperable. H0 conserva el laboratorio aislado de recursos interactivos; su generación dentro del tutor corresponde a H3.
 
+Para retomar el proyecto, leer primero [AGENTS.md](AGENTS.md) y el [contexto actualizado](docs/CONTEXTO.md). **Al 11 de noviembre de 2026, el despliegue sigue pausado hasta que el usuario avise que la facturación está activa; el desarrollo y las pruebas continúan en local y la nube se conecta después (ver contexto).** La solicitud de acceso remoto ya existe; aún no se ha desplegado la web. La dirección propuesta es Firebase Hosting en dos orígenes y Cloud Run para API/worker. También queda pendiente aplicar esqueletos a todos los estados de espera, sin spinners.
+
 ## Requisitos e instalación
 
 Node 24 LTS, pnpm 11, Python 3.12–3.13, uv y Java 21 para los emuladores. Esta PC tiene un JRE 21 local en `.tools/java21`, detectado por el script sin modificar el Java del sistema. En PowerShell:
@@ -19,7 +21,7 @@ En otra terminal: `pnpm dev`. Arranca web, renderer, API y worker persistente. C
 - Contratos API: http://127.0.0.1:8000/docs
 - Auth/Firestore emulados: puertos 9099/8080; cuentas sintéticas con dominio institucional.
 
-El emulador exporta datos al salir con el script; `.firebase` está ignorado. Archivar conserva relaciones. Borrar completamente una materia corresponde a T24 y devuelve 501 explícito.
+El emulador exporta datos al salir con el script; `.firebase` está ignorado. Archivar conserva relaciones. Eliminar una materia borra también sus temas, pendientes, apuntes, archivos, conversaciones, recursos y práctica; se rechaza mientras haya tareas en curso.
 
 ## Servicios reales
 
@@ -56,4 +58,4 @@ H2: `pnpm eval:ai:h2` verifica visión y tutoría con dos llamadas reales y mate
 
 El [informe escolar de H0/H1](docs/academico/fases-1-2/informe-fases-1-2.pdf) ocupa nueve páginas con la portada y el estilo académico indicados por el usuario. H2 se documenta en su [registro de cierre](docs/evidence/cierre-h2.md). La implementación continúa directamente con un solo agente por decisión del usuario.
 
-El [registro de evidencia](docs/evidence/avance-fases-1-2.md) detalla pruebas y límites. El laboratorio es una prueba de viabilidad QuickJS/WASM con SDK acotado, no un IDE remoto. La configuración de orígenes/CSP debe adaptarse al desplegar. La calidad de IA se evaluó con un corpus sintético pequeño, no como certificación académica general.
+El [cierre H3/H4](docs/evidence/cierre-h3-h4.md) resume recursos, práctica, pasaporte y borrado, y la [guía de demo](docs/DEMO.md) explica el recorrido. `pnpm eval:ai:h3` mide con IA real la calidad del tutor y los recursos. El [registro de evidencia](docs/evidence/avance-fases-1-2.md) detalla pruebas y límites. El laboratorio es una prueba de viabilidad QuickJS/WASM con SDK acotado, no un IDE remoto. La configuración de orígenes/CSP debe adaptarse al desplegar. La calidad de IA se evaluó con un corpus sintético pequeño, no como certificación académica general.

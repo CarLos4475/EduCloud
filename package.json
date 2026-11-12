@@ -18,6 +18,7 @@
     "contracts:check": "node scripts/contracts.mjs check",
     "eval:ai": "node scripts/ai-eval.mjs",
     "eval:ai:h2": "node scripts/ai-eval-h2.mjs",
+    "eval:ai:h3": "node scripts/ai-eval-h3.mjs",
     "test:cloud:h2": "node scripts/h2-firestore-smoke.mjs",
     "test:cloud": "node scripts/cloud-smoke.mjs",
     "demo:seed": "node scripts/unavailable.mjs demo:seed",

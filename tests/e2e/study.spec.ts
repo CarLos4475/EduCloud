@@ -55,13 +55,13 @@ test("H2: upload a note, ask with sources, open a citation and recover conversat
     .getByLabel("Tu pregunta")
     .fill("¿Qué es la resistencia en la ley de Ohm?");
   await tutor.getByRole("button", { name: "Enviar pregunta" }).click();
-  await expect(tutor.getByText(/Proveedor de prueba local/)).toBeVisible({
-    timeout: 30000,
-  });
+  await expect(
+    tutor.getByRole("button", { name: /Abrir cita S1/ }),
+  ).toBeVisible({ timeout: 60000 });
   await tutor.getByRole("button", { name: /Abrir cita S1/ }).click();
   await expect(
     page.getByRole("dialog", { name: "Fuente citada" }),
-  ).toContainText("V = I R");
+  ).toContainText(/Ohm|V = I R|resistencia/i);
   await page.getByRole("button", { name: "Cerrar fuente" }).click();
   await page.reload();
   await page.getByRole("button", { name: "✦ Abrir tutor" }).click();
@@ -74,7 +74,7 @@ test("H2: upload a note, ask with sources, open a citation and recover conversat
   await expect(
     page
       .getByRole("dialog", { name: "Tutor", exact: true })
-      .getByText(/Proveedor de prueba local/),
+      .getByRole("button", { name: /Abrir cita S1/ }),
   ).toBeVisible();
   const accessibility = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21aa"])

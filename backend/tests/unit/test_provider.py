@@ -84,3 +84,21 @@ def test_server_error_is_unknown_usage_and_bad_transcription_keeps_usage(monkeyp
     with pytest.raises(ProviderFailure) as invalid:
         provider.transcribe_image(b"synthetic")
     assert invalid.value.usage["total_tokens"] == 20
+
+
+def test_model_json_with_latex_backslashes_is_repaired():
+    from campus.adapters.deepseek import parse_model_json
+
+    # Single backslashes that are not valid JSON escapes are doubled, not rejected.
+    assert parse_model_json(r'{"a": "$V = I \cdot R \alpha$"}') == {
+        "a": r"$V = I \cdot R \alpha$"
+    }
+    # \frac or \theta start like a JSON escape but must stay LaTeX.
+    assert parse_model_json(r'{"a": "$\frac{\theta}{2} \times \beta$"}') == {
+        "a": r"$\frac{\theta}{2} \times \beta$"
+    }
+    # Correctly escaped output and real newlines are untouched.
+    assert parse_model_json(r'{"a": "$\\frac{1}{2}$"}') == {"a": r"$\frac{1}{2}$"}
+    assert parse_model_json(r'{"a": "uno\nnuevo\ttexto"}') == {"a": "uno\nnuevo\ttexto"}
+    with pytest.raises(ValueError):
+        parse_model_json("no es json")

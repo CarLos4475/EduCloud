@@ -98,7 +98,12 @@ def register(collection: str, model: type[BaseModel], update_model: type[BaseMod
         return service.update(actor.uid, collection, key, validated, expected)
 
     def remove(key: str, actor: ActorDependency, service: ServiceDependency):
-        service.delete(actor.uid, collection, key)
+        if collection == "subjects":
+            from campus.api.study_runtime import study_runtime
+
+            study_runtime().delete_subject(actor.uid, key)
+        else:
+            service.delete(actor.uid, collection, key)
         return Response(status_code=204)
 
     create.__annotations__["body"] = model

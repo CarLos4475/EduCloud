@@ -1,6 +1,8 @@
 # Arquitectura y contratos de la v1
 
-Estado: propuesta técnica ejecutable. Ningún componente descrito está implementado todavía. Las interfaces de este documento se congelan en T02; cualquier cambio posterior debe actualizar consumidores y pruebas en la misma entrega.
+Estado actualizado al 11 de noviembre de 2026: este documento conserva la arquitectura objetivo y contratos de la planeación original. H0–H2 ya están implementados; los registros de cierre y ADR describen el alcance real y sus ajustes. Los contratos ejecutables se generan desde el backend; sus cambios deben actualizar consumidores y pruebas en la misma entrega. Consultar [el contexto vigente](../CONTEXTO.md).
+
+La propuesta original alojaba todos los componentes en Cloud Run. Para el acceso remoto solicitado se recomendó después Firebase Hosting para web y renderer, siempre en orígenes separados, con API/worker en Cloud Run. Esa configuración aún no está implementada: el trabajo quedó pausado hasta aviso del usuario sobre facturación activa. Las tablas y diagramas originales siguientes expresan el objetivo inicial, no infraestructura existente.
 
 ## 1. Elección de arquitectura
 

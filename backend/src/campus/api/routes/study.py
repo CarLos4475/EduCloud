@@ -1,6 +1,6 @@
 import asyncio
 import json
-from typing import Annotated
+from typing import Annotated, Literal
 
 from fastapi import APIRouter, Depends, Header, Query, Request
 from fastapi.responses import Response, StreamingResponse
@@ -9,6 +9,23 @@ from starlette.concurrency import run_in_threadpool
 from campus.api.routes.academic import ActorDependency
 from campus.api.study_runtime import StudyRuntime, study_runtime
 from campus.domain.contracts import ContractModel, Page, SourceRef
+from campus.domain.practice import (
+    AttemptInput,
+    AttemptRead,
+    PassportRead,
+    ProgressRead,
+    ReviewInput,
+    ReviewRead,
+    StateInput,
+    StateRead,
+)
+from campus.domain.resources import (
+    ResourceChange,
+    ResourceDetail,
+    ResourceInput,
+    ResourceRead,
+    ResourceUpdate,
+)
 from campus.domain.study import (
     PERSONALITIES,
     BlockRead,
@@ -183,6 +200,16 @@ def cancel(key: str, actor: ActorDependency, state: State):
     return public_job(state.cancel(actor.uid, key))
 
 
+class AccountDeletion(ContractModel):
+    confirm: Literal["ELIMINAR"]
+
+
+@router.post("/me/delete", status_code=204)
+def delete_account(body: AccountDeletion, actor: ActorDependency, state: State):
+    state.delete_account_data(actor.uid)
+    return Response(status_code=204)
+
+
 class RetryInput(ContractModel):
     accept_possible_charge: bool = False
 
@@ -190,6 +217,103 @@ class RetryInput(ContractModel):
 @router.post("/jobs/{key}/retry", status_code=202, response_model=JobRead)
 def retry(key: str, body: RetryInput, actor: ActorDependency, state: State):
     return public_job(state.retry(actor.uid, key, body.accept_possible_charge))
+
+
+@router.post("/resources", status_code=202, response_model=ResourceDetail)
+def create_resource(
+    body: ResourceInput, actor: ActorDependency, state: State, idempotency: Idempotency
+):
+    return state.resources.create(
+        actor.uid, body.model_dump(by_alias=True), idempotency
+    )
+
+
+@router.get("/subjects/{subject}/resources", response_model=Page[ResourceRead])
+def resources(
+    subject: str,
+    actor: ActorDependency,
+    state: State,
+    archived: bool = False,
+    limit: int = Query(default=50, ge=1, le=50),
+    cursor: str | None = Query(default=None, max_length=512),
+):
+    return page_rows(
+        state.resources.list(actor.uid, subject, archived),
+        actor.uid,
+        f"resources:{subject}:{archived}",
+        limit,
+        cursor,
+    )
+
+
+@router.get("/resources/{key}", response_model=ResourceDetail)
+def get_resource(key: str, actor: ActorDependency, state: State):
+    return state.resources.detail(actor.uid, key)
+
+
+@router.patch("/resources/{key}", response_model=ResourceDetail)
+def update_resource(
+    key: str, body: ResourceUpdate, actor: ActorDependency, state: State
+):
+    return state.resources.update(actor.uid, key, body.model_dump(by_alias=True))
+
+
+@router.post(
+    "/resources/{key}/versions", status_code=202, response_model=ResourceDetail
+)
+def change_resource(
+    key: str,
+    body: ResourceChange,
+    actor: ActorDependency,
+    state: State,
+    idempotency: Idempotency,
+):
+    return state.resources.change(
+        actor.uid, key, body.model_dump(by_alias=True), idempotency
+    )
+
+
+@router.post(
+    "/resources/versions/{key}/attempts", status_code=201, response_model=AttemptRead
+)
+def attempt(key: str, body: AttemptInput, actor: ActorDependency, state: State):
+    return state.practice.attempt(actor.uid, key, body.model_dump(by_alias=True))
+
+
+@router.get("/resources/versions/{key}/review", response_model=ReviewRead)
+def get_review(key: str, actor: ActorDependency, state: State):
+    return state.practice.get_review(actor.uid, key)
+
+
+@router.put("/resources/versions/{key}/review", response_model=ReviewRead)
+def put_review(key: str, body: ReviewInput, actor: ActorDependency, state: State):
+    return state.practice.put_review(actor.uid, key, body.model_dump(by_alias=True))
+
+
+@router.get("/resources/versions/{key}/state", response_model=StateRead)
+def get_state(key: str, actor: ActorDependency, state: State):
+    return state.practice.get_state(actor.uid, key)
+
+
+@router.put("/resources/versions/{key}/state", response_model=StateRead)
+def put_state(key: str, body: StateInput, actor: ActorDependency, state: State):
+    return state.practice.put_state(actor.uid, key, body.model_dump(by_alias=True))
+
+
+@router.delete("/resources/versions/{key}/state", status_code=204)
+def delete_state(key: str, actor: ActorDependency, state: State):
+    state.practice.delete_state(actor.uid, key)
+    return Response(status_code=204)
+
+
+@router.get("/subjects/{subject}/progress", response_model=ProgressRead)
+def progress(subject: str, actor: ActorDependency, state: State):
+    return state.practice.progress(actor.uid, subject)
+
+
+@router.get("/passport", response_model=PassportRead)
+def passport(actor: ActorDependency, state: State):
+    return state.practice.passport(actor.uid)
 
 
 @router.post("/conversations", status_code=201, response_model=ConversationRead)

@@ -37,7 +37,9 @@ class JobService:
 
     def create(self, uid, kind, entity, payload, key, reserve=0, additions=()):
         if not key or len(key) > 128:
-            raise DomainError(422, "Falta una clave de idempotencia válida.")
+            raise DomainError(
+                422, "No pudimos procesar la solicitud. Inténtalo de nuevo."
+            )
         fingerprint = hashlib.sha256(
             json.dumps([kind, entity, payload], sort_keys=True).encode()
         ).hexdigest()
@@ -47,7 +49,9 @@ class JobService:
             previous = self.records.get(uid, "idempotency", token)
             if previous:
                 if previous["fingerprint"] != fingerprint:
-                    raise DomainError(409, "La clave ya se usó con otro contenido.")
+                    raise DomainError(
+                        409, "Esta solicitud ya se envió con otro contenido."
+                    )
                 return self.get(uid, previous["jobId"])
             day = self.clock().date().isoformat()
             usage = self.records.get(uid, "usage", day)
@@ -72,7 +76,7 @@ class JobService:
             ]
             if kind == "tutor_turn" and len(recent) >= 20:
                 raise DomainError(
-                    429, "Se alcanzó el límite de 20 preguntas por minuto."
+                    429, "Estás preguntando muy rápido. Espera un momento."
                 )
             if reserve and (
                 active_limits["active"] >= 2
@@ -80,7 +84,8 @@ class JobService:
                 or len(recent) >= 20
             ):
                 raise DomainError(
-                    429, "Se alcanzó la cuota de IA del piloto. Intenta más tarde."
+                    429,
+                    "Llegaste al límite de ayuda de hoy. Vuelve a intentarlo más tarde.",
                 )
             job = new_row(
                 ownerId=uid,

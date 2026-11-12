@@ -1,5 +1,7 @@
 import { safeMarkup, safeCss, plainJson } from "./policy";
 import type { InteractivePackage } from "../../../packages/resource-sdk/src/fixtures";
+import katex from "katex";
+import "katex/dist/katex.min.css";
 import "./style.css";
 
 const root = document.getElementById("root")!;
@@ -35,6 +37,15 @@ function post(type: string, payload: unknown) {
       parentOrigin,
     );
 }
+// Tell the parent how tall the content is so its frame can fit without inner scrolling.
+let reportedHeight = 0;
+new ResizeObserver(() => {
+  const height = Math.ceil(document.body.getBoundingClientRect().height);
+  if (Math.abs(height - reportedHeight) > 4) {
+    reportedHeight = height;
+    post("size", { height });
+  }
+}).observe(document.body);
 function event(id: string, event: string, value: unknown) {
   if (!worker) return;
   clearTimeout(watchdog);
@@ -109,9 +120,20 @@ function apply(command: any) {
         "value" in element ? (element as HTMLInputElement).value : null,
       ),
     );
-  } else if (command.type === "math")
-    element.textContent = String(command.value).slice(0, 10000);
-  else if (command.type === "plot") {
+  } else if (command.type === "math") {
+    // Trusted library output only: no raw HTML from the resource reaches the DOM.
+    element.innerHTML = katex.renderToString(
+      String(command.value).slice(0, 2000),
+      {
+        throwOnError: false,
+        trust: false,
+        strict: "ignore",
+        maxExpand: 1000,
+        maxSize: 20,
+        output: "htmlAndMathml",
+      },
+    );
+  } else if (command.type === "plot") {
     const points = command.value?.points;
     if (!Array.isArray(points) || points.length < 2 || points.length > 1000)
       throw new Error("Invalid points");

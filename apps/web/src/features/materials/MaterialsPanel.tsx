@@ -1,5 +1,6 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { api, authorizedFetch, studyRows, Row } from "../../api";
+import { Skeleton } from "../../components/Skeleton";
 
 export type SourceRef = {
   materialId: string;
@@ -25,7 +26,7 @@ export type Material = Row & {
 };
 const labels: Record<string, string> = {
   uploading: "Carga pendiente",
-  queued: "En cola",
+  queued: "En la fila",
   processing: "Procesando",
   needs_review: "Revisa la transcripción",
   ready: "Listo para estudiar",
@@ -42,11 +43,11 @@ function stageLabel(stage: string) {
   return (
     (
       {
-        queued: "En cola",
-        started: "Iniciando",
-        transcribing: "Transcribiendo",
-        receiving: "Recibiendo respuesta",
-        succeeded: "Terminado",
+        queued: "En la fila",
+        started: "Empezando",
+        transcribing: "Leyendo tus apuntes",
+        receiving: "Preparando la respuesta",
+        succeeded: "Listo",
         needs_review: "Por revisar",
         failed: "Fallido",
         canceled: "Cancelado",
@@ -162,7 +163,7 @@ export function SourceViewer({
           )}
         </>
       ) : (
-        <p role="status">Abriendo la fuente privada…</p>
+        <Skeleton lines={5} label="Abriendo tus apuntes…" />
       )}
     </dialog>
   );
@@ -451,7 +452,7 @@ export function MaterialsPanel({
               <h3>{m.name}</h3>
               <p role="status">
                 {m.status === "failed" && m.error === "processing_canceled"
-                  ? "Procesamiento cancelado"
+                  ? "Cancelado"
                   : labels[m.status] || "Procesando"}
               </p>
             </div>
@@ -569,8 +570,8 @@ export function MaterialsPanel({
             </form>
           ) : (
             <p>
-              La extracción todavía no está disponible. El trabajo puede seguir
-              en cola o necesitar reintento.
+              Todavía estamos preparando tus apuntes. Puede tardar un poco o
+              necesitar que lo intentes de nuevo.
             </p>
           )}
           <label>
@@ -600,10 +601,7 @@ export function MaterialsPanel({
           </button>
           {job && (
             <div className="job-detail">
-              <p>
-                Procesamiento: {stageLabel(String(job.stage))} ·{" "}
-                {Number(job.progress || 0)}%
-              </p>
+              <p>Estado: {stageLabel(String(job.stage))}</p>
               {["queued", "running"].includes(String(job.status)) && (
                 <button
                   className="secondary"
@@ -614,7 +612,7 @@ export function MaterialsPanel({
                     })
                   }
                 >
-                  Cancelar procesamiento
+                  Cancelar
                 </button>
               )}
               {["failed", "canceled"].includes(String(job.status)) && (
@@ -625,7 +623,8 @@ export function MaterialsPanel({
                       checked={acceptCharge}
                       onChange={(e) => setAcceptCharge(e.target.checked)}
                     />
-                    Entiendo que reintentar puede volver a consumir cuota de IA.
+                    Entiendo que intentarlo de nuevo puede contar en mi límite
+                    de hoy.
                   </label>
                   <button
                     className="secondary"

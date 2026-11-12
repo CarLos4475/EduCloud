@@ -1,6 +1,6 @@
 # Desarrollo de H2
 
-La aplicación sigue local. No ejecutar despliegue de Hosting o Cloud Run durante este corte.
+La aplicación sigue local. El usuario pidió acceso remoto y después pausó implementación e infraestructura hasta avisar que la facturación esté activa. No ejecutar despliegue de Hosting o Cloud Run mientras continúe esa pausa. Estado resumido en [CONTEXTO.md](../CONTEXTO.md).
 
 ## Uso normal
 

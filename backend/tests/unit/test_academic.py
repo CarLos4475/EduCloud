@@ -87,13 +87,3 @@ def test_agenda_validates_dates_and_schedule_zone():
                 "timezone": "America/Mexico_City",
             },
         )
-
-
-def test_deleting_subject_is_explicitly_deferred():
-    service = AcademicService(MemoryRecords())
-    subject = service.create(
-        "alice", "subjects", {"name": "Física", "illustrationId": "wave"}
-    )
-    with pytest.raises(DomainError) as error:
-        service.delete("alice", "subjects", subject["id"])
-    assert error.value.status == 501

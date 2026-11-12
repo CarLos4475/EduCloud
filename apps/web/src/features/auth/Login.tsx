@@ -139,7 +139,7 @@ export function Login() {
         </button>
         {isEmulator && (
           <p className="quiet">
-            Entorno de desarrollo local · usa cuentas de prueba.
+            Modo de prueba: usa cualquier correo @pcpuma.acatlan.unam.mx.
           </p>
         )}
       </section>

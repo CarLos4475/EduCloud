@@ -154,10 +154,11 @@ class AcademicService:
     def _delete(self, uid, collection, key):
         self.get(uid, collection, key)
         if collection == "subjects":
-            raise DomainError(
-                501,
-                "El borrado completo llegará con el procesamiento de datos. Puedes archivar la materia.",
-            )
+            # Study data (materials, tutor, resources) is removed first by StudyRuntime.
+            for name in ("topics", "agenda", "schedule"):
+                for row in self.list(uid, name):
+                    if row.get("subjectId") == key:
+                        self.records.remove(uid, name, row["id"])
         if collection == "periods" and any(
             s.get("periodId") == key for s in self.list(uid, "subjects")
         ):
